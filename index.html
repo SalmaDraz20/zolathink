@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Zola Think</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body id="top">
+    <main>
+      <section class="hero">
+        <header class="hero-nav">
+          <a class="brand" href="#top"
+            ><img src="Logo%20Vector.png" alt="Zola Think"
+          /></a>
+          <nav>
+            <a href="#about" data-i="about">About</a
+            ><a href="#missions" data-i="missions">Missions</a
+            ><a href="#skills" data-i="skills">Skills</a
+            ><a href="#stories" data-i="stories">Stories</a>
+          </nav>
+          <div class="nav-actions">
+            <button
+              class="lang-switch"
+              type="button"
+              aria-label="Switch language"
+            >
+              <span>ع</span><span>EN</span></button
+            ><a class="nav-cta" href="#join" data-i="join"
+              >Join the Next Mission</a
+            >
+          </div>
+        </header>
+        <div class="hero-stage">
+          <i class="hero-blob hero-blob--left"></i
+          ><i class="hero-blob hero-blob--right"></i
+          ><svg class="hero-line hero-line--left" viewBox="0 0 430 740">
+            <path
+              d="M187 8C-12 146 267 157 196 341S1 416 95 559s126-32 292 116"
+            /></svg
+          ><svg class="hero-line hero-line--right" viewBox="0 0 340 510">
+            <path
+              d="M19 79c174-132 339 57 209 119S113 265 186 361s63 89 129 88"
+            />
+          </svg>
+          <article class="hero-card">
+            <span class="mission-pill" data-i="mission">THE MISSION</span>
+            <h1 data-i="heroTitle">
+              Where Teens Turn Learning Into<em> Real Skills</em>
+            </h1>
+            <p data-i="heroCopy">
+              No lessons. No ready-made answers.Just real missions, live<br />and
+              a team figuring it out together
+            </p>
+            <a href="#join" class="primary-cta" data-i="join"
+              >Join the Next Mission</a
+            ><i class="corner-fold"></i>
+          </article>
+          <span class="hero-arrow">&rarr;</span>
+        </div>
+        <p class="hero-meta" data-i="meta">
+          Ages 10–16 <i>·</i> Egypt &amp; MENA
+        </p>
+      </section>
+      <section class="intro section-shell" id="about">
+        <span class="eyebrow" data-i="introEyebrow"
+          >NOT A LESSON. A LIVE MISSION.</span
+        >
+        <h2 data-i="introTitle">
+          Give what they know<br /><em>somewhere to go.</em>
+        </h2>
+        <p class="lede" data-i="introCopy">
+          Zola Think puts young people inside real-world challenges. They take
+          on a role, work with a team, make a call and stand behind it.
+        </p>
+        <div class="orbit-note orbit-note--left" data-i="note1">
+          NO READY-MADE<br />ANSWERS
+        </div>
+        <div class="orbit-note orbit-note--right" data-i="note2">
+          REAL ROLES<br />REAL CHOICES
+        </div>
+        <svg class="intro-squiggle" viewBox="0 0 220 80">
+          <path d="M2 56C37 13 55 74 89 42s36 0 61-21 35-5 67-14" />
+        </svg>
+      </section>
+      <section class="practice section-shell" id="missions">
+        <span class="eyebrow" data-i="practiceEyebrow"
+          >WHAT YOU'LL PRACTISE</span
+        >
+        <h2 data-i="practiceTitle">
+          Five moves for<br />an idea with <em>momentum.</em>
+        </h2>
+        <p class="section-copy" data-i="practiceCopy">
+          Every mission begins with a question. What happens next is yours to
+          figure out.
+        </p>
+        <div class="mission-deck">
+          <article class="mission-card is-active">
+            <div class="card-top">
+              <span data-i="s1">01 / DISCOVER</span
+              ><i class="dot dot--lime"></i>
+            </div>
+            <h3 data-i="s1h">Look closer.</h3>
+            <p data-i="s1p">
+              Meet the role, unpack the problem, and find the questions worth
+              asking.
+            </p>
+            <div class="card-scribble">?</div>
+          </article>
+          <article class="mission-card">
+            <div class="card-top">
+              <span data-i="s2">02 / DECIDE</span><i class="dot"></i>
+            </div>
+            <h3 data-i="s2h">Choose a way.</h3>
+            <p data-i="s2p">
+              Weigh evidence, hear every voice, and make one team decision under
+              real constraints.
+            </p>
+            <div class="vote-stack">
+              <b data-i="yes">YES</b><b data-i="maybe">MAYBE</b>
+            </div>
+          </article>
+          <article class="mission-card">
+            <div class="card-top">
+              <span data-i="s3">03 / BUILD</span><i class="dot"></i>
+            </div>
+            <h3 data-i="s3h">Make it real.</h3>
+            <p data-i="s3p">
+              Use the tools your idea needs—research, code, maths, AI or a sharp
+              story.
+            </p>
+            <div class="build-shape">
+              <span></span><span></span><span></span>
+            </div>
+          </article>
+          <article class="mission-card">
+            <div class="card-top">
+              <span data-i="s4">04 / PRESENT</span><i class="dot"></i>
+            </div>
+            <h3 data-i="s4h">Own the room.</h3>
+            <p data-i="s4p">
+              Share what you made, explain why it works, and let your thinking
+              be heard.
+            </p>
+            <div class="present-lines">
+              <span></span><span></span><span></span>
+            </div>
+          </article>
+          <article class="mission-card">
+            <div class="card-top">
+              <span data-i="s5">05 / REFLECT</span><i class="dot"></i>
+            </div>
+            <h3 data-i="s5h">Take it further.</h3>
+            <p data-i="s5p">
+              Look back at the choice, the outcome, and the next better
+              question.
+            </p>
+            <div class="reflect-orbit"></div>
+          </article>
+        </div>
+        <p class="deck-caption" data-i="tap">
+          Tap a card to follow the mission.
+        </p>
+      </section>
+      <section class="roles section-shell">
+        <span class="eyebrow" data-i="rolesEyebrow"
+          >YOU'RE NOT “THE STUDENT” HERE</span
+        >
+        <h2 data-i="rolesTitle">
+          You’re the one<br />they’re counting <em>on.</em>
+        </h2>
+        <div class="role-stage">
+          <div class="role-card role-card--back">
+            <span data-i="m1">MISSION 01</span
+            ><b data-i="engineer">SEISMIC<br />ENGINEER</b
+            ><small data-i="engineerP">Build an early-warning response.</small>
+          </div>
+          <div class="role-card role-card--front">
+            <span data-i="m0">MISSION 00</span
+            ><b data-i="pharmacist">PHARMACIST</b
+            ><small data-i="pharmacistP"
+              >Help an elderly patient stay on track.</small
+            ><i>+</i>
+          </div>
+          <div class="role-chip chip-one" data-i="time">TIME: 2:00</div>
+          <div class="role-chip chip-two" data-i="team">TEAM OF 3</div>
+          <svg class="role-line" viewBox="0 0 620 390">
+            <path
+              d="M72 244C46 145 125 105 204 153s61 138 144 110 107-121 189-53"
+            />
+          </svg>
+        </div>
+        <p class="section-copy" data-i="rolesCopy">
+          A pharmacist. A seismic engineer. A role with consequences. Each live,
+          small-team mission starts with incomplete information—and no correct
+          answer waiting at the end.
+        </p>
+      </section>
+      <section class="journey section-shell" id="skills">
+        <span class="eyebrow" data-i="journeyEyebrow"
+          >HOW A JOURNEY UNFOLDS</span
+        >
+        <h2 data-i="journeyTitle">
+          One challenge.<br /><em>Five shared moves.</em>
+        </h2>
+        <div class="journey-paper">
+          <svg class="journey-path" viewBox="0 0 800 800">
+            <path
+              d="M402 63c-208 55-148 180 7 154 159-28 202 112 18 160-198 51-127 192 35 164 171-29 187 128-9 181-165 45-103 104-23 126"
+            />
+          </svg>
+          <ol>
+            <li>
+              <span>01</span>
+              <div>
+                <b data-i="d">Discover</b>
+                <p data-i="dp">Get inside the situation.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <b data-i="de">Decide</b>
+                <p data-i="dep">Choose together, with reasons.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <b data-i="b">Build</b>
+                <p data-i="bp">Turn thinking into something real.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <b data-i="p">Present</b>
+                <p data-i="pp">Defend your team’s direction.</p>
+              </div>
+            </li>
+            <li>
+              <span>05</span>
+              <div>
+                <b data-i="r">Reflect</b>
+                <p data-i="rp">Notice what you’ll take forward.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <p class="journey-footnote" data-i="journeyNote">
+          A Journey brings together 5 missions and a final team hackathon.
+        </p>
+      </section>
+      <section class="paths section-shell" aria-labelledby="paths-title">
+        <span class="eyebrow" data-i="pathsEyebrow">PICK YOUR PATH</span>
+        <h2 id="paths-title" data-i="pathsTitle">
+          One journey, or<br /><em>the long way forward.</em>
+        </h2>
+        <p class="section-copy" data-i="pathsCopy">
+          Every Journey is five Missions and one final Team Challenge. The
+          format is clear; the worlds you enter stay surprising.
+        </p>
+        <div class="path-cards">
+          <article class="path-card path-card--short">
+            <span data-i="singleLabel">SINGLE JOURNEY</span
+            ><b data-i="singleTitle">5 Missions<br />+ Final Challenge</b>
+            <div class="path-dots">
+              <i></i><i></i><i></i><i></i><i></i><strong>✦</strong>
+            </div>
+            <small data-i="pricing">Pricing revealed soon</small>
+          </article>
+          <article class="path-card path-card--long">
+            <span data-i="bundleLabel">3-JOURNEY BUNDLE</span
+            ><b data-i="bundleTitle">15 Missions<br />across 3 Journeys</b>
+            <div class="path-dots path-dots--long">
+              <i></i><i></i><i></i><i></i><i></i><em></em><i></i><i></i><i></i
+              ><i></i><i></i><em></em><i></i><i></i><i></i><i></i><i></i
+              ><strong>✦</strong>
+            </div>
+            <small data-i="pricing">Pricing revealed soon</small>
+          </article>
+        </div>
+      </section>
+      <section class="tools section-shell" aria-labelledby="tools-title">
+        <span class="eyebrow" data-i="toolsEyebrow"
+          >NO CODING BACKGROUND REQUIRED</span
+        >
+        <h2 id="tools-title" data-i="toolsTitle">
+          Knowledge is the tool.<br /><em>Thinking is the skill.</em>
+        </h2>
+        <div class="tool-list">
+          <div>
+            <b>01</b><strong data-i="toolMath">Mathematics</strong
+            ><span data-i="toolMathUse">Understand &amp; analyse</span>
+          </div>
+          <div>
+            <b>02</b><strong data-i="toolCode">Coding</strong
+            ><span data-i="toolCodeUse">Build &amp; test</span>
+          </div>
+          <div>
+            <b>03</b><strong>AI</strong
+            ><span data-i="toolAiUse">Explore possibilities</span>
+          </div>
+          <div>
+            <b>04</b><strong data-i="toolResearch">Research</strong
+            ><span data-i="toolResearchUse">Gather evidence</span>
+          </div>
+          <div>
+            <b>05</b><strong data-i="toolCommunication">Communication</strong
+            ><span data-i="toolCommunicationUse">Defend the decision</span>
+          </div>
+        </div>
+        <p class="tools-note" data-i="toolsNote">
+          Not every team uses code. The tool each team reaches for depends on
+          the solution they choose — not the other way around.
+        </p>
+      </section>
+      <section class="skill-map section-shell" aria-labelledby="skill-title">
+        <span class="eyebrow" data-i="skillEyebrow"
+          >WHAT THEY BUILD, BEYOND THE MISSION</span
+        >
+        <h2 id="skill-title" data-i="skillTitle">
+          Skills you won’t learn<br /><em>from a textbook.</em>
+        </h2>
+        <div class="skill-routes">
+          <article>
+            <span>01 / <b data-i="think">THINK</b></span>
+            <p data-i="thinkList">
+              Critical thinking · Problem solving · Decision making
+            </p>
+          </article>
+          <article>
+            <span>02 / <b data-i="create">CREATE</b></span>
+            <p data-i="createList">
+              Brainstorming · Creativity · Design thinking
+            </p>
+          </article>
+          <article>
+            <span>03 / <b data-i="collaborate">COLLABORATE</b></span>
+            <p data-i="collaborateList">
+              Teamwork · Communication · Confidence
+            </p>
+          </article>
+          <article>
+            <span>04 / <b data-i="lead">LEAD</b></span>
+            <p data-i="leadList">Presentation · Entrepreneurial thinking</p>
+          </article>
+        </div>
+      </section>
+      <section class="proof section-shell" id="stories">
+        <span class="eyebrow" data-i="proofEyebrow"
+          >THE FIRST MISSIONS LEFT A MARK</span
+        >
+        <div class="proof-numbers">
+          <div>
+            <strong>24</strong
+            ><span data-i="stat1">young people<br />reached</span>
+          </div>
+          <i></i>
+          <div>
+            <strong>10/11</strong
+            ><span data-i="stat2"
+              >rated their mission<br />five out of five</span
+            >
+          </div>
+          <i></i>
+          <div>
+            <strong>2</strong
+            ><span data-i="stat3">pilot missions<br />delivered</span>
+          </div>
+        </div>
+        <blockquote>
+          <p data-i="quote">
+            “It’s not a lesson.<br />It’s a <em>real mission.</em>”
+          </p>
+          <cite data-i="quoteBy">— ZOLA THINK PARTICIPANT</cite>
+        </blockquote>
+        <p class="proof-detail" data-i="proofCopy">
+          The pilot teams said they genuinely felt like they were the people the
+          mission was about. That feeling is the point.
+        </p>
+      </section>
+      <section class="parents section-shell" aria-labelledby="parents-title">
+        <span class="eyebrow" data-i="parentsEyebrow">FOR PARENTS</span>
+        <h2 id="parents-title" data-i="parentsTitle">
+          Not another course.<br /><em>A different kind of confidence.</em>
+        </h2>
+        <div class="parent-grid">
+          <div class="parent-values">
+            <p data-i="parentIntro">What your child actually gets:</p>
+            <ul>
+              <li data-i="parent1">Real-world problem-solving</li>
+              <li data-i="parent2">Teamwork under real constraints</li>
+              <li data-i="parent3">Decision-making with no easy answer</li>
+              <li data-i="parent4">Presentation &amp; communication</li>
+            </ul>
+          </div>
+          <aside>
+            <span data-i="practical">THE PRACTICALS</span>
+            <p data-i="practicalCopy">
+              Ages 10–16<br />Live online (Zoom)<br />2 hours per Mission<br />Small
+              teams<br />Certificate for full completion
+            </p>
+            <b data-i="noCode">No coding background required.</b>
+          </aside>
+        </div>
+      </section>
+      <section class="closing section-shell" id="join">
+        <div class="closing-card">
+          <span class="eyebrow" data-i="closingEyebrow"
+            >THE NEXT MISSION STARTS WITH YOU</span
+          >
+          <h2 data-i="closingTitle">
+            Don’t just learn<br />the tool. Learn what<br />to
+            <em>do with it.</em>
+          </h2>
+          <p data-i="closingCopy">
+            For curious minds, brave questions, and ideas ready to leave the
+            page.
+          </p>
+          <a
+            class="primary-cta"
+            href="mailto:hello@zolathink.com?subject=Join%20the%20Next%20Mission"
+            data-i="join"
+            >Join the Next Mission <b>→</b></a
+          ><small data-i="closingMeta"
+            >Ages 10–16 &nbsp; · &nbsp; Live online in small teams</small
+          ><svg class="closing-squiggle" viewBox="0 0 1000 480">
+            <path
+              d="M83 318C-7 171 191 119 231 213s138 47 90-58 114-168 166-65-11 180 115 174 104-159 201-120 7 145 104 173 128-31 97-127"
+            />
+          </svg>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="footer-logo" href="#top"
+        ><img src="Logo%20Vector.png" alt="Zola Think"
+      /></a>
+      <p data-i="footerTag">Think. Decide. Build. Present. Reflect.</p>
+      <nav>
+        <a href="#about" data-i="about">About</a
+        ><a href="#missions" data-i="missions">Missions</a
+        ><a href="#skills" data-i="skills">Skills</a
+        ><a href="#stories" data-i="stories">Stories</a>
+      </nav>
+      <small data-i="footerMeta">© 2026 Zola Think · Alexandria, Egypt</small>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
