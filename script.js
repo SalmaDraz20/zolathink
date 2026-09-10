@@ -160,21 +160,25 @@ loadGSAP("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", () =>
     "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
     () => {
       gsap.registerPlugin(ScrollTrigger);
-      gsap.from(".hero-card", {
-        y: 34,
-        rotate: -2,
-        duration: 1.1,
-        ease: "power3.out",
-      });
-      gsap.to(".hero-blob", {
-        y: 16,
-        rotate: "+=8",
-        duration: 2.5,
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.25,
-        ease: "sine.inOut",
-      });
+      if (document.querySelector(".hero-card")) {
+        gsap.from(".hero-card", {
+          y: 34,
+          rotate: -2,
+          duration: 1.1,
+          ease: "power3.out",
+        });
+      }
+      if (document.querySelector(".hero-blob")) {
+        gsap.to(".hero-blob", {
+          y: 16,
+          rotate: "+=8",
+          duration: 2.5,
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.25,
+          ease: "sine.inOut",
+        });
+      }
       gsap.utils.toArray(".section-shell").forEach((s) =>
         gsap.from(s.children, {
           y: 28,
