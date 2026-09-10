@@ -1,4 +1,6 @@
 :root {
+  --content-width: 1040px;
+  --content-gutter: 40px;
   --navy: #19203a;
   --purple-light: #834cbf;
   --yellow: #f4ea5f;
@@ -52,12 +54,13 @@ em {
 }
 .hero {
   min-height: 100vh;
-  padding: 28px 32px 78px;
+  padding: 28px 20px 78px;
   position: relative;
   overflow: hidden;
 }
 .hero-nav {
-  max-width: 1460px;
+  width: 100%;
+  max-width: var(--content-width);
   margin: auto;
   display: flex;
   align-items: center;
@@ -258,7 +261,7 @@ footer a {
   color: var(--purple-light);
 }
 .section-shell {
-  width: min(1040px, calc(100% - 40px));
+  width: min(var(--content-width), calc(100% - var(--content-gutter)));
   margin: auto;
   text-align: center;
   position: relative;
@@ -1011,7 +1014,7 @@ html[dir="rtl"] .reflect-orbit {
 }
 @media (max-width: 760px) {
   .hero {
-    padding: 22px 16px 72px;
+    padding: 22px 14px 72px;
     min-height: 650px;
   }
   .hero-nav nav,
