@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": { "api/mission-zero/register.js": { "maxDuration": 15 } }
+}

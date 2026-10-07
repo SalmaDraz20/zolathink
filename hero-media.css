@@ -30,4 +30,7 @@ body:has(.landing-footer) .reference-stage:after{display:none}
 .hero-doodle-placeholder{font-size:clamp(8px,1.5cqw,13px)}
 .doodle-small-rays{font-size:clamp(7px,1.2cqw,10px)}
 .hero-media{transform:scale(.92);transform-origin:center}
+.hero-finished-doodle{position:absolute;z-index:7;display:block;fill:none;stroke:#6331a8;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;overflow:visible;background:none;border:0;box-shadow:none}
+.hero-finished-doodle.doodle-bulb,.hero-finished-doodle.doodle-team{background:none;box-shadow:none;border:0;border-radius:0}
+.hero-finished-doodle .hero-doodle-yellow{stroke:#e8bc43;stroke-width:2.2}
 @media(max-width:800px){.hero-media{position:relative;left:auto;top:auto;width:calc(100% + 40px);margin:20px -20px 0;flex-shrink:0}.doodle-bottom{top:97%}}

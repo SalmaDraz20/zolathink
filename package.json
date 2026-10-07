@@ -1,0 +1,16 @@
+{
+  "name": "zola-think",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "check": "node --check registration.js && node --check api/mission-zero/register.js && node --check lib/server/mission-zero.cjs && node --check lib/server/supabase.cjs",
+    "test": "node --test tests/mission-zero.test.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3"
+  }
+}

@@ -122,7 +122,17 @@ registrationForm.addEventListener('submit', async event => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch('/api/registrations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), signal: controller.signal });
+    const gradeCodes = ['grade_5_primary', 'grade_6_primary', 'grade_1_prep', 'grade_2_prep', 'grade_3_prep'];
+    const payload = {
+      student_name: data.studentName,
+      grade: gradeCodes[gradeChoices.indexOf(data.grade)],
+      parent_name: data.parentName,
+      parent_whatsapp: data.parentWhatsapp,
+      preferred_slot: data.preferredTime === 'الجمعة — 7 مساءً' ? 'friday_7pm' : 'saturday_7pm',
+      interests: data.interests,
+      dream_profession: data.dreamCareer,
+    };
+    const response = await fetch('/api/mission-zero/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal });
     const result = await response.json().catch(() => null);
     if (!response.ok || !result?.ok) throw new Error('Registration failed');
     registrationSucceeded = true;
