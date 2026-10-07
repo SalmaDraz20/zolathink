@@ -1,0 +1,36 @@
+/* Shared Arabic-first refinements for the landing and About pages. */
+:root{--zola-ink:#19203a;--zola-purple:#6739a6;--zola-muted:#6d7284}
+.landing-shell{width:min(1040px,calc(100% - 104px))}
+body:has(.landing-footer) .reference-nav{max-width:1170px;gap:22px}
+body:has(.landing-footer) .reference-nav nav{gap:25px}
+body:has(.landing-footer) .reference-nav a{font-size:13px}
+body:has(.landing-footer) .reference-brand img{width:100px;height:38px}
+body:has(.landing-footer) .reference-hero{position:relative;isolation:isolate}
+.reference-hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(#19203a04 1px,transparent 1px),linear-gradient(90deg,#19203a04 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(#000 65%,transparent)}
+.reference-copy h1{margin-top:0}.play-icon{display:grid;place-items:center;border:1.5px solid #7349af;background:#fff;width:33px;height:33px;flex-shrink:0}
+.play-icon svg{width:19px;height:19px;fill:none;stroke:#6739a6;stroke-width:1.8;stroke-linejoin:round;margin-left:2px}
+.reference-watch:hover .play-icon{background:#f7f3fc}
+.landing-skills{padding-block:85px 105px}.landing-skill{border-color:#f0edf5;padding:18px 13px 24px}.landing-skill>span{width:68px;height:68px}.landing-skill>span svg{width:40px;height:40px}
+html[dir="rtl"] .landing-skill h3{font-size:19px}.landing-skill p{font-size:16px}
+.landing-trial{padding:36px 40px}.trial-action li svg{width:56px;height:56px}.landing-button{font-size:15px;padding:12px 17px}
+.landing-faq{padding-block:50px 95px}.faq-preview{display:block;margin-bottom:35px}.faq-preview>div{margin:0;text-align:center}
+#faq-answers{max-width:780px;margin:auto}.landing-faq details{padding:21px 4px;border-bottom:1px solid #eee8f3}.landing-faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;font-size:18px;color:#19203a}.landing-faq summary::-webkit-details-marker{display:none}.landing-faq summary:after{content:"+";font:24px Arial;color:#834cbf;flex-shrink:0}.landing-faq details[open] summary:after{content:"−"}.landing-faq details p{font-size:16px;padding-top:15px;max-width:670px}
+.landing-footer{background:#19203a;color:#fff;border:0;padding:58px 0 30px}
+.landing-footer .footer-columns{direction:rtl;grid-template-columns:1.3fr 1fr 1.1fr 1fr;gap:45px;margin-bottom:45px}
+.landing-footer .footer-columns>div,.landing-footer .footer-columns>nav,.landing-footer .footer-columns .footer-brand{direction:rtl;align-items:flex-start;text-align:right;padding-top:0}
+.landing-footer .footer-columns h3{color:#f6f2fb;font-size:15px!important;margin-bottom:11px}.landing-footer .footer-columns a,.landing-footer .footer-columns p,.landing-footer .legal-link{color:#c3c4d2;font-size:13px;line-height:1.9}
+.landing-footer .footer-brand img{width:96px;filter:brightness(0) invert(1);margin-bottom:10px}.landing-footer .footer-columns a:hover,.landing-footer .legal-link:hover{color:#fff}
+.landing-footer>small{color:#9699af;font-size:11px;border-top:1px solid #ffffff10;max-width:1040px;margin:auto;padding-top:22px}
+.landing-footer .footer-socials{display:flex;gap:12px;margin-top:13px;direction:rtl}.landing-footer .footer-socials a{display:grid;place-items:center;border:1px solid #ffffff23;border-radius:50%;width:35px;height:35px;color:#d9cee9}.landing-footer .footer-socials a:hover{background:#ffffff0b;border-color:#9e79c5}
+.landing-footer .footer-brand img{filter:none}
+.footer-socials svg{width:16px;height:16px;fill:currentColor;stroke:none}.footer-socials .social-outline{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.zola-about{font-family:"IBM Plex Sans Arabic",sans-serif;background:#fff;color:#19203a}
+.about-introduction{text-align:center;padding:105px 0 120px}.about-introduction h1{font:700 clamp(34px,3.7vw,52px)/1.5 "IBM Plex Sans Arabic",sans-serif;letter-spacing:-.035em;margin:25px 0 20px}.about-introduction p{max-width:650px;margin:0 auto 30px;font-size:18px;line-height:1.9}
+html[dir="rtl"] .about-introduction h1{font-weight:700!important}
+.about-story{display:grid;grid-template-columns:1fr 1.15fr;gap:70px;padding-block:55px 110px;border-top:1px solid #f0edf5;align-items:center}.about-story p{font-size:17px;line-height:2;margin-bottom:18px}
+.about-values{padding-block:50px 105px;text-align:center}.about-values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:35px;text-align:right}.about-values-grid article{border:1px solid #f0eaf6;border-radius:16px;padding:28px 24px;background:#fff}.about-values-grid article>span{display:block;font:500 16px Manrope,sans-serif;color:#9768bf;margin-bottom:21px}.about-values-grid h3{font:600 23px/1.5 "IBM Plex Sans Arabic",sans-serif!important;letter-spacing:0;margin-bottom:12px}.about-values-grid p{font-size:16px;line-height:1.9}
+.about-invitation{text-align:center;padding-block:65px 120px;border-top:1px solid #f0edf5}.about-invitation p{font-size:17px;margin-bottom:25px}
+@media(min-width:901px){body:has(.landing-footer) .reference-stage{max-width:1180px;height:595px}body:has(.landing-footer) .reference-hero{min-height:865px}body:has(.landing-footer) .reference-copy{top:132px}html[dir="rtl"] body:has(.landing-footer) .reference-copy h1{font-size:clamp(32px,2.7vw,42px)}body:has(.landing-footer) .reference-description{font-size:16px}.reference-cta{font-size:17px;min-height:58px}.reference-watch{font-size:14px}html[dir="rtl"] .mission-flow-heading h2{font-size:38px}html[dir="rtl"] .landing-skills h2{font-size:33px}html[dir="rtl"] .trial-copy h2{font-size:34px}.journey-lock-card{padding:20px 10px;min-height:220px}.journey-lock-card>svg{width:32px;height:32px}html[dir="rtl"] .journey-refresh h2{font-size:30px}.mission-flow{padding-block:95px 115px}}
+@media(max-width:1000px){body:has(.landing-footer) .reference-nav nav{gap:16px}.landing-shell{width:calc(100% - 56px)}.landing-footer .footer-columns{gap:30px}.about-story{gap:35px}}
+@media(max-width:800px){body:has(.landing-footer) .reference-nav nav{gap:8px;flex-wrap:wrap;justify-content:center}body:has(.landing-footer) .reference-nav nav a{padding-inline:5px;font-size:12px}.landing-shell{width:calc(100% - 40px)}.landing-footer .footer-columns{grid-template-columns:repeat(2,1fr);gap:35px}.about-introduction{padding-block:65px 80px}.about-story{grid-template-columns:1fr;padding-block:45px 75px;gap:10px}.about-values-grid{grid-template-columns:1fr;gap:20px}.about-values{padding-bottom:75px}.about-invitation{padding-block:50px 80px}.landing-trial{padding:30px 22px}.landing-footer>small{margin-inline:20px}}
+@media(max-width:520px){html[dir="rtl"] .landing-skill h3{font-size:16px}.landing-skill p{font-size:15px}.landing-footer{padding-top:45px}.landing-footer .footer-columns{gap:30px 20px}.landing-footer .footer-columns h3{font-size:14px!important}.landing-faq summary{font-size:17px}.landing-footer .footer-brand img{width:85px}.about-introduction p,.about-story p{font-size:17px}.reference-copy h1{margin-top:0}.landing-faq{padding-bottom:70px}}

@@ -1,0 +1,42 @@
+body.registration-open{overflow:hidden}
+.registration-modal{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#b8a7cb #faf9fc;scroll-padding-block:22px;background:#fff}
+.registration-modal{direction:rtl;font-family:"IBM Plex Sans Arabic",sans-serif;color:#19203a;width:min(600px,calc(100% - 32px));max-height:calc(100dvh - 40px);padding:35px 38px 25px;border:1px solid #ede6f5;border-radius:25px;box-shadow:0 25px 100px #19203a30;overflow:auto;overscroll-behavior:contain}
+.registration-modal::backdrop{background:#19203a70;backdrop-filter:blur(4px)}
+.registration-close{position:absolute;left:15px;top:12px;background:#f8f4fc;border:0;border-radius:50%;width:36px;height:36px;color:#61438a;font-size:26px;cursor:pointer;line-height:1}
+.registration-tag{display:inline-block;color:#6332aa;background:#f2ecfa;border-radius:20px;padding:4px 14px;font-size:12px}
+html[dir="rtl"] .registration-modal h2{font:700 29px/1.5 "IBM Plex Sans Arabic",sans-serif!important;letter-spacing:-.02em;margin:12px 0 5px}
+.registration-modal #registration-subtitle{font-size:15px;line-height:1.8;color:#717386;margin:0 0 23px;max-width:450px}
+.registration-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 18px}
+.registration-form label{font-size:14px;font-weight:500;display:block}.registration-form input:not([type=radio]):not([type=checkbox]),.registration-form select{display:block;width:100%;font:400 15px "IBM Plex Sans Arabic",sans-serif;color:#19203a;margin-top:7px;padding:9px 12px;min-height:44px;border:1px solid #ddd6e6;border-radius:11px;background:#fff;outline:none}
+.registration-form input:focus,.registration-form select:focus{border-color:#834cbf!important;box-shadow:0 0 0 3px #834cbf13}
+.registration-form [aria-invalid=true]{border-color:#b34459!important}.field-error{display:block;font-size:12px;color:#a6354b;line-height:1.6;margin-top:4px}.field-error:empty{display:none}
+.registration-form fieldset{border:0;padding:0;margin:19px 0 0;min-width:0}.registration-form legend{font-size:14px;font-weight:500;margin-bottom:9px}.registration-form legend>span,.registration-career>span{font-size:12px;font-weight:400;color:#858295;margin-inline-start:5px}
+.registration-time>div{display:flex;gap:12px;flex-wrap:wrap}.registration-time label{display:flex;align-items:center;gap:6px;padding:10px 13px;border:1px solid #e4ddeb;border-radius:11px;cursor:pointer;flex:1;white-space:nowrap;font-size:13px}.registration-time label:has(input:checked){background:#f7f1fc;border-color:#a080cb}.registration-form input[type=radio],.registration-form input[type=checkbox]{accent-color:#6930ad;flex-shrink:0}
+.registration-interests>div{display:flex;gap:7px;flex-wrap:wrap}.registration-interests label{position:relative;cursor:pointer}.registration-interests input{position:absolute;opacity:0;width:1px;height:1px}.registration-interests label>span{display:block;font-size:12px;padding:7px 11px;border:1px solid #e8e1ee;background:#fff;border-radius:20px;font-weight:400}.registration-interests input:checked+span{background:#f1e8fa;border-color:#9d73ce;color:#542284}.registration-interests input:checked+span:before{content:"✓ ";font-weight:700}.registration-interests input:focus-visible+span{outline:3px solid #bc9ddf;outline-offset:2px}
+.registration-career{margin-top:19px}.registration-error{font-size:14px;line-height:1.7;background:#fff3f4;border-radius:10px;padding:10px 12px;color:#a6354b;margin:15px 0 0}
+.registration-submit,.registration-success button{border:0;border-radius:13px;background:linear-gradient(100deg,#6930b0,#43227f);color:white;width:100%;font:500 16px "IBM Plex Sans Arabic",sans-serif;min-height:48px;padding:10px 16px;margin-top:21px;cursor:pointer}.registration-submit:disabled{opacity:.65;cursor:wait}.registration-status{font-size:12px;line-height:1.7;color:#7c748a;margin:5px 0 0;text-align:center}
+.registration-success{text-align:center;padding:32px 0 20px}.registration-success>span{display:grid;place-items:center;width:82px;height:82px;border-radius:50%;background:#f2ebfb;margin:auto;font-size:35px}html[dir="rtl"] .registration-success h3{font:700 28px/1.5 "IBM Plex Sans Arabic",sans-serif!important;letter-spacing:0;margin:20px 0 10px}.registration-success p{font-size:17px;line-height:1.9;color:#6a7184;max-width:400px;margin:auto}.registration-success button{width:160px;margin-top:25px}
+.registration-modal [hidden]{display:none!important}.registration-modal :focus-visible{outline:3px solid #bc9ddf;outline-offset:3px}
+.registration-modal h2:focus,.registration-success h3:focus{outline:none}
+.registration-modal{width:min(570px,calc(100% - 32px));padding:34px 35px 25px;box-shadow:0 20px 80px #19203a20;border-color:#eee9f3}
+.registration-tag{background:#f7f3fc}.registration-submit,.registration-success button{background:linear-gradient(110deg,#693aae,#482784)}
+@media(max-width:520px){.registration-modal{padding:28px 22px 22px;border-radius:20px;max-height:calc(100dvh - 24px);width:calc(100% - 24px)}html[dir="rtl"] .registration-modal h2{font-size:26px!important}.registration-grid{gap:14px 12px}.registration-form input:not([type=radio]):not([type=checkbox]),.registration-form select{font-size:16px;padding-inline:10px}.registration-form label,.registration-form legend{font-size:13px}.registration-time label{padding-inline:10px;font-size:12px}.registration-interests label>span{font-size:12px;padding:7px 9px}}
+@media(max-width:360px){.registration-grid{grid-template-columns:1fr}.registration-time>div{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.registration-modal{scroll-behavior:auto}}
+
+/* The shell never scrolls: header stays above a separate right-hand scroller. */
+html:has(.registration-modal[open]),body.registration-open{overflow:hidden;overscroll-behavior:none}
+.registration-modal{position:fixed;inset:0;margin:auto;padding:0;max-height:90vh;max-height:90dvh;overflow:hidden;scroll-behavior:auto}
+.registration-content{display:flex;flex-direction:column;max-height:90vh;max-height:90dvh;min-height:0;overflow:hidden}
+.registration-header{flex-shrink:0;padding:32px 35px 0;background:#fff;position:relative;z-index:2}
+.registration-close{z-index:3}
+.registration-scroll-area{direction:ltr;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 18px 20px;padding:0 13px 5px 17px;scroll-behavior:smooth;scroll-padding-block:12px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#834cbf70 transparent;scrollbar-gutter:stable;flex:0 1 auto}
+.registration-scroll-content{direction:rtl;min-width:0;text-align:right}
+.registration-scroll-area::-webkit-scrollbar{width:5px;height:0}
+.registration-scroll-area::-webkit-scrollbar-track{background:transparent}
+.registration-scroll-area::-webkit-scrollbar-thumb{background:#834cbf70;border:0;border-radius:20px}
+.registration-scroll-area::-webkit-scrollbar-thumb:hover{background:#834cbfa0}
+.registration-scroll-area::-webkit-scrollbar-button{display:none;width:0;height:0}
+.registration-scroll-area::-webkit-scrollbar-corner{background:transparent}
+@media(max-width:520px){.registration-modal{padding:0;max-height:90dvh}.registration-header{padding:28px 22px 0}.registration-scroll-area{margin:0 11px 17px;padding:0 10px 5px 11px}}
+@media(prefers-reduced-motion:reduce){.registration-scroll-area{scroll-behavior:auto}}

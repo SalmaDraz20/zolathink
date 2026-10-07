@@ -1,0 +1,45 @@
+/* A modest reduction in desktop content scale, with comfortable mobile type. */
+@media(min-width:901px){
+ .landing-shell{width:min(1260px,calc(100% - 128px))}
+ html[dir="rtl"] .landing-shell h2{font-size:clamp(32px,3.2vw,49px)}
+ .landing-shell p{font-size:18px}
+ html[dir="rtl"] .landing-process h2,html[dir="rtl"] .landing-skills h2{font-size:39px}
+ .step-icon{width:102px;height:102px}.landing-shell svg{width:40px;height:40px}
+ html[dir="rtl"] .landing-steps h3{font-size:21px}.landing-steps p{font-size:19px}
+ .landing-skill>span{width:88px;height:88px}.landing-skill>span svg{width:55px;height:55px}
+ html[dir="rtl"] .landing-skill h3{font-size:23px}.landing-skill p{font-size:19px}
+ .landing-skill{padding:20px 15px 25px}.landing-button{font-size:18px;padding:15px 21px}
+ html[dir="rtl"] .trial-copy h2{font-size:45px}.trial-action li svg{width:72px;height:72px}
+ body:has(.landing-footer) .reference-stage{max-width:1400px;height:690px}
+ body:has(.landing-footer) .reference-hero{min-height:965px}
+ html[dir="rtl"] body:has(.landing-footer) .reference-copy h1{font-size:clamp(34px,3.25vw,50px)}
+ body:has(.landing-footer) .reference-description{font-size:18px}
+ body:has(.landing-footer) .reference-facts{max-width:1060px}.reference-facts p{font-size:16px}
+ .reference-cta{font-size:21px;min-height:73px}.reference-cta>span{width:42px;height:42px}
+ .landing-problem{min-height:590px}.landing-problem-visual{min-height:490px}
+}
+.journey-refresh{display:grid;grid-template-columns:minmax(255px,.95fr) minmax(0,3fr);gap:32px;direction:rtl;padding:25px 25px 28px;background:linear-gradient(110deg,#f0e9f8,#f8f5fa);border-radius:20px;margin-block:10px 55px;position:relative}
+.journey-refresh-main{grid-column:2;grid-row:1;min-width:0;padding:10px 0 0}
+.journey-refresh-main header{text-align:center}.journey-refresh-label{display:block;font:700 21px Manrope,sans-serif;color:#19203a;margin-bottom:10px}
+html[dir="rtl"] .journey-refresh h2{font-size:clamp(27px,2.75vw,40px);line-height:1.45;font-weight:700!important;margin:10px 0 20px;letter-spacing:-.03em}
+.journey-refresh-main header>p{font-size:18px;line-height:1.8;margin-bottom:27px}
+#journey-title{display:flex;justify-content:center;align-items:baseline;gap:.2em;flex-wrap:wrap}
+.journey-lock-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.journey-lock-card{background:#fff;border:1px solid #ffffff90;border-radius:14px;text-align:center;padding:25px 12px 24px;display:flex;flex-direction:column;align-items:center;min-height:255px}
+.journey-lock-card>svg{width:42px;height:42px;color:#19203a;margin-bottom:17px;stroke-width:2.8}
+html[dir="rtl"] .journey-lock-card h3{font:800 17px/1.65 Manrope,sans-serif!important;letter-spacing:0;color:#19203a;margin:0}
+.journey-card-rule{width:32px;height:2px;background:#f3edf9;margin:15px 0}
+.journey-lock-card p{font-size:16px;line-height:1.85;color:#626979;margin:0}
+.journey-refresh-contact{display:flex;justify-content:flex-start;align-items:center;gap:24px;margin:25px 12px 0;flex-wrap:wrap}
+.journey-refresh-contact p{font-size:16px;line-height:1.8}.journey-refresh-contact .landing-button{font-size:17px;min-height:62px;border-radius:18px;padding:13px 20px}.journey-refresh-contact .landing-button svg{width:29px;height:29px}
+.journey-refresh-details{grid-column:1;grid-row:1;background:#fffdfa;border-radius:16px;padding:24px 26px 26px;box-shadow:0 8px 20px #31234505}
+html[dir="rtl"] .journey-refresh-details h3{font-family:inherit;font-size:23px;font-weight:700!important;letter-spacing:-.02em;margin:0;line-height:1.5}
+.journey-details-rule{height:3px;background:linear-gradient(to left,#eae7e9 calc(100% - 28px),#554185 28px);display:block;margin:16px 0 25px}
+.journey-refresh-details ul{list-style:none;margin:0;padding:0}.journey-refresh-details li{min-height:32px;border-bottom:1px solid #f5f1ee;display:flex;align-items:center;gap:7px;font-size:16px;color:#686a75;line-height:1.8}
+.journey-refresh-details li b{font:700 19px Manrope,sans-serif!important;color:#8260ae}.journey-refresh-details li svg{width:19px;height:19px;color:#8260ae}
+.journey-refresh-price{background:#fff0df;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px 8px;min-height:94px;margin:32px 0 27px}
+html[dir="rtl"] .journey-refresh-price strong{font:800 30px Manrope,sans-serif!important;letter-spacing:-.025em;color:#19203a}.journey-refresh-price span{font-size:17px;font-weight:600;color:#414550}
+.journey-refresh-portfolio{display:flex;align-items:center;justify-content:center;gap:12px}.journey-refresh-portfolio svg{width:48px;height:48px;color:#52397e}.journey-refresh-portfolio p{font-size:17px;line-height:1.65;font-weight:600;color:#606273;margin:0}
+@media(max-width:1100px){.journey-refresh{gap:22px;padding:22px;grid-template-columns:240px minmax(0,1fr)}.journey-lock-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-lock-card{min-height:235px}.journey-refresh-details{align-self:stretch}.journey-refresh-contact{margin-inline:0;gap:15px}.journey-refresh-details{padding:22px}.journey-refresh-details ul{margin-top:30px}.journey-refresh-price{margin-top:40px}}
+@media(max-width:760px){.journey-refresh{grid-template-columns:1fr;padding:22px 18px;gap:25px;margin-bottom:40px}.journey-refresh-main{grid-column:1;grid-row:1}.journey-refresh-details{grid-column:1;grid-row:2}.journey-refresh-label{font-size:18px}html[dir="rtl"] .journey-refresh h2{font-size:29px}.journey-refresh-main header>p{font-size:17px}.journey-lock-card{padding:22px 12px;min-height:240px}.journey-lock-card p{font-size:16px}.journey-refresh-contact{justify-content:center;text-align:center;margin-top:24px}.journey-refresh-contact p{font-size:16px}.journey-refresh-details ul{margin-top:0}.journey-refresh-price{margin:24px auto;max-width:340px}.journey-refresh-details li{font-size:17px;min-height:38px}.journey-refresh-portfolio p{font-size:17px}.journey-refresh-details h3{text-align:center}}
+@media(max-width:400px){.journey-refresh{padding:24px 15px}.journey-lock-cards{grid-template-columns:1fr}.journey-lock-card{min-height:220px}.journey-lock-card p{font-size:17px}html[dir="rtl"] .journey-refresh h2{font-size:27px}.journey-refresh-contact .landing-button{font-size:16px}}
