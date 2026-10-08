@@ -1,0 +1,29 @@
+/* Ambient light only; text, photographs and section geometry remain stable. */
+@media(prefers-reduced-motion:no-preference){
+ .reference-hero:after{animation:zola-purple-ambient 16s ease-in-out infinite}
+ .reference-hero .hero-media-wash{animation:zola-yellow-ambient 14s ease-in-out infinite}
+}
+@keyframes zola-purple-ambient{0%,100%{translate:0 0;scale:1;opacity:.75}50%{translate:-9px 7px;scale:1.025;opacity:.64}}
+@keyframes zola-yellow-ambient{0%,100%{translate:0 0;scale:1;opacity:.8}50%{translate:7px -8px;scale:1.035;opacity:.68}}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .reference-cta,.reference-nav-cta,.landing-button,.faq-toggle,.legal-link{transition:transform 190ms ease,opacity 190ms ease,box-shadow 190ms ease}
+ .reference-cta:hover,.reference-nav-cta:hover,.landing-button:hover{transform:translateY(-2px)}
+ .reference-cta:active,.reference-nav-cta:active,.landing-button:active{transform:translateY(0) scale(.99)}
+ .reference-nav nav a,.footer-columns a{transition:color 180ms ease,opacity 180ms ease}
+ .mission-floating-step{transition:border-color 200ms ease}
+ .mission-floating-step:hover{border-color:#dfd2ed}
+ #skills .skills-doodle-pillar{transition:translate 200ms ease}
+ #skills .skills-doodle-pillar:hover{translate:0 -2px}
+ #skills .skills-doodle-art{transition:translate 200ms ease,scale 200ms ease}
+ #skills .skills-doodle-pillar:hover .skills-doodle-art{scale:1.025}
+ .journey-lock-card{transition:border-color 200ms ease}
+ .journey-lock-card:hover{border-color:#ded2ee}
+}
+@media(max-width:800px){
+ @keyframes zola-purple-ambient{0%,100%{translate:0 0;opacity:.75}50%{translate:-3px 3px;opacity:.66}}
+ @keyframes zola-yellow-ambient{0%,100%{translate:0 0;opacity:.8}50%{translate:3px -3px;opacity:.7}}
+}
+@media(prefers-reduced-motion:reduce){
+ .reference-hero:after,.reference-hero .hero-media-wash{animation:none!important}
+ .reference-cta,.reference-nav-cta,.landing-button,.mission-floating-step,.journey-lock-card,#skills .skills-doodle-pillar,#skills .skills-doodle-art{transition:none!important;translate:none;scale:none}
+}
