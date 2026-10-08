@@ -1,0 +1,31 @@
+/* Isolated Skills composition: open columns, flowing doodles, no card surfaces. */
+#skills.skills-doodle{padding-block:65px 70px;background:#fff;text-align:center;color:#19203a}
+#skills.skills-doodle .landing-label{background:#f5f0ff;color:#6d568e;font-size:14px;padding:7px 20px}
+html[dir="rtl"] #skills.skills-doodle h2{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:clamp(29px,3.1vw,43px);font-weight:700!important;line-height:1.5;letter-spacing:-.025em;margin:22px 0 18px}
+#skills.skills-doodle h2 em{color:#7045bd}
+#skills.skills-doodle .skills-support{font-size:18px;line-height:1.8;color:#72778b;max-width:850px;margin-inline:auto}
+.skills-doodle-pillars{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));direction:rtl;gap:20px;margin-top:48px;padding-bottom:37px}
+.skills-doodle-pillar{position:relative;min-width:0;background:none;border:0;box-shadow:none;padding:0 3px}
+.skills-doodle-art{width:105px;height:97px;margin:0 auto 19px;position:relative}
+#skills .skills-doodle-art svg{display:block;width:100%;height:100%;overflow:visible;fill:none;stroke:#232344;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#skills .skills-doodle-art .lavender{fill:#f4edff;stroke:none}
+#skills .skills-doodle-art .yellow{fill:#fff7de;stroke:none}
+#skills .skills-doodle-art .spark{stroke:#f1c55c;stroke-width:1.7}
+#skills .skills-doodle-art .purple-spark{stroke:#7450b4;stroke-width:1.7}
+html[dir="rtl"] #skills .skills-doodle-pillar h3{font:800 21px/1.4 Manrope,sans-serif!important;color:#19203a;letter-spacing:-.025em;margin:0 0 7px;white-space:nowrap}
+html[dir="rtl"] #skills .skills-doodle-pillar h4{font:600 21px/1.55 "IBM Plex Sans Arabic",sans-serif!important;letter-spacing:0;margin:0 0 17px;color:#19203a}
+#skills .skills-doodle-pillar p{font-size:16px;line-height:1.9;color:#777b90;margin:0}
+#skills .skills-connector{position:absolute;left:0;top:0;width:100%;height:120px;pointer-events:none;fill:none;stroke:#774dc0;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+#skills .skills-connector circle{fill:#fff;stroke-width:2.2}
+#skills .skills-connector-mobile{display:none}
+.skills-doodle-bottom{display:grid;grid-template-columns:1fr 1fr;direction:rtl;gap:37px;border-top:1px solid #eee9f6;padding-top:32px}
+.skills-doodle-benefit{display:flex;flex-direction:row-reverse;align-items:flex-start;text-align:right;gap:22px;min-width:0}
+.skills-doodle-benefit .skills-doodle-art{flex-shrink:0;width:107px;height:107px;margin:0}
+html[dir="rtl"] #skills .skills-doodle-benefit h3{font:600 22px/1.5 "IBM Plex Sans Arabic",sans-serif!important;letter-spacing:-.02em;margin:0 0 13px;color:#19203a}
+#skills .skills-doodle-benefit h3 bdi{font:800 20px Manrope,sans-serif}
+#skills .skills-doodle-benefit p{font-size:16px;line-height:1.85;color:#777b90;margin:0}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.skills-doodle-art{transition:translate 220ms ease}.skills-doodle-pillar:hover .skills-doodle-art,.skills-doodle-benefit:hover .skills-doodle-art{translate:0 -3px}}
+@media(max-width:1100px){.skills-doodle-pillars{gap:12px}.skills-doodle-art{width:93px;height:91px}html[dir="rtl"] #skills .skills-doodle-pillar h3{font-size:19px!important}html[dir="rtl"] #skills .skills-doodle-pillar h4{font-size:19px!important}.skills-doodle-bottom{gap:25px}.skills-doodle-benefit{gap:15px}.skills-doodle-benefit .skills-doodle-art{width:83px;height:90px}html[dir="rtl"] #skills .skills-doodle-benefit h3{font-size:20px!important}}
+@media(max-width:800px){#skills.skills-doodle{padding-block:50px 55px}.skills-doodle-pillars{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:36px;margin-top:35px;padding-bottom:30px}.skills-doodle-pillar{padding-inline:8px}#skills .skills-connector-desktop{display:none}#skills .skills-connector-mobile{display:block;height:100%;opacity:.7}.skills-doodle-bottom{grid-template-columns:1fr;gap:32px;padding-top:28px}.skills-doodle-benefit{gap:23px}.skills-doodle-benefit .skills-doodle-art{width:95px;height:95px}#skills.skills-doodle .skills-support{font-size:17px}html[dir="rtl"] #skills.skills-doodle h2{font-size:31px}}
+@media(max-width:460px){html[dir="rtl"] #skills.skills-doodle h2{font-size:28px}.skills-doodle-pillars{gap:29px 8px}.skills-doodle-art{width:85px;height:83px;margin-bottom:15px}html[dir="rtl"] #skills .skills-doodle-pillar h3{font-size:16px!important}html[dir="rtl"] #skills .skills-doodle-pillar h4{font-size:18px!important}#skills .skills-doodle-pillar p{font-size:15px;line-height:1.8}.skills-doodle-pillar{padding-inline:2px}.skills-doodle-benefit{gap:16px}.skills-doodle-benefit .skills-doodle-art{width:75px;height:85px}html[dir="rtl"] #skills .skills-doodle-benefit h3{font-size:19px!important}#skills .skills-doodle-benefit p{font-size:16px}.skills-doodle-bottom{gap:28px}}
+@media(prefers-reduced-motion:reduce){#skills .skills-doodle-art{transition:none;translate:none}}

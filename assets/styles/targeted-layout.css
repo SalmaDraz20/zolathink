@@ -1,0 +1,41 @@
+/* Spacing and RTL corrections only; approved component styling is retained. */
+:root{--section-between-space:20px}
+main>section+section{margin-top:var(--section-between-space)}
+.landing-problem{direction:rtl}
+.landing-problem-copy{text-align:right}
+html[dir="rtl"] .landing-problem h2{text-align:right}
+.landing-problem-copy .landing-label{margin-right:0;margin-left:auto}
+.landing-trial{direction:rtl}
+.trial-copy{direction:rtl;text-align:right}
+.trial-copy .landing-label{margin-right:0;margin-left:auto}
+.trial-action{border-left:0;border-right:1px solid #dcccf4;padding-left:0;padding-right:40px}
+#faq-answers{max-width:none;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px;align-items:start;direction:rtl}
+#faq-answers details{min-width:0}
+@media(min-width:901px){
+ body:has(.landing-footer) .reference-stage{padding-top:14px}
+ body:has(.landing-footer) .reference-stage .hero-media{margin:-20px 0}
+ body:has(.landing-footer) .reference-facts{margin-top:16px}
+ body:has(.landing-footer) .reference-hero{padding-bottom:28px}
+ body:has(.landing-footer) .reference-description{margin-top:34px}
+ body:has(.landing-footer) .reference-actions{margin-top:47px}
+ /* Read the scattered journey right-to-left, row by row: 01/02, 03/04, 05/06. */
+ .step-discover{left:68%;top:6%;width:25%;transform:rotate(-3deg)}
+ .step-research{left:9%;top:6%;width:25%;transform:rotate(5deg)}
+ .step-discuss{left:75%;top:38%;width:25%;transform:rotate(4deg)}
+ .step-decide{left:0;top:33%;width:25%;transform:rotate(-4deg)}
+ .step-build{left:67%;top:69%;width:26%;transform:rotate(5deg)}
+ .step-present{left:11%;top:66%;width:24%;transform:rotate(-5deg)}
+}
+@media(max-width:900px){
+ :root{--section-between-space:14px}
+ .trial-action{border:0;padding-inline:0}
+ #faq-answers{column-gap:28px}
+}
+@media(max-width:800px){
+ body:has(.landing-footer) .reference-stage{padding-top:36px}
+ body:has(.landing-footer) .reference-facts{margin-top:20px}
+}
+@media(max-width:760px){
+ :root{--section-between-space:12px}
+ #faq-answers{grid-template-columns:1fr;column-gap:0}
+}

@@ -1,0 +1,33 @@
+/* Final hierarchy refinements; all existing section geometry is retained. */
+html[dir="rtl"] body:has(.landing-footer) .reference-copy h1{font-size:clamp(36px,3.4vw,48px);line-height:1.48;white-space:normal}
+body:has(.landing-footer) .reference-hero{background:transparent}
+body:has(.landing-footer) .reference-hero:after{content:"";position:absolute;right:-140px;top:12%;width:460px;height:460px;background:radial-gradient(ellipse,#b295de38 0%,#d8c8ee1c 42%,transparent 72%);filter:blur(30px);opacity:.75;z-index:-1;pointer-events:none;border-radius:50%}
+.reference-hero .hero-media-wash{background:radial-gradient(ellipse,#ffdf743b 0%,#fff0bc20 40%,transparent 72%);filter:blur(25px);opacity:.8;border-radius:50%}
+html[dir="rtl"] .mission-flow-heading h2{font-size:clamp(28px,2.65vw,36px);line-height:1.5}
+.mission-flow-heading p{font-size:17px;line-height:1.9;max-width:880px;margin-inline:auto}
+html[dir="rtl"] .mission-floating-step h3{font-size:18px!important;line-height:1.6!important}
+.mission-floating-step p{font-size:16px;line-height:1.8}
+.mission-floating-step{box-shadow:none;border-color:#f0eaf6;background:#fefcff!important}
+.mission-center-card{box-shadow:0 5px 18px #493b7307}
+.mission-center-card h3{font-size:24px!important}
+html[dir="rtl"] #skills.skills-doodle h2{font-size:clamp(28px,2.8vw,38px);line-height:1.5}
+#skills.skills-doodle .skills-support{font-size:17px}
+#skills .skills-doodle-art{width:87px;height:82px;margin-bottom:18px}
+html[dir="rtl"] #skills .skills-doodle-pillar h3{font-size:19px!important}
+html[dir="rtl"] #skills .skills-doodle-pillar h4{font-size:19px!important}
+#skills .skills-doodle-pillar p{font-size:16px}
+#skills .skills-doodle-benefit .skills-doodle-art{width:88px;height:88px}
+html[dir="rtl"] #skills .skills-doodle-benefit h3{font-size:20px!important}
+.journey-refresh{box-shadow:none;border-color:#f0ebf5}
+.journey-refresh-details{background:#fefcff;box-shadow:none;border-color:#f3eef8}
+.journey-lock-card{border-color:#f1edf6;box-shadow:none}
+.landing-trial{box-shadow:none;border-color:#eee8f4}
+.landing-problem{padding-block:65px}
+:root{--section-between-space:24px}
+.whatsapp-mark{display:block;overflow:visible;flex-shrink:0}
+.whatsapp-mark path{fill:currentColor;stroke:none}
+.footer-socials .whatsapp-mark{width:17px;height:17px}
+.journey-refresh-contact .landing-button .whatsapp-mark{width:25px;height:25px}
+@media(max-width:900px){:root{--section-between-space:18px}.mission-flow-heading p{font-size:17px}.reference-hero:after{max-width:65vw}.hero-media-wash{filter:blur(18px)}}
+@media(max-width:800px){html[dir="rtl"] body:has(.landing-footer) .reference-copy h1{font-size:clamp(32px,5vw,42px)}#skills .skills-doodle-art{width:82px;height:79px}#skills .skills-doodle-benefit .skills-doodle-art{width:82px;height:82px}}
+@media(max-width:520px){:root{--section-between-space:14px}html[dir="rtl"] body:has(.landing-footer) .reference-copy h1{font-size:clamp(30px,8.5vw,35px)}html[dir="rtl"] .mission-flow-heading h2{font-size:28px}.mission-center-card h3{font-size:24px!important}html[dir="rtl"] #skills.skills-doodle h2{font-size:27px}#skills .skills-doodle-art{width:76px;height:74px}html[dir="rtl"] #skills .skills-doodle-pillar h3{font-size:16px!important}html[dir="rtl"] #skills .skills-doodle-pillar h4{font-size:18px!important}#skills .skills-doodle-pillar p{font-size:15px}#skills .skills-doodle-benefit .skills-doodle-art{width:69px;height:75px}html[dir="rtl"] #skills .skills-doodle-benefit h3{font-size:19px!important}}

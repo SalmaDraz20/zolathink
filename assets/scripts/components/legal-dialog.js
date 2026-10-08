@@ -1,3 +1,4 @@
+export function initLegalDialog() {
 const legalDialog = document.getElementById('legal-dialog');
 document.querySelectorAll('[data-legal]').forEach(button => {
   button.addEventListener('click', () => {
@@ -16,3 +17,5 @@ legalDialog.addEventListener('click', event => {
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) legalDialog.close();
   }
 });
+
+}

@@ -2,7 +2,6 @@
 body:has(.landing-footer){--launch-purple:#6434a4;--launch-ink:#19203a;--launch-line:#eae5f0}
 .hero-media{transform:scale(.88)}
 body:has(.landing-footer) .reference-hero{min-height:0;padding-bottom:30px}
-body:has(.landing-footer) .reference-discover{margin-block:38px 12px}
 .landing-problem{min-height:0;padding-block:60px;gap:60px;align-items:center}
 .landing-problem-copy p{font-size:17px;margin-top:20px;max-width:520px}
 .landing-problem{grid-template-columns:1fr 1fr;column-gap:40px}

@@ -6,13 +6,12 @@ body:has(.landing-footer) .reference-facts,
 .landing-shell,
 .zola-about-reference .landing-shell{width:min(var(--page-max-width),calc(100% - var(--page-side-padding)*2));max-width:var(--page-max-width);margin-inline:auto;box-sizing:border-box}
 body:has(.landing-footer) .reference-nav{padding-inline:0}
-body:has(.landing-footer) .reference-hero{height:auto;min-height:0;padding-bottom:18px}
+body:has(.landing-footer) .reference-hero{height:auto;min-height:0;padding-bottom:22px}
 @media(min-width:901px){
  body:has(.landing-footer) .reference-stage{height:auto;display:grid;grid-template-columns:54.04% 45.96%;direction:ltr;align-items:center;padding:4px 0 0}
  body:has(.landing-footer) .reference-stage .hero-media{position:relative;left:auto;top:auto;width:100%;grid-column:1;grid-row:1;margin:-30px 0}
  body:has(.landing-footer) .reference-copy{position:relative;inset:auto;width:100%;grid-column:2;grid-row:1;direction:rtl;padding:0}
  body:has(.landing-footer) .reference-facts{margin-top:6px}
- body:has(.landing-footer) .reference-discover{margin:24px auto 12px}
 }
 @media(max-width:900px){:root{--page-side-padding:24px}}
 @media(max-width:800px){

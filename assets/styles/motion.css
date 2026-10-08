@@ -1,0 +1,12 @@
+/* Quiet hover feedback; no changes to size, color, or card geometry. */
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .reference-nav a,.footer-columns a,.legal-link{transition:opacity 160ms ease}
+ .reference-nav a:hover,.footer-columns a:hover,.legal-link:hover{opacity:.88}
+ .landing-button,.reference-cta{transition:transform 180ms ease,box-shadow 180ms ease}
+ .landing-button:active,.reference-cta:active{transform:translateY(0)}
+ .landing-faq summary:after{transition:opacity 160ms ease}
+ .landing-faq summary:hover:after{opacity:.7}
+}
+@media(prefers-reduced-motion:reduce){
+ .landing-button,.reference-cta,.reference-nav a,.footer-columns a,.legal-link{transition:none!important}
+}
