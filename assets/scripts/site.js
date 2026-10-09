@@ -1,7 +1,9 @@
 import { initLegalDialog } from './components/legal-dialog.js';
+import { initVideoModal } from './components/video-modal.js';
 import { entrance, revealOnScroll, revealSequence, revealDoodleLines } from './utils/motion.js';
 
 initLegalDialog();
+initVideoModal();
 
 // Content is always visible, including without JavaScript or reduced motion.
 document.querySelectorAll('.reference-copy h1, .reference-description, .reference-actions')

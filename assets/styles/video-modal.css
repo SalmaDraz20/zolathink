@@ -1,0 +1,13 @@
+html.zola-video-open,html.zola-video-open body{overflow:hidden;overscroll-behavior:none}
+.reference-watch{font-family:inherit;text-align:inherit;padding:0;border:0;background:transparent;cursor:pointer}
+.zola-video-modal{position:fixed;inset:0;margin:auto;padding:0;border:0;border-radius:16px;background:#101426;color:#fff;max-width:calc(100vw - 36px);max-height:90vh;max-height:90dvh;overflow:hidden;box-shadow:0 24px 90px #0005}
+.zola-video-modal::backdrop{background:#111426c9;backdrop-filter:blur(5px)}
+.zola-video-frame{position:relative;line-height:0}
+.zola-video-frame video{display:block;width:auto;height:auto;max-width:min(1040px,calc(100vw - 36px));max-height:86vh;max-height:86dvh;object-fit:contain;background:#101426}
+.zola-video-close{position:absolute;top:10px;left:10px;z-index:2;width:38px;height:38px;border:1px solid #ffffff45;border-radius:50%;background:#19203ad9;color:#fff;font:28px/1 Arial;cursor:pointer;display:grid;place-items:center}
+.zola-video-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:66px;height:66px;border:1px solid #ffffff65;background:#6636a7e8;color:white;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+.zola-video-play svg{width:29px;height:29px;fill:currentColor;stroke:none;margin-left:3px}
+.zola-video-modal [hidden]{display:none!important}
+.zola-video-modal button:focus-visible,.zola-video-modal video:focus-visible{outline:3px solid #b996e4;outline-offset:-4px}
+@media(max-width:520px){.zola-video-modal{max-width:calc(100vw - 20px);border-radius:12px}.zola-video-frame video{max-width:calc(100vw - 20px);max-height:84dvh}.zola-video-close{width:35px;height:35px;top:8px;left:8px}}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.zola-video-modal button{transition:opacity 160ms ease}.zola-video-modal button:hover{opacity:.85}}
