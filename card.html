@@ -272,17 +272,28 @@ async function submit(){
   sending = true; $('next').disabled = true; $('next').textContent = 'جاري الإرسال…';
   const body = new URLSearchParams({ k:key, mission, phase, code:(A.code||'').trim() });
   Object.entries(pack()).forEach(([k,v])=>body.set(k,v));
+  let status = 'unknown', text = '';
   try{
-    await fetch(ENDPOINT,{method:'POST',mode:'no-cors',body});
-    try{ sessionStorage.removeItem(DRAFT); }catch(e){}
-    $('nav').style.display='none'; $('barfill').style.width='100%'; $('count').textContent='';
-    $('stage').innerHTML = `<div class="card"><div class="done"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">${I.check}</svg></div>
-      <h1>اتسجّلت <em>إجابتك</em></h1><p>${phase==='before'?'كمّل مع فريقك. هنرجعلك بعد الشغل.':'شكرًا! خلصت.'}</p></div></div>`;
-    buzz();
+    // بنقرا رد السيرفر لو المتصفح سمح، عشان ما نقولش "اتسجّلت" وهي مااتسجّلتش
+    const r = await fetch(ENDPOINT,{method:'POST',body});
+    text = (await r.text()).trim();
+    status = text === 'ok' ? 'ok' : 'rejected';
   }catch(err){
-    sending = false; $('next').disabled = false; $('next').textContent='إعادة الإرسال';
-    $('err').textContent='الإرسال مانفعش. اتأكد من النت وجرّب تاني. إجاباتك محفوظة.';
+    status = 'unknown'; // الطلب اتبعت غالبًا لكن المتصفح مانعنا نقرا الرد
   }
+  if (status === 'rejected'){
+    sending = false; $('next').disabled = false; $('next').textContent='إعادة الإرسال';
+    $('err').textContent = text === 'forbidden' ? 'اللينك ده غلط (الكلمة السرية). اطلب من الميسّر لينك جديد.' : 'الإرسال اترفض (' + text.slice(0,40) + '). كلّم الميسّر.';
+    return;
+  }
+  try{ sessionStorage.removeItem(DRAFT); }catch(e){}
+  $('nav').style.display='none'; $('barfill').style.width='100%'; $('count').textContent='';
+  const msg = status === 'ok'
+    ? (phase==='before' ? 'كمّل مع فريقك. هنرجعلك بعد الشغل.' : 'شكرًا! خلصت.')
+    : 'الإجابة اتبعتت. لو الميسّر قالك إنها مش ظاهرة، ابعتها تاني.';
+  $('stage').innerHTML = `<div class="card"><div class="done"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">${I.check}</svg></div>
+    <h1>${status==='ok' ? 'اتسجّلت <em>إجابتك</em>' : 'اتبعتت <em>إجابتك</em>'}</h1><p>${msg}</p></div></div>`;
+  buzz();
 }
 
 render();
