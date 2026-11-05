@@ -96,15 +96,18 @@
   </footer>
 </main>
 
+<script src="mission2-data.js"></script>
 <script>
-// ===== إعدادات: لينك Google Apps Script =====
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyD6t0HVvI-HtDqpfVjoUQgzNR36pt6EpslUp3LVMvZe5ckI9ukSdAIPwxm_qxfXVgBxw/exec';
+// ===== إعدادات: لينك Google Apps Script (بيتاخد من mission2-data.js) =====
+const ENDPOINT = (window.ZM2 && ZM2.api()) || 'https://script.google.com/macros/s/AKfycbyD6t0HVvI-HtDqpfVjoUQgzNR36pt6EpslUp3LVMvZe5ckI9ukSdAIPwxm_qxfXVgBxw/exec';
 // ============================================
 
 const qs = new URLSearchParams(location.search);
 const mission = (qs.get('mission') || '').replace(/[^\w؀-ۿ -]/g,'').slice(0,20);
 const key = qs.get('k') || '';
 const phase = qs.get('phase') === 'after' ? 'after' : 'before';
+const presetCode = (qs.get('c') || '').replace(/[^\w؀-ۿ-]/g,'').toUpperCase().slice(0,20);
+const M2 = mission === '2' && window.ZM2;
 const $ = id => document.getElementById(id);
 
 $('pill').textContent = (phase === 'after' ? 'بعد' : 'قبل') + (mission ? ' · Mission ' + mission : '');
@@ -126,30 +129,34 @@ const I = {
 const svg = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
 
 const CONS = [['فلوس','💰'],['وقت','⏱️'],['مكان','📍'],['ناس','👥'],['أدوات','🧰'],['قواعد وشروط','📏']];
-const SUBJ = [['علوم','🔬'],['رياضيات','➗'],['لغة عربية','📖'],['إنجليزي','🔤'],['دراسات','🌍'],['كمبيوتر','💻'],['من الحياة','🌱'],['مفيش حاجة','🤷']];
+const SUBJ_ALL = [['علوم','🔬'],['رياضيات','➗'],['لغة عربية','📖'],['إنجليزي','🔤'],['دراسات','🌍'],['كمبيوتر','💻'],['من الحياة','🌱'],['مفيش حاجة','🤷']];
+const SUBJ = (mission === '2') ? SUBJ_ALL.filter(x => ['رياضيات','دراسات','لغة عربية','إنجليزي','من الحياة','مفيش حاجة'].includes(x[0])) : SUBJ_ALL;
 const OKS  = [['قياس رقم','📏'],['تجربة صغيرة','🧪'],['رأي الناس','💬'],['مقارنة قبل وبعد','↔️'],['مش عارف','🤔']];
 const EMO  = [['😕','مش واثق'],['🤔','شوية'],['🙂','معقول'],['😀','واثق'],['🤩','واثق جدًا']];
 
 // ---------- الخطوات ----------
 const STEPS = [
-  {id:'code', icon:'user', title:'كودك <em>إيه؟</em>', note:'الكود اللي الميسّر إداهولك. ماتكتبش اسمك.', type:'text', max:20, ph:'مثال: S07', req:true},
-  {id:'q1', icon:'bulb', title: phase==='after' ? 'حلك <em>النهائي</em> إيه؟' : 'أول <em>حل</em> هتختاره؟', note:'في سطر واحد', type:'text', max:120, ph:'اكتب حلك هنا', req:true},
+  {id:'code', icon:'user', title:'كودك <em>إيه؟</em>', note:'الكود اللي الميسّر إداهولك. ماتكتبش اسمك.', type:'text', max:20, ph:'مثال: S07', req:true, skip:()=>!!presetCode},
+  {id:'q1', icon:'bulb', title: phase==='after' ? 'حلك <em>النهائي</em> إيه؟' : 'أول <em>حل</em> هتختاره؟', note: M2 ? ZM2.SCENARIO : 'في سطر واحد', type:'text', max:120, ph:'اكتب حلك هنا', req:true},
   {id:'q2', icon:'why', title:'ليه <em>اخترته؟</em>', note:'قول السبب بكلمتين', type:'text', max:140, ph:'عشان…', req:true},
   {id:'cons', icon:'flag', title:'إيه <em>القيود</em> اللي واخد بالك منها؟', note:'اختار كل اللي ينطبق', type:'multi', opts:CONS},
   {id:'top', icon:'star', title:'أنهي قيد هو <em>الأهم؟</em>', type:'single', from:'cons', skip:a=>(a.cons||[]).length<2},
-  {id:'know', icon:'book', title:'استخدمت إيه من اللي <em>اتعلمته؟</em>', note:'اختار المادة، وبعدين سمّي الحاجة', type:'chipsText', opts:SUBJ, none:'مفيش حاجة', ph:'سمّيها (مثال: انتقال الحرارة)', max:60},
+  {id:'know', icon:'book', title:'استخدمت إيه من اللي <em>اتعلمته؟</em>', note:'اختار المادة، وبعدين سمّي الحاجة', type:'chipsText', opts:SUBJ, none:'مفيش حاجة', ph: M2 ? 'سمّيها (مثال: مقياس الرسم)' : 'سمّيها (مثال: انتقال الحرارة)', max:60},
   {id:'alt', icon:'scale', title:'فكرت في <em>حل تاني؟</em>', type:'yesno', yes:'آه', no:'لأ',
      fields:[['alt','الحل التاني إيه؟',100],['gave','اتنازلت عن إيه عشان حلك؟',100]]},
   {id:'ok', icon:'target', title:'هتعرف إنه <em>نجح</em> إزاي؟', note:'اختار اللي يناسب', type:'multi', opts:OKS},
   ...(phase==='after' ? [{id:'chg', icon:'swap', title:'<em>غيّرت</em> حلك؟', type:'yesno', yes:'آه غيّرت', no:'لأ، زي ما هو',
      fields:[['why','غيّرته ليه؟',120]], yesOnly:true}] : []),
+  ...(M2 ? [{id:'quiz', icon:'target', title:'جرّب نفسك <em>بسرعة</em>', note: phase==='before' ? 'لو مش عارف سيبها فاضية. مفيش درجات دلوقتي' : 'ثلاث أسئلة سريعة', type:'quiz'}] : []),
   {id:'conf', icon:'smile', title:'واثق <em>قد إيه</em> من حلك؟', type:'emoji'}
 ];
 
 // ---------- الحالة (بتتحفظ مؤقتًا لو الصفحة اتقفلت) ----------
 const DRAFT = 'zola-card-' + (mission||'x') + '-' + phase;
 let A = {}, idx = 0, dir = 1, sending = false;
+if (presetCode) A.code = presetCode;
 try{ const d = JSON.parse(sessionStorage.getItem(DRAFT)||'null'); if(d){A=d.A||{}; idx=Math.min(d.idx||0, STEPS.length-1);} }catch(e){}
+if (presetCode) A.code = presetCode;
 const save = () => { try{ sessionStorage.setItem(DRAFT, JSON.stringify({A,idx})); }catch(e){} };
 
 const active = () => STEPS.filter(s => !(s.skip && s.skip(A)));
@@ -192,6 +199,12 @@ function render(){
       <button type="button" class="chip" data-v="no" aria-pressed="${v==='no'}">${esc(s.no)}</button></div>
       <div class="reveal ${v==='yes'?'on':''}" id="rv">`+s.fields.map(([k,l,m])=>
         `<label class="lbl" for="f_${k}">${esc(l)}</label><input class="field" id="f_${k}" data-k="${k}" maxlength="${m}" value="${esc(A[s.id+'_'+k]||'')}">`).join('')+`</div>`;
+  } else if (s.type==='quiz'){
+    const Q = ZM2.QUIZ[phase];
+    body = `<label class="lbl" for="qa">1) ${esc(Q.a)}</label><input class="field" id="qa" data-q="qa" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="الرقم" value="${esc(A.qa||'')}">
+      <label class="lbl" for="qb">2) ${esc(Q.b)}</label><input class="field" id="qb" data-q="qb" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="الرقم" value="${esc(A.qb||'')}">
+      <label class="lbl">3) ${esc(Q.c)}</label><div class="grid" role="group" style="grid-template-columns:1fr">`+ZM2.QUIZ.eras.map(t=>
+      `<button type="button" class="chip" data-v="${esc(t)}" aria-pressed="${A.qc===t}">${esc(t)}</button>`).join('')+`</div>`;
   } else if (s.type==='emoji'){
     const v = A.conf;
     body = `<div class="emo" role="group">`+EMO.map(([e,t],i)=>
@@ -213,12 +226,15 @@ function wire(s){
   if (s.type==='text'){
     inp.addEventListener('input',()=>{A[s.id]=inp.value; save(); $('next').disabled = !valid(s);});
     inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault(); if(valid(s)) go(1);} });
-    setTimeout(()=>inp.focus({preventScroll:true}),120);
+    setTimeout(()=>{ if(document.body.contains(inp)) inp.focus({preventScroll:true}); },120);
   }
+  stage.querySelectorAll('[data-q]').forEach(f=>f.addEventListener('input',()=>{A[f.dataset.q]=f.value; save();}));
   stage.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
     buzz();
     const v = b.dataset.v;
-    if (s.type==='multi'){
+    if (s.type==='quiz'){
+      A.qc=v; save(); stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
+    } else if (s.type==='multi'){
       const a = new Set(A[s.id]||[]); a.has(v)?a.delete(v):a.add(v); A[s.id]=[...a];
       if (s.id==='cons' && !A.cons.includes(A.top)) A.top='';
       save(); b.setAttribute('aria-pressed', a.has(v));
@@ -227,7 +243,7 @@ function wire(s){
     } else if (s.type==='chipsText'){
       A[s.id]=v; if(v===s.none) A[s.id+'_t']=''; save();
       stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
-      const rv=$('rv'); rv.classList.toggle('on', v!==s.none); if(v!==s.none) setTimeout(()=>$('in').focus({preventScroll:true}),80);
+      const rv=$('rv'); rv.classList.toggle('on', v!==s.none); if(v!==s.none) setTimeout(()=>{ const x=$('in'); if(x) x.focus({preventScroll:true}); },80);
     } else if (s.type==='yesno'){
       A[s.id]=v; save();
       stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
@@ -263,6 +279,7 @@ function pack(){
     q4: [A.know, (A.know_t||'').trim()].filter(Boolean).join(' — '),
     q5: [A.alt && 'فكرت في بديل: '+yn(A.alt), (A.alt_alt||'').trim() && 'بديل: '+A.alt_alt.trim(), (A.alt_gave||'').trim() && 'اتنازلت عن: '+A.alt_gave.trim()].filter(Boolean).join(' | '),
     q6: [j(A.ok), A.conf && 'ثقة: '+A.conf+'/5'].filter(Boolean).join(' | '),
+    qa: M2 ? (A.qa||'').trim() : '', qb: M2 ? (A.qb||'').trim() : '', qc: M2 ? (A.qc||'') : '',
     q7: phase==='after' ? [A.chg && 'غيّرت: '+yn(A.chg), (A.chg_why||'').trim() && 'ليه: '+A.chg_why.trim()].filter(Boolean).join(' | ') : ''
   };
 }
@@ -294,6 +311,7 @@ async function submit(){
   $('stage').innerHTML = `<div class="card"><div class="done"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">${I.check}</svg></div>
     <h1>${status==='ok' ? 'اتسجّلت <em>إجابتك</em>' : 'اتبعتت <em>إجابتك</em>'}</h1><p>${msg}</p></div></div>`;
   buzz();
+  try{ if (parent !== window) parent.postMessage({zola:'card-done', phase, status}, location.origin); }catch(e){}
 }
 
 render();
