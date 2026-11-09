@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF9FE">
+<title>Zola Think — Mission 1 · Earthquake Early Warning</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF9FE;--ink:#1B2140;--ink2:#2A2F55;--muted:#6B6F88;--p:#8450C2;--pd:#5E31A0;--lav:#F1ECFA;--lav2:#E3D8F3;--y:#F8B73A;--red:#E5484D;--ok:#2FA36B;
+--sh:0 1px 2px rgba(40,20,90,.05),0 12px 30px -16px rgba(60,30,130,.3);--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Tahoma,sans-serif}
+body{background:repeating-linear-gradient(to bottom,transparent 0 47px,#F1EEF7 47px 49px),var(--bg)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top img{height:34px}
+.prog{flex:1;height:6px;background:#ECE6F6;border-radius:9px;overflow:hidden;margin:0 6px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#B48CF0,var(--p));border-radius:9px;transition:width .6s var(--ease)}
+.lang{font-size:14px;font-weight:700;color:var(--pd);background:#fff;border:1.5px solid var(--lav2);border-radius:99px;padding:6px 12px}
+.screen{display:none;flex:1;flex-direction:column;padding-top:18px}
+.screen.on{display:flex;animation:in .5s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.kick{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--pd);background:var(--lav);border-radius:99px;padding:5px 12px;margin-bottom:10px;align-self:flex-start}
+h1{font-size:30px;line-height:1.25;color:var(--ink2)}
+h2{font-size:24px;line-height:1.3;color:var(--ink2)}
+p.sub{font-size:16px;line-height:1.6;color:var(--muted);margin-top:8px}
+.card{background:#fff;border:1.5px solid #ECE7F4;border-radius:22px;box-shadow:var(--sh);padding:16px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border-radius:16px;background:var(--p);color:#fff;font-size:18px;font-weight:700;box-shadow:0 12px 24px -12px rgba(110,60,190,.8);transition:transform .15s,background .2s;margin-top:auto}
+.btn:active{transform:scale(.97)}.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.ghost{background:#fff;color:var(--pd);border:1.5px solid var(--lav2);box-shadow:none;min-height:48px;font-size:16px}
+.spacer{flex:1;min-height:16px}
+/* intro */
+.hero{margin:22px 0 18px;position:relative;border-radius:22px;overflow:hidden;background:#F7F2FD}
+.hero img{width:100%;display:block}
+.intro-line{font-size:17px;line-height:1.6;color:var(--muted);margin:10px 0 0}
+.meta{display:flex;gap:8px;margin:16px 0 18px;flex-wrap:wrap}
+.meta span{font-size:13px;font-weight:600;color:var(--pd);background:#fff;border:1.5px solid var(--lav2);border-radius:99px;padding:6px 12px}
+/* options */
+.opts{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.opt{display:flex;align-items:center;gap:12px;text-align:start;background:#fff;border:2px solid #ECE7F4;border-radius:16px;padding:14px 16px;font-size:17px;font-weight:600;color:var(--ink2);transition:.2s}
+.opt .e{font-size:24px;width:30px;text-align:center}
+.opt.sel{border-color:var(--p);background:var(--lav)}
+.opt.right{border-color:var(--ok);background:#E8F7EF}
+.opt.wrong{border-color:#F3C2C4;background:#FDF0F0;color:#9A3B3F}
+.opt .ck{margin-inline-start:auto;width:24px;height:24px;border-radius:7px;border:2px solid var(--lav2);display:grid;place-items:center;color:#fff;font-size:15px;flex:none}
+.opt.sel .ck{background:var(--p);border-color:var(--p)}
+.fb{display:none;border-radius:16px;padding:14px 16px;font-size:15.5px;line-height:1.6;margin-bottom:14px}
+.fb.on{display:block;animation:in .4s var(--ease)}
+.fb.good{background:#E8F7EF;color:#1F6B46}.fb.mid{background:#FFF5E0;color:#8A5A00}.fb.bad{background:#FDF0F0;color:#9A3B3F}
+.fb b{display:block;font-size:17px;margin-bottom:2px}
+.seis{position:relative;border-radius:20px;overflow:hidden;background:#F7F2FD;margin-top:14px}
+.seis img{width:100%;display:block}
+.seis.shake{animation:quake .7s}
+@keyframes quake{10%,50%,90%{transform:translateX(-6px)}30%,70%{transform:translateX(6px)}}
+.legend{display:none;gap:8px;margin-top:10px}
+.legend.on{display:flex;animation:in .4s}
+.legend div{flex:1;background:#fff;border:1.5px solid #ECE7F4;border-radius:14px;padding:10px;font-size:13px;line-height:1.4;color:var(--muted)}
+.legend b{display:block;font-size:15px;color:var(--pd)}
+/* cards */
+.deck{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0;perspective:900px}
+.sc{aspect-ratio:3/4.3;position:relative}
+.sc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s var(--ease)}
+.sc.flip .sc-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.back{background:linear-gradient(160deg,#9564D3,#6A3AAE);color:#F3EBFF;font-weight:700;box-shadow:var(--sh)}
+.back .n{width:46px;height:46px;border-radius:50%;background:#DCC9F0;color:var(--p);display:grid;place-items:center;font-size:22px}
+.frontf{transform:rotateY(180deg);background:#fff;border:2px solid var(--p);font-weight:700;font-size:14px;color:var(--pd);padding:8px;text-align:center}
+.frontf .em{font-size:30px}
+.sc.dim{opacity:.35;transform:scale(.95);transition:.4s}
+.scen{display:none}.scen.on{display:block;animation:in .45s var(--ease)}
+.scen h3{font-size:21px;color:var(--p);display:flex;align-items:center;gap:8px}
+.scen p{font-size:15.5px;line-height:1.6;color:var(--ink2);margin-top:6px}
+.scen .info{background:var(--lav);border-radius:12px;padding:10px 12px;font-size:14px;color:#4A4E68;margin-top:10px;line-height:1.55}
+/* calc */
+.data{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.data div{background:#fff;border:1.5px solid #ECE7F4;border-radius:14px;padding:10px 6px;text-align:center;font-size:12.5px;color:var(--muted)}
+.data b{display:block;font-size:22px;color:var(--ink2);direction:ltr}
+.stepper{display:flex;align-items:center;justify-content:center;gap:18px;margin:10px 0 6px}
+.stepper button{width:56px;height:56px;border-radius:50%;background:#fff;border:2px solid var(--lav2);font-size:28px;color:var(--pd);font-weight:700}
+.stepper .v{min-width:120px;text-align:center;font-size:56px;font-weight:700;color:var(--p);direction:ltr;line-height:1}
+.stepper .v small{font-size:18px;color:var(--muted)}
+.hint{font-size:14px;color:var(--pd);text-decoration:underline;text-underline-offset:3px;margin:4px auto 12px;display:block}
+.eq{font-size:15px;line-height:1.9;direction:ltr;text-align:center;color:var(--ink2)}
+/* sim */
+.sim{position:relative;height:170px;margin:18px 0 10px}
+.road{position:absolute;left:0;right:0;top:92px;height:4px;background:#DDD3EE;border-radius:4px}
+.epi{position:absolute;inset-inline-start:-4px;top:76px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,var(--red) 0 8px,rgba(229,72,77,.22) 9px 18px)}
+.home{position:absolute;inset-inline-end:-6px;top:56px;width:64px;height:64px;border-radius:18px;background:#fff;border:2.5px solid var(--lav2);display:grid;place-items:center;font-size:32px;transition:.3s}
+.wf{position:absolute;top:40px;height:110px;width:5px;border-radius:4px;inset-inline-start:14px;opacity:0}
+.wf.p{background:linear-gradient(transparent,#9C7BE0,transparent)}.wf.s{background:linear-gradient(transparent,var(--red),transparent);width:8px}
+.wf em{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:13px;font-weight:700;white-space:nowrap}
+.wf.p em{color:#7A55CF}.wf.s em{color:var(--red)}
+.lbls{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:-6px}
+.count{text-align:center;margin:8px 0}
+.count .big{font-size:76px;font-weight:700;color:var(--ink2);direction:ltr;line-height:1;font-variant-numeric:tabular-nums}
+.count .st{font-size:16px;color:var(--muted);margin-top:4px;min-height:24px}
+.alertbox{display:none;border-radius:18px;padding:16px;text-align:center;font-size:24px;font-weight:700;margin-bottom:12px}
+.alertbox.on{display:block}
+body.flash{animation:flash .5s infinite}
+@keyframes flash{50%{background:#FFE7A8}}
+.home.warn{border-color:var(--y);background:#FFF6E3}.home.hit{border-color:var(--red);background:#FDECEC;animation:quake .4s infinite}
+.app.quake{animation:quake .35s 4}
+/* end */
+.done-ico{font-size:58px;margin:24px 0 6px}
+.recap{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.recap div{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid #ECE7F4;border-radius:14px;padding:12px 14px;font-size:15px;color:var(--ink2)}
+.recap i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--lav);display:grid;place-items:center;flex:none;font-size:15px}
+.foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:12px}
+[dir=rtl] .eq,[dir=rtl] .data b{direction:ltr}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top"><img src="/assets/mission1/logo.png" alt="Zola Think" width="68" height="34"><div class="prog"><i id="prog"></i></div><button class="lang" id="lang">عربي</button></div>
+
+  <!-- 0 intro -->
+  <section class="screen on" data-s="0">
+    <span class="kick" data-t="kick"></span>
+    <h1 data-t="introH"></h1>
+    <p class="intro-line" data-t="introP"></p>
+    <div class="hero"><img src="/assets/mission1/seis.jpg" alt="" width="900" height="378"></div>
+    <div class="meta"><span data-t="m1"></span><span data-t="m2"></span><span data-t="m3"></span></div>
+    <button class="btn" data-go="1" data-t="start"></button>
+  </section>
+
+  <!-- 1 mystery -->
+  <section class="screen" data-s="1">
+    <span class="kick" data-t="s1k"></span>
+    <h2 data-t="s1h"></h2>
+    <div class="seis" id="seis"><img src="/assets/mission1/seis.jpg" alt="" width="900" height="378"></div>
+    <div class="legend" id="legend"><div><b data-t="pw"></b><span data-t="pwd"></span></div><div><b data-t="sw"></b><span data-t="swd"></span></div><div><b data-t="gap"></b><span data-t="gapd"></span></div></div>
+    <div class="opts" id="q1"></div>
+    <div class="fb" id="fb1"></div>
+    <button class="btn" data-go="2" id="n1" disabled data-t="next"></button>
+  </section>
+
+  <!-- 2 pick card -->
+  <section class="screen" data-s="2">
+    <span class="kick" data-t="s2k"></span>
+    <h2 data-t="s2h"></h2>
+    <p class="sub" data-t="s2p"></p>
+    <div class="deck" id="deck"></div>
+    <div class="scen card" id="scen"></div>
+    <div class="spacer"></div>
+    <button class="btn" data-go="3" id="n2" disabled data-t="next"></button>
+  </section>
+
+  <!-- 3 calc -->
+  <section class="screen" data-s="3">
+    <span class="kick" data-t="s3k"></span>
+    <h2 data-t="s3h"></h2>
+    <div class="data" id="data"></div>
+    <div class="stepper"><button id="minus" aria-label="-">−</button><div class="v" id="val">0<small> s</small></div><button id="plus" aria-label="+">+</button></div>
+    <button class="hint" id="hintBtn" data-t="hint"></button>
+    <div class="fb" id="fb3"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="check" data-t="check"></button>
+  </section>
+
+  <!-- 4 alert -->
+  <section class="screen" data-s="4">
+    <span class="kick" data-t="s4k"></span>
+    <h2 data-t="s4h"></h2>
+    <p class="sub" id="s4p"></p>
+    <div class="opts" id="q4"></div>
+    <div class="fb" id="fb4"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="decide" disabled data-t="decide"></button>
+  </section>
+
+  <!-- 5 sim -->
+  <section class="screen" data-s="5">
+    <span class="kick" data-t="s5k"></span>
+    <h2 data-t="s5h"></h2>
+    <div class="sim"><div class="road"></div><div class="epi"></div><div class="home" id="home"></div><div class="wf p" id="wp"><em>P</em></div><div class="wf s" id="ws"><em>S</em></div></div>
+    <div class="lbls"><span data-t="epi"></span><span id="homeL"></span></div>
+    <div class="count"><div class="big" id="cnt">—</div><div class="st" id="cst"></div></div>
+    <div class="alertbox" id="abox"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="simGo" data-t="simGo"></button>
+  </section>
+
+  <!-- 6 done -->
+  <section class="screen" data-s="6">
+    <div class="done-ico">🎉</div>
+    <h1 data-t="endH"></h1>
+    <p class="sub" data-t="endP"></p>
+    <div class="recap" id="recap"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="again" data-t="again"></button>
+    <p class="foot" data-t="foot"></p>
+  </section>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const T={
+en:{kick:"ZOLA THINK · MISSION 1",introH:"You're an earthquake engineer. You have seconds to save lives.",introP:"Try the exact mission our students (8–16) solved live — on your phone.",m1:"⏱ 2 min",m2:"📱 No sign-up",m3:"🧮 Real physics",start:"Start the mission",
+s1k:"STEP 1 · OBSERVE",s1h:"What does this device do?",next:"Next",
+o1:["Measures a heartbeat","Records ground motion during an earthquake","Records sound like a radio"],
+r1ok:"Exactly — it's a seismograph.",r1no:"Good guess! Students said that too — it's a seismograph.",r1d:"It records ground motion. The calm wave (P) arrives first; the violent one (S) arrives later. The gap between them is your warning time.",
+pw:"P-wave",pwd:"Fast, light — arrives first",sw:"S-wave",swd:"Slower, destructive",gap:"Time gap",gapd:"Your precious seconds",
+s2k:"STEP 2 · YOUR SCENARIO",s2h:"Pick a card",s2p:"Same earthquake, different place. Each team gets a different one.",
+s3k:"STEP 3 · CALCULATE",s3h:"How many seconds of warning before strong shaking?",dist:"Distance",vp:"P speed",vs:"S speed",hint:"Need a hint?",hintT:"Time = distance ÷ speed. Find P's arrival, then S's, and subtract.",check:"Check my answer",
+c_ok:"Correct!",c_no:"Not quite — try again.",c_hi:"Too high.",c_lo:"Too low.",show:"Show me",
+s4k:"STEP 4 · DECIDE",s4h:"How should the alert reach people?",decide:"Lock my decision",
+a:{sound:["🔊","Loud siren"],light:["💡","Flashing light"],vib:["📳","Vibration"],voice:["🗣","Voice instruction (what to do)"]},
+f_good:"Strong decision.",f_mid:"Close — something's missing.",f_bad:"Risky choice.",
+s5k:"STEP 5 · TEST IT",s5h:"Earthquake! Watch your alert work.",epi:"Epicenter",simGo:"Trigger the earthquake",simNext:"See my result",
+st0:"Waiting…",st1:"P-wave detected — alert sent!",st2:"Strong shaking arrived.",cntU:"s left",
+endH:"Mission complete.",endP:"In the live session, teams then defend their decision and build a working tool with AI in 15 minutes.",again:"Play again",foot:"Zola Think — not a course, not a contest: an experience in deciding, teaming and defending ideas.",
+rc1:"Observed & guessed",rc2:"Calculated: {g} s of warning",rc3:"Decided: {a}",rc4:"Tested under pressure",
+s4p_school:"Many classrooms — every child must hear it at once.",s4p_elder:"He lives alone and may be hard of hearing.",s4p_market:"A crowd from everywhere — people follow others, not signs.",
+alerts:{DROP:"DROP · COVER · HOLD ON"}},
+ar:{kick:"ZOLA THINK · MISSION 1",introH:"إنت مهندس مقاومة زلازل، ومعاك ثواني تنقذ بيها أرواح.",introP:"جرّب نفس المهمة اللي طلابنا (٨–١٦ سنة) حلّوها لايف — من موبايلك.",m1:"⏱ دقيقتين",m2:"📱 من غير تسجيل",m3:"🧮 فيزياء حقيقية",start:"ابدأ المهمة",
+s1k:"الخطوة ١ · لاحظ",s1h:"الجهاز ده بيعمل إيه؟",next:"التالي",
+o1:["بيقيس نبض القلب","بيسجّل حركة الأرض وقت الزلزال","بيسجّل الصوت زي الراديو"],
+r1ok:"بالظبط — ده Seismograph.",r1no:"تخمين حلو! الطلاب قالوه برضه — ده Seismograph.",r1d:"بيسجّل حركة الأرض. الموجة الهادية (P) بتوصل الأول، والعنيفة (S) بعدها. الفرق بينهم هو وقت التحذير بتاعك.",
+pw:"موجة P",pwd:"سريعة وخفيفة — بتوصل الأول",sw:"موجة S",swd:"أبطأ ومدمّرة",gap:"الفرق الزمني",gapd:"ثوانيك الثمينة",
+s2k:"الخطوة ٢ · السيناريو",s2h:"اختار كارت",s2p:"نفس الزلزال، بس مكان مختلف. كل فريق بياخد سيناريو.",
+s3k:"الخطوة ٣ · احسب",s3h:"قد إيه ثانية تحذير قبل الاهتزاز القوي؟",dist:"المسافة",vp:"سرعة P",vs:"سرعة S",hint:"محتاج تلميح؟",hintT:"الزمن = المسافة ÷ السرعة. احسب وصول P، وبعدين S، واطرحهم.",check:"اتأكد من إجابتي",
+c_ok:"صح!",c_no:"لسه — جرّب تاني.",c_hi:"أكبر من اللازم.",c_lo:"أقل من اللازم.",show:"ورّيني الحل",
+s4k:"الخطوة ٤ · قرّر",s4h:"التنبيه يوصل للناس إزاي؟",decide:"ثبّت قراري",
+a:{sound:["🔊","صفارة عالية"],light:["💡","ضوء بيلمع"],vib:["📳","اهتزاز"],voice:["🗣","تعليمات صوتية (يعملوا إيه)"]},
+f_good:"قرار قوي.",f_mid:"قربت — في حاجة ناقصة.",f_bad:"اختيار فيه خطورة.",
+s5k:"الخطوة ٥ · جرّبه",s5h:"زلزال! شوف التنبيه بتاعك شغال.",epi:"مركز الزلزال",simGo:"شغّل الزلزال",simNext:"شوف النتيجة",
+st0:"مستنيين…",st1:"اتلقطت موجة P — التنبيه اتبعت!",st2:"الاهتزاز القوي وصل.",cntU:"ثانية فاضلة",
+endH:"المهمة خلصت.",endP:"في السيشن اللايف، الفرق بعدها بتدافع عن قرارها وتبني أداة شغالة بالـAI في ١٥ دقيقة.",again:"العب تاني",foot:"Zola Think — مش كورس ومش مسابقة: تجربة في القرار والتفكير كفريق والدفاع عن الفكرة.",
+rc1:"لاحظت وخمّنت",rc2:"حسبت: {g} ثانية تحذير",rc3:"قررت: {a}",rc4:"جرّبت تحت ضغط الوقت",
+s4p_school:"فصول كتير — كل الأطفال لازم يسمعوا مرة واحدة.",s4p_elder:"ساكن لوحده، وممكن يكون تقيل السمع.",s4p_market:"زحمة من كل حتة — الناس بتتبع اللي حواليها مش اللافتات.",
+alerts:{DROP:"انزل · اتغطى · استنى"}}
+};
+const SC={
+ school:{e:"🏫",d:60,n:{en:"School",ar:"مدرسة"},p:{en:"Many classrooms. The alert must reach every child at once, not just one class.",ar:"فيها فصول كتير، والأطفال محتاجين التنبيه يوصلهم كلهم مرة واحدة، مش فصل بس."},i:{en:"💡 Schools in quake zones teach “Drop, Cover, Hold On”.",ar:"💡 في مدارس مناطق الزلازل بيتعلم الأطفال «انزل، اتغطى، استنى»."}},
+ elder:{e:"🏠",d:36,n:{en:"Elderly man living alone",ar:"مُسِن يسكن بمفرده"},p:{en:"Nobody around to hear him, and he may be hard of hearing.",ar:"مفيش حد حواليه يسمعه، وممكن يكون تقيل السمع."},i:{en:"💡 Vibration alerts exist for people who are hard of hearing.",ar:"💡 فيه أنظمة تنبيه بالاهتزاز مخصصة لضعاف السمع."}},
+ market:{e:"🛒",d:72,n:{en:"Crowded market",ar:"سوق مزدحم"},p:{en:"Lots of people from everywhere who need one clear direction out.",ar:"ناس كتير من أماكن مختلفة، محتاجين اتجاه واضح للخروج."},i:{en:"💡 In crowds, people follow others, not signs — the alert must guide behavior.",ar:"💡 في الزحمة الناس بتتبع اللي حواليها مش اللافتات — التنبيه لازم يوجّه سلوك."}}
+};
+const VP=6,VS=3;
+let L='en',S={scr:0,q1:null,key:null,val:0,calcOk:false,alerts:new Set(),fb4:null};
+const t=k=>T[L][k];
+function applyLang(){document.documentElement.lang=L;document.documentElement.dir=L==='ar'?'rtl':'ltr';$('#lang').textContent=L==='ar'?'English':'عربي';
+ $$('[data-t]').forEach(el=>{const v=t(el.dataset.t);if(typeof v==='string')el.textContent=v});renderQ1();renderDeck(false);renderScen();renderCalc();renderQ4();renderSimLabels();renderRecap()}
+$('#lang').onclick=()=>{L=L==='en'?'ar':'en';try{localStorage.setItem('zt-lang',L)}catch(e){}applyLang()};
+function go(n){S.scr=n;$$('.screen').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));$('#prog').style.width=(n/6*100)+'%';scrollTo({top:0,behavior:'smooth'});if(n===3)renderCalc();if(n===4)renderQ4();if(n===5)resetSim()}
+$$('[data-go]').forEach(b=>b.onclick=()=>go(+b.dataset.go));
+
+/* audio */
+let ac;const beep=(f=880,d=.15,v=.25,dl=0)=>{try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.connect(g);g.connect(ac.destination);const s=ac.currentTime+dl;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v,s+.02);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.05)}catch(e){}};
+
+/* step 1 */
+function renderQ1(){const box=$('#q1');box.innerHTML=t('o1').map((o,i)=>`<button class="opt" data-i="${i}"><span class="e">${['❤️','🌍','📻'][i]}</span>${o}</button>`).join('');
+ if(S.q1!==null)markQ1();$$('#q1 .opt').forEach(b=>b.onclick=()=>{if(S.q1!==null)return;S.q1=+b.dataset.i;markQ1();$('#seis').classList.add('shake');beep(220,.4,.2)})}
+function markQ1(){$$('#q1 .opt').forEach((b,i)=>{b.classList.toggle('right',i===1);b.classList.toggle('wrong',i===S.q1&&i!==1)});
+ const fb=$('#fb1');fb.className='fb on '+(S.q1===1?'good':'mid');fb.innerHTML=`<b>${S.q1===1?t('r1ok'):t('r1no')}</b>${t('r1d')}`;$('#legend').classList.add('on');$('#n1').disabled=false}
+
+/* step 2 */
+let order=Object.keys(SC).sort(()=>Math.random()-.5);
+function renderDeck(){const d=$('#deck');d.innerHTML=order.map((k,i)=>`<div class="sc ${S.key===k?'flip':S.key?'dim':''}" data-k="${k}"><div class="sc-in"><div class="face back"><div class="n">${L==='ar'?'١٢٣'[i]:i+1}</div></div><div class="face frontf"><div class="em">${SC[k].e}</div>${SC[k].n[L]}</div></div></div>`).join('');
+ $$('#deck .sc').forEach(c=>c.onclick=()=>{if(S.key)return;S.key=c.dataset.k;c.classList.add('flip');beep(660,.1,.15);$$('#deck .sc').forEach(o=>{if(o!==c)o.classList.add('dim')});setTimeout(()=>{renderScen();$('#n2').disabled=false},450)})}
+function renderScen(){const b=$('#scen');if(!S.key){b.classList.remove('on');return}const s=SC[S.key];b.classList.add('on');b.innerHTML=`<h3>${s.e} ${s.n[L]}</h3><p>${s.p[L]}</p><div class="info">${s.i[L]}</div>`}
+
+/* step 3 */
+const gap=()=>SC[S.key].d/VS-SC[S.key].d/VP;
+function renderCalc(){if(!S.key)return;const s=SC[S.key];$('#data').innerHTML=`<div>${t('dist')}<b>${s.d} km</b></div><div>${t('vp')}<b>${VP} km/s</b></div><div>${t('vs')}<b>${VS} km/s</b></div>`;$('#val').innerHTML=`${S.val}<small> s</small>`}
+$('#plus').onclick=()=>{S.val=Math.min(60,S.val+1);renderCalc();beep(700,.04,.08)};$('#minus').onclick=()=>{S.val=Math.max(0,S.val-1);renderCalc();beep(600,.04,.08)};
+$('#hintBtn').onclick=()=>{const fb=$('#fb3');fb.className='fb on mid';fb.innerHTML=t('hintT')};
+let tries=0;
+$('#check').onclick=()=>{if(S.calcOk){go(4);return}const g=gap(),s=SC[S.key],fb=$('#fb3');
+ if(S.val===g){S.calcOk=true;beep(880,.12,.2);beep(1320,.18,.2,.12);fb.className='fb on good';fb.innerHTML=`<b>${t('c_ok')}</b><div class="eq">P: ${s.d} ÷ ${VP} = ${s.d/VP} s<br>S: ${s.d} ÷ ${VS} = ${s.d/VS} s<br><b>${s.d/VS} − ${s.d/VP} = ${g} s</b></div>`;$('#check').textContent=t('next')}
+ else{tries++;beep(220,.2,.15);fb.className='fb on bad';fb.innerHTML=`<b>${S.val>g?t('c_hi'):t('c_lo')} ${t('c_no')}</b>${t('hintT')}${tries>=2?`<button class="btn ghost" id="showMe" style="margin-top:10px">${t('show')}</button>`:''}`;const sm=$('#showMe');if(sm)sm.onclick=()=>{S.val=g;renderCalc();$('#check').click()}}};
+
+/* step 4 */
+const RULE={
+ school:a=>a.has('voice')?'good':a.has('sound')?'mid':'bad',
+ elder:a=>a.has('vib')?'good':a.has('light')?'mid':'bad',
+ market:a=>a.has('voice')?'good':a.has('light')||a.has('sound')?'mid':'bad'};
+const WHY={
+ school:{good:{en:"Every class hears it at once, and a voice tells kids exactly what to do: Drop, Cover, Hold On. In 10 s, staying under the desk beats running to the stairs.",ar:"كل الفصول بتسمعه مرة واحدة، والصوت بيقول للأطفال يعملوا إيه بالظبط: انزل، اتغطى، استنى. في ١٠ ثواني، الاستخبّي تحت الديسك أأمن من الجري على السلالم."},mid:{en:"A siren reaches everyone — but frightened kids need to be told what to do, not just warned.",ar:"الصفارة بتوصل للكل — بس الأطفال المفزوعين محتاجين حد يقولهم يعملوا إيه، مش تحذير وبس."},bad:{en:"In a school, the alert must reach every class at once. Light or vibration alone won't.",ar:"في المدرسة لازم التنبيه يوصل لكل الفصول مرة واحدة. الضوء أو الاهتزاز لوحدهم مش هيعملوا كده."}},
+ elder:{good:{en:"Vibration reaches someone who can't hear — and he only has 6 seconds, the shortest warning of all.",ar:"الاهتزاز بيوصل لحد مش سامع — ومعاه ٦ ثواني بس، أقصر وقت تحذير."},mid:{en:"Light helps, but he might not be looking. Add something he feels.",ar:"الضوء بيساعد، بس ممكن ما يكونش باصص. ضيف حاجة يحسّ بيها."},bad:{en:"He may be hard of hearing — a sound-only alert might never reach him.",ar:"ممكن يكون تقيل السمع — تنبيه بالصوت بس ممكن ما يوصلوش خالص."}},
+ market:{good:{en:"In a crowd people copy each other — a clear voice instruction steers the whole crowd in 12 s.",ar:"في الزحمة الناس بتقلّد بعض — تعليمات صوتية واضحة بتوجّه الزحمة كلها في ١٢ ثانية."},mid:{en:"It gets attention, but a crowd needs to be told where to go — otherwise it panics.",ar:"بيلفت الانتباه، بس الزحمة محتاجة حد يقولها تروح فين — غير كده هيحصل تدافع."},bad:{en:"A crowd doesn't read or feel individual alerts — it needs guidance.",ar:"الزحمة مش هتحسّ بتنبيه فردي — محتاجة توجيه."}}};
+function renderQ4(){if(!S.key)return;$('#s4p').textContent=t('s4p_'+S.key);const A=t('a');$('#q4').innerHTML=Object.keys(A).map(k=>`<button class="opt ${S.alerts.has(k)?'sel':''}" data-k="${k}"><span class="e">${A[k][0]}</span>${A[k][1]}<span class="ck">✓</span></button>`).join('');
+ $$('#q4 .opt').forEach(b=>b.onclick=()=>{if(S.fb4)return;const k=b.dataset.k;S.alerts.has(k)?S.alerts.delete(k):S.alerts.add(k);b.classList.toggle('sel');$('#decide').disabled=!S.alerts.size;beep(760,.05,.08)});
+ if(S.fb4)showFb4()}
+function showFb4(){const fb=$('#fb4');fb.className='fb on '+S.fb4;fb.innerHTML=`<b>${t('f_'+S.fb4)}</b>${WHY[S.key][S.fb4][L]}`;$('#decide').textContent=t('next')}
+$('#decide').onclick=()=>{if(S.fb4){go(5);return}S.fb4=RULE[S.key](S.alerts);showFb4();beep(S.fb4==='good'?990:440,.15,.18)};
+
+/* step 5 sim */
+let raf,timers=[];
+function renderSimLabels(){if(!S.key)return;$('#home').textContent=SC[S.key].e;$('#homeL').textContent=`${SC[S.key].n[L]} · ${SC[S.key].d} km`}
+function resetSim(){cancelAnimationFrame(raf);timers.forEach(clearTimeout);document.body.classList.remove('flash');$('#home').className='home';$('#wp').style.opacity=$('#ws').style.opacity=0;$('#cnt').textContent=gap()+'s';$('#cst').textContent=t('st0');$('#abox').classList.remove('on');$('#simGo').textContent=t('simGo');$('#simGo').disabled=false;$('#simGo').onclick=runSim;renderSimLabels()}
+function runSim(){const s=SC[S.key],g=gap(),tp=s.d/VP,ts=s.d/VS;$('#simGo').disabled=true;const sim=$('.sim').clientWidth-60;const rtl=L==='ar';
+ const ff=1.8,pre=tp/ff; // fast-forward until P arrives, then real time
+ const t0=performance.now();$('#wp').style.opacity=$('#ws').style.opacity=1;let alerted=false,lastSec=null;
+ const pos=(el,x)=>{el.style.insetInlineStart=(14+Math.min(sim,x))+'px'};
+ const step=now=>{const el=(now-t0)/1000;const T=el<pre?el*ff:tp+(el-pre);
+  pos($('#wp'),VP*T/s.d*sim);pos($('#ws'),VS*T/s.d*sim);
+  if(T>=tp&&!alerted){alerted=true;fireAlert()}
+  if(alerted&&T<ts){const left=Math.ceil(ts-T);$('#cnt').textContent=left+'s';$('#cst').textContent=t('st1')+' · '+left+' '+t('cntU');if(left!==lastSec){lastSec=left;if(S.alerts.has('sound'))beep(left<=3?1046:880,.12,.25);if(S.alerts.has('vib')&&navigator.vibrate)try{navigator.vibrate(180)}catch(e){}}}
+  if(T>=ts){hit();return}raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
+function fireAlert(){$('#home').className='home warn';const box=$('#abox');const a=S.alerts;
+ box.style.background=a.has('light')?'#FFE7A8':'#F1ECFA';box.style.color=a.has('voice')?'#5E31A0':'#2A2F55';
+ box.textContent=a.has('voice')?(S.key==='market'?(L==='ar'?'⬅ اتجهوا للمخرج الأخضر — بهدوء':'⬅ Head to the green exit — calmly'):t('alerts').DROP):[...a].map(k=>t('a')[k][0]).join('  ');box.classList.add('on');
+ if(a.has('light'))document.body.classList.add('flash');if(a.has('vib')){$('#app').classList.add('quake');setTimeout(()=>$('#app').classList.remove('quake'),1500)}}
+function hit(){document.body.classList.remove('flash');$('#home').className='home hit';$('#cnt').textContent='0s';$('#cst').textContent=t('st2');$('#app').classList.add('quake');beep(110,.6,.3);try{navigator.vibrate&&navigator.vibrate([300,100,300])}catch(e){}
+ timers.push(setTimeout(()=>{$('#app').classList.remove('quake');$('#home').classList.remove('hit');$('#simGo').disabled=false;$('#simGo').textContent=t('simNext');$('#simGo').onclick=()=>{renderRecap();go(6)}},1600))}
+
+/* end */
+function renderRecap(){if(!S.key)return;const A=t('a');$('#recap').innerHTML=[['👀',t('rc1')],['🧮',t('rc2').replace('{g}',gap())],['✅',t('rc3').replace('{a}',[...S.alerts].map(k=>A[k][1]).join(' + ')||'—')],['⏱',t('rc4')]].map(r=>`<div><i>${r[0]}</i>${r[1]}</div>`).join('')}
+$('#again').onclick=()=>{S={scr:0,q1:null,key:null,val:0,calcOk:false,alerts:new Set(),fb4:null};tries=0;order=Object.keys(SC).sort(()=>Math.random()-.5);
+ $('#legend').classList.remove('on');$('#seis').classList.remove('shake');$('#fb1').className='fb';$('#fb3').className='fb';$('#fb4').className='fb';$('#n1').disabled=$('#n2').disabled=$('#decide').disabled=true;$('#check').textContent=t('check');$('#decide').textContent=t('decide');applyLang();go(0)};
+
+try{const sv=localStorage.getItem('zt-lang');if(sv)L=sv;else if((navigator.language||'').startsWith('ar'))L='ar'}catch(e){}
+applyLang();
+})();
+</script>
+</body>
+</html>
