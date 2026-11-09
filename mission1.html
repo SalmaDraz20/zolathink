@@ -33,8 +33,11 @@ p.sub{font-size:16px;line-height:1.6;color:var(--muted);margin-top:8px}
 .btn.ghost{background:#fff;color:var(--pd);border:1.5px solid var(--lav2);box-shadow:none;min-height:48px;font-size:16px}
 .spacer{flex:1;min-height:16px}
 /* intro */
-.hero{margin:22px 0 18px;position:relative;border-radius:22px;overflow:hidden;background:#F7F2FD}
-.hero img{width:100%;display:block}
+.hero,.seis{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#FFFFFF 0%,#F4EEFC 55%,#EAE0F8 100%);border:1.5px solid #ECE4F7;padding:22px 14px 26px}
+.hero{margin:22px 0 18px}
+.hero:after,.seis:after{content:"";position:absolute;left:14%;right:14%;bottom:20px;height:18px;border-radius:50%;background:radial-gradient(closest-side,rgba(60,30,130,.22),transparent);z-index:0}
+.hero img,.seis img{position:relative;z-index:1;width:100%;height:auto;display:block;animation:float 4.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-5px)}}
 .intro-line{font-size:17px;line-height:1.6;color:var(--muted);margin:10px 0 0}
 .meta{display:flex;gap:8px;margin:16px 0 18px;flex-wrap:wrap}
 .meta span{font-size:13px;font-weight:600;color:var(--pd);background:#fff;border:1.5px solid var(--lav2);border-radius:99px;padding:6px 12px}
@@ -51,9 +54,8 @@ p.sub{font-size:16px;line-height:1.6;color:var(--muted);margin-top:8px}
 .fb.on{display:block;animation:in .4s var(--ease)}
 .fb.good{background:#E8F7EF;color:#1F6B46}.fb.mid{background:#FFF5E0;color:#8A5A00}.fb.bad{background:#FDF0F0;color:#9A3B3F}
 .fb b{display:block;font-size:17px;margin-bottom:2px}
-.seis{position:relative;border-radius:20px;overflow:hidden;background:#F7F2FD;margin-top:14px}
-.seis img{width:100%;display:block}
-.seis.shake{animation:quake .7s}
+.seis{margin-top:14px}
+.seis.shake img{animation:quake .7s}
 @keyframes quake{10%,50%,90%{transform:translateX(-6px)}30%,70%{transform:translateX(6px)}}
 .legend{display:none;gap:8px;margin-top:10px}
 .legend.on{display:flex;animation:in .4s}
@@ -121,7 +123,7 @@ body.flash{animation:flash .5s infinite}
     <span class="kick" data-t="kick"></span>
     <h1 data-t="introH"></h1>
     <p class="intro-line" data-t="introP"></p>
-    <div class="hero"><img src="/assets/mission1/seis.jpg" alt="" width="900" height="378"></div>
+    <div class="hero"><img src="/assets/mission1/device.webp" alt="Seismograph" width="1144" height="502"></div>
     <div class="meta"><span data-t="m1"></span><span data-t="m2"></span><span data-t="m3"></span></div>
     <button class="btn" data-go="1" data-t="start"></button>
   </section>
@@ -130,7 +132,7 @@ body.flash{animation:flash .5s infinite}
   <section class="screen" data-s="1">
     <span class="kick" data-t="s1k"></span>
     <h2 data-t="s1h"></h2>
-    <div class="seis" id="seis"><img src="/assets/mission1/seis.jpg" alt="" width="900" height="378"></div>
+    <div class="seis" id="seis"><img src="/assets/mission1/device.webp" alt="Seismograph" width="1144" height="502"></div>
     <div class="legend" id="legend"><div><b data-t="pw"></b><span data-t="pwd"></span></div><div><b data-t="sw"></b><span data-t="swd"></span></div><div><b data-t="gap"></b><span data-t="gapd"></span></div></div>
     <div class="opts" id="q1"></div>
     <div class="fb" id="fb1"></div>
@@ -199,7 +201,7 @@ body.flash{animation:flash .5s infinite}
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const T={
-en:{kick:"ZOLA THINK · MISSION 1",introH:"You're an earthquake engineer. You have seconds to save lives.",introP:"Try the exact mission our students (8–16) solved live — on your phone.",m1:"⏱ 2 min",m2:"📱 No sign-up",m3:"🧮 Real physics",start:"Start the mission",
+en:{kick:"ZOLA THINK · MISSION 1",introH:"You're an earthquake engineer. You have seconds to save lives.",introP:"Try the exact mission our students (12–14) solved live — on your phone.",m1:"⏱ 2 min",m2:"📱 No sign-up",m3:"🧮 Real physics",start:"Start the mission",
 s1k:"STEP 1 · OBSERVE",s1h:"What does this device do?",next:"Next",
 o1:["Measures a heartbeat","Records ground motion during an earthquake","Records sound like a radio"],
 r1ok:"Exactly — it's a seismograph.",r1no:"Good guess! Students said that too — it's a seismograph.",r1d:"It records ground motion. The calm wave (P) arrives first; the violent one (S) arrives later. The gap between them is your warning time.",
@@ -216,7 +218,7 @@ endH:"Mission complete.",endP:"In the live session, teams then defend their deci
 rc1:"Observed & guessed",rc2:"Calculated: {g} s of warning",rc3:"Decided: {a}",rc4:"Tested under pressure",
 s4p_school:"Many classrooms — every child must hear it at once.",s4p_elder:"He lives alone and may be hard of hearing.",s4p_market:"A crowd from everywhere — people follow others, not signs.",
 alerts:{DROP:"DROP · COVER · HOLD ON"}},
-ar:{kick:"ZOLA THINK · MISSION 1",introH:"إنت مهندس مقاومة زلازل، ومعاك ثواني تنقذ بيها أرواح.",introP:"جرّب نفس المهمة اللي طلابنا (٨–١٦ سنة) حلّوها لايف — من موبايلك.",m1:"⏱ دقيقتين",m2:"📱 من غير تسجيل",m3:"🧮 فيزياء حقيقية",start:"ابدأ المهمة",
+ar:{kick:"ZOLA THINK · MISSION 1",introH:"إنت مهندس مقاومة زلازل، ومعاك ثواني تنقذ بيها أرواح.",introP:"جرّب نفس المهمة اللي طلابنا (١٢–١٤ سنة) حلّوها لايف — من موبايلك.",m1:"⏱ دقيقتين",m2:"📱 من غير تسجيل",m3:"🧮 فيزياء حقيقية",start:"ابدأ المهمة",
 s1k:"الخطوة ١ · لاحظ",s1h:"الجهاز ده بيعمل إيه؟",next:"التالي",
 o1:["بيقيس نبض القلب","بيسجّل حركة الأرض وقت الزلزال","بيسجّل الصوت زي الراديو"],
 r1ok:"بالظبط — ده Seismograph.",r1no:"تخمين حلو! الطلاب قالوه برضه — ده Seismograph.",r1d:"بيسجّل حركة الأرض. الموجة الهادية (P) بتوصل الأول، والعنيفة (S) بعدها. الفرق بينهم هو وقت التحذير بتاعك.",
