@@ -36,7 +36,10 @@ test('submit writes one row with answers and uppercased code', async () => {
   const w = m.calls.at(-1); assert.equal(w.url, 'https://api.notion.com/v1/pages'); assert.equal(w.auth, 'Bearer tok');
   assert.equal(w.body.properties.Code.rich_text[0].text.content, 'S07');
   assert.equal(w.body.properties.Seconds.number, 42);
-  assert.match(w.body.properties.Answers.rich_text[0].text.content, /حل/);
+  assert.equal(w.body.properties.A1.rich_text[0].text.content, 'حل');
+  assert.equal(w.body.properties.A3.rich_text[0].text.content, 'س');
+  assert.equal(w.body.properties.A4.rich_text[0].text.content, '4/5');
+  assert.ok(!('A5' in w.body.properties) && !('Answers' in w.body.properties));
 });
 test('closed card, duplicate, foreign page and bad answers are rejected without writing', async () => {
   const closed = mock({ card: page({ Status: { select: { name: 'مقفول' } } }) });
