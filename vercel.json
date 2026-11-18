@@ -2,5 +2,21 @@
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": { "api/mission-zero/register.js": { "maxDuration": 15 } }
+  "functions": {
+    "api/mission-zero/register.js": {
+      "maxDuration": 15
+    },
+    "api/card.js": {
+      "maxDuration": 15
+    },
+    "api/card-submit.js": {
+      "maxDuration": 15
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/card",
+      "destination": "/live-card.html"
+    }
+  ]
 }
