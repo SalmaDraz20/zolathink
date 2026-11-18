@@ -41,6 +41,10 @@ test('submit writes one row with answers and uppercased code', async () => {
   assert.equal(w.body.properties.A4.rich_text[0].text.content, '4/5');
   assert.ok(!('A5' in w.body.properties) && !('Answers' in w.body.properties));
 });
+test('line breaks in text answers are accepted (become spaces)', async () => {
+  const m = mock(); await m.service.submit({ ...ok(), answers: ['سطر 1\nسطر 2', 'أ', ['س'], 4] });
+  assert.equal(m.calls.at(-1).body.properties.A1.rich_text[0].text.content, 'سطر 1 سطر 2');
+});
 test('closed card, duplicate, foreign page and bad answers are rejected without writing', async () => {
   const closed = mock({ card: page({ Status: { select: { name: 'مقفول' } } }) });
   await assert.rejects(closed.service.submit(ok()), { status: 409, code: 'closed' });
