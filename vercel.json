@@ -5,12 +5,22 @@
   "functions": {
     "api/mission-zero/register.js": {
       "maxDuration": 15
+    },
+    "api/card.js": {
+      "maxDuration": 15
+    },
+    "api/card-submit.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
     {
       "source": "/mission1",
       "destination": "/mission1.html"
+    },
+    {
+      "source": "/card",
+      "destination": "/live-card.html"
     }
   ]
 }

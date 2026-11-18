@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light">
+<title>Mission 2 — Zola Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#111535;--ink2:#19203a;--muted:#626782;--purple:#6724cc;--purple2:#6739a6;--lav:#f5efff;--lav2:#ece3fb;--line:#eadff8;--note:#ece6fb;--ok:#1d7a4d;--err:#b3261e;--warn:#e8590c;
+    --shadow:0 9px 27px #493b7312}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:#fff}
+  body{min-height:100dvh;color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;line-height:1.6;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(#19203a06 1px,transparent 1px),linear-gradient(90deg,#19203a06 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(#000 55%,transparent)}
+  .shell{max-width:520px;margin:0 auto;padding:16px 16px calc(24px + env(safe-area-inset-bottom));min-height:100dvh;display:flex;flex-direction:column}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 12px}
+  .top img{height:30px;width:auto}
+  .pill{font-size:13px;font-weight:600;color:var(--purple2);background:var(--lav);border:1px solid var(--line);border-radius:999px;padding:3px 12px}
+  .stage{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:10px 0}
+  .card{background:#fff;border:1px solid #f0edf5;border-radius:22px;box-shadow:var(--shadow);padding:24px 20px;animation:pop .4s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) rotate(-2deg) scale(.97)}to{opacity:1;transform:none}}
+  h1{font-size:clamp(26px,7vw,32px);line-height:1.4;margin:0 0 8px;font-weight:700;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--purple)}
+  .note{display:inline-block;background:var(--note);color:var(--purple2);font-size:14px;font-weight:500;padding:8px 14px;border-radius:6px;transform:rotate(1.2deg);margin:0 0 16px}
+  .field{width:100%;font:inherit;font-size:20px;color:var(--ink);background:#fcfaff;border:2px solid var(--line);border-radius:16px;padding:14px 16px;min-height:58px;text-transform:uppercase}
+  .field:focus{outline:0;border-color:var(--purple);box-shadow:0 0 0 4px #6724cc1f}
+  .lbl{display:block;font-size:14px;color:var(--muted);margin:16px 2px 8px}
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .num{font:inherit;font-size:30px;font-weight:700;color:var(--ink2);background:#fff;border:2px solid var(--line);border-radius:18px;min-height:76px;cursor:pointer;transition:transform .12s,background .15s}
+  .num:active{transform:scale(.94)}
+  .num[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff;transform:rotate(-3deg) scale(1.05)}
+  .btn{font:inherit;font-size:18px;font-weight:700;border-radius:16px;min-height:58px;width:100%;margin-top:18px;cursor:pointer;border:0;background:var(--purple);color:#fff;box-shadow:0 8px 18px #6724cc33}
+  .btn:disabled{opacity:.45;box-shadow:none}
+  .btn.ghost{background:#fff;color:var(--purple2);border:2px solid var(--line);box-shadow:none}
+  .err{color:var(--err);font-size:14px;min-height:20px;margin-top:10px}
+  .dots{display:flex;gap:8px;justify-content:center;margin:14px 0 4px}
+  .dots i{width:12px;height:12px;border-radius:50%;background:var(--purple);animation:b 1.2s infinite ease-in-out}
+  .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+  @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+  .center{text-align:center}
+  .me{display:inline-flex;gap:8px;align-items:center;background:var(--lav);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-weight:600;color:var(--purple2);font-size:15px}
+  /* مؤقت */
+  .timer{display:none;align-items:center;gap:14px;background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 16px}
+  .timer.on{display:flex}
+  .ring{width:72px;height:72px;flex:none;position:relative}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:8}
+  .ring .bg{stroke:var(--lav2)}
+  .ring .fg{stroke:var(--purple);stroke-linecap:round;transition:stroke-dashoffset .9s linear,stroke .3s}
+  .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:18px;font-variant-numeric:tabular-nums}
+  .timer.warn{border-color:var(--warn);animation:shake .6s infinite}
+  .timer.warn .fg{stroke:var(--warn)}
+  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+  .timer .t1{font-weight:700;font-size:17px}
+  .timer .t2{font-size:14px;color:var(--muted)}
+  /* الفريق */
+  .team{display:none}
+  .team.on{display:block}
+  .bigteam{font-size:64px;font-weight:700;color:var(--purple);line-height:1;margin:4px 0}
+  .persona{margin-top:12px;background:var(--lav);border-radius:18px;padding:14px 16px;display:flex;gap:12px;align-items:center;animation:pop .5s .15s both}
+  .persona .e{font-size:40px}
+  .persona b{display:block;font-size:18px}
+  .persona span{color:var(--muted);font-size:14px}
+  .mates{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .mates span{background:#fff;border:2px solid var(--line);border-radius:12px;padding:4px 12px;font-weight:600;transition:all .25s}
+  .mates span.pick{background:var(--purple);color:#fff;border-color:var(--purple);transform:scale(1.15) rotate(-3deg)}
+  .prompt{font-size:20px;font-weight:500;line-height:1.6;margin-top:10px}
+  /* كارت كامل الشاشة */
+  #overlay{position:fixed;inset:0;background:#fff;z-index:10;display:none;flex-direction:column}
+  #overlay.on{display:flex}
+  #ovbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:var(--lav);border-bottom:1px solid var(--line);font-weight:600;color:var(--purple2)}
+  #ovbar.warn{background:#fff1e6;color:var(--warn)}
+  #ovbar .t{font-variant-numeric:tabular-nums;font-size:20px}
+  #frame{flex:1;border:0;width:100%}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <img src="assets/zola-wordmark.png" alt="Zola Think" onerror="this.style.display='none'">
+    <span class="pill" id="pill">Mission 2</span>
+  </header>
+
+  <section class="stage">
+    <!-- 1) الدخول -->
+    <div class="card" id="sJoin">
+      <h1>أهلًا في <em>Mission 2</em></h1>
+      <div class="note">اكتب كودك واختار رقم</div>
+      <input class="field" id="code" inputmode="text" autocomplete="off" maxlength="20" placeholder="كودك (مثال: S07)">
+      <span class="lbl">اختار رقم. اللي هيختاروا نفس رقمك هيبقوا معاك في الفريق</span>
+      <div class="nums" id="nums" role="group"></div>
+      <button class="btn" id="go" type="button" disabled>ادخل</button>
+      <div class="err" id="err" role="alert"></div>
+    </div>
+
+    <!-- 2) الانتظار -->
+    <div class="card center" id="sWait" style="display:none">
+      <div class="me" id="me"></div>
+      <h1 style="margin-top:14px" id="waitTitle">جوّه! <em>استنى</em> الميسّرة</h1>
+      <div class="dots"><i></i><i></i><i></i></div>
+      <p style="color:var(--muted);margin:6px 0 0" id="waitSub">الكارت هيفتح لوحده على الموبايل</p>
+    </div>
+
+    <!-- مؤقت (بيتزامن مع الميسّرة) -->
+    <div class="timer" id="timer" aria-live="off">
+      <div class="ring"><svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"/><circle class="fg" id="fg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="0"/></svg><b id="tt">0:00</b></div>
+      <div><div class="t1" id="tlabel"></div><div class="t2" id="tsub"></div></div>
+    </div>
+
+    <!-- 3) الفريق -->
+    <div class="card team" id="sTeam">
+      <div class="center">
+        <span class="lbl" style="margin:0">فريقك</span>
+        <div class="bigteam" id="teamNo">1</div>
+        <div class="me" id="roomName"></div>
+      </div>
+      <div class="persona"><div class="e" id="pE"></div><div><b id="pN"></b><span id="pH"></span></div></div>
+      <div class="mates" id="mates"></div>
+      <button class="btn ghost" id="pick" type="button">🎲 مين يبدأ الكلام؟</button>
+      <div class="prompt" id="prompt"></div>
+    </div>
+  </section>
+</main>
+
+<div id="overlay">
+  <div id="ovbar"><span id="ovlabel">الكارت</span><span class="t" id="ovt"></span></div>
+  <iframe id="frame" title="كارت القرار"></iframe>
+</div>
+
+<script src="mission2-data.js"></script>
+<script src="zola-sfx.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const qs = new URLSearchParams(location.search);
+const K = qs.get('k') || '';
+const API = ZM2.api();
+const LS = { get(k){ try{return localStorage.getItem(k)}catch(e){return null} }, set(k,v){ try{localStorage.setItem(k,v)}catch(e){} } };
+let code = (LS.get('zm2-code') || '').toUpperCase(), chosen = +LS.get('zm2-chosen') || 0;
+let offset = 0, st = null, joined = false, pollTimer = null;
+const fired = {};            // أصوات التايمر اللي اتشغلت لكل جولة
+
+// ---------- الدخول ----------
+$('nums').innerHTML = [1,2,3,4].map(n=>`<button class="num" type="button" data-n="${n}" aria-pressed="false">${n}</button>`).join('');
+function refreshJoin(){ $('go').disabled = !($('code').value.trim() && chosen); }
+document.querySelectorAll('.num').forEach(b=>b.addEventListener('click',()=>{
+  chosen = +b.dataset.n; Sfx.unlock(); Sfx.play('pop');
+  document.querySelectorAll('.num').forEach(x=>x.setAttribute('aria-pressed', +x.dataset.n===chosen)); refreshJoin();
+}));
+$('code').value = code; if (chosen) document.querySelector(`.num[data-n="${chosen}"]`).setAttribute('aria-pressed','true');
+$('code').addEventListener('input',refreshJoin); refreshJoin();
+
+async function api(params, post){
+  const url = API + (post ? '' : '?' + new URLSearchParams(params));
+  const r = await fetch(url, post ? {method:'POST', body:new URLSearchParams(params)} : undefined);
+  return r.json();
+}
+async function doJoin(){
+  Sfx.unlock(); Sfx.play('whoosh');
+  code = $('code').value.trim().toUpperCase().replace(/[^\w؀-ۿ-]/g,'');
+  $('go').disabled = true; $('go').textContent = '…'; $('err').textContent='';
+  try{
+    const r = await api({a:'join', k:K, code, chosen}, true);
+    if (!r.ok) throw new Error(r.error||'x');
+    LS.set('zm2-code', code); LS.set('zm2-chosen', chosen);
+    enter(r.state);
+  }catch(e){
+    // لو الرد مااتقراش (CORS) نتأكد بطلب GET
+    try{ const s = await api({a:'state', k:K, code}); if (s.registered){ LS.set('zm2-code',code); LS.set('zm2-chosen',chosen); enter(s); return; } }catch(_){}
+    $('err').textContent = 'مقدرناش نوصل للسيرفر. اتأكد من النت واللينك وجرّب تاني.';
+    $('go').disabled = false; $('go').textContent = 'ادخل';
+  }
+}
+$('go').addEventListener('click', doJoin);
+$('code').addEventListener('keydown', e=>{ if(e.key==='Enter' && !$('go').disabled) doJoin(); });
+
+function enter(s){
+  joined = true; $('sJoin').style.display='none'; $('sWait').style.display='';
+  $('me').textContent = `كودك ${code} · رقمك ${chosen}`;
+  apply(s); clearInterval(pollTimer); pollTimer = setInterval(poll, 3000);
+}
+async function poll(){
+  try{ apply(await api({a:'state', k:K, code})); }catch(e){}
+}
+
+// ---------- تطبيق حالة السيرفر ----------
+const doneKey = ph => `zm2-done-${ph}-${code}`;
+function apply(s){
+  if (!s || !s.ok) return;
+  offset = s.now - Date.now(); const prev = st; st = s;
+  // الكارت
+  if (s.card && !LS.get(doneKey(s.card))) openCard(s.card, prev && prev.card === s.card); else closeCard();
+  // الفريق
+  if (s.teamsReady && s.me && s.me.team) showTeam(s);
+  // نص الانتظار
+  if (!s.card) {
+    $('waitTitle').innerHTML = s.teamsReady ? 'تمام! <em>استنوا</em> التعليمات' : 'جوّه! <em>استنى</em> الميسّرة';
+  }
+  // المؤقت
+  tick();
+}
+let curCard = '';
+function openCard(ph, wasOpen){
+  if (curCard === ph) return; curCard = ph;
+  Sfx.play('card'); try{navigator.vibrate&&navigator.vibrate([60,40,60])}catch(e){}
+  $('ovlabel').textContent = ph === 'before' ? 'كارت قبل · لوحدك' : 'كارت بعد · لوحدك';
+  $('frame').src = `card.html?mission=2&phase=${ph}&k=${encodeURIComponent(K)}&c=${encodeURIComponent(code)}` + (qs.get('api') ? '&api='+encodeURIComponent(qs.get('api')) : '');
+  $('overlay').classList.add('on');
+}
+function closeCard(){ if(!curCard) return; curCard=''; $('overlay').classList.remove('on'); $('frame').src='about:blank'; }
+window.addEventListener('message', e=>{
+  if (e.origin !== location.origin || !e.data || e.data.zola !== 'card-done') return;
+  LS.set(doneKey(e.data.phase), '1'); Sfx.play('success');
+  setTimeout(()=>{ closeCard(); if (st) apply(st); }, 2200);
+});
+
+let teamShown = 0, mates = [];
+function showTeam(s){
+  const t = s.me.team; $('sTeam').classList.add('on'); $('sWait').style.display = 'none';
+  if (teamShown !== t){
+    teamShown = t; Sfx.play('success');
+    const P = ZM2.PERSONAS[(t-1) % ZM2.PERSONAS.length];
+    $('teamNo').textContent = t; $('roomName').textContent = 'غرفة ' + t;
+    $('pE').textContent = P.emoji; $('pN').textContent = P.name; $('pH').textContent = P.hint + ' · معاه ' + P.minutes + ' دقيقة';
+  }
+  mates = s.me.teammates || [];
+  $('mates').innerHTML = mates.map(c=>`<span data-c="${c}">${c===code?'أنت · ':''}${c}</span>`).join('');
+  $('prompt').textContent = s.prompt || '';
+}
+$('pick').addEventListener('click', ()=>{
+  if (!mates.length) return; Sfx.unlock();
+  const els = [...document.querySelectorAll('.mates span')]; let i = 0, n = 12 + Math.floor(Math.random()*mates.length);
+  const run = setInterval(()=>{
+    els.forEach(x=>x.classList.remove('pick')); els[i % els.length].classList.add('pick'); Sfx.play('tick'); i++;
+    if (i > n){ clearInterval(run); Sfx.play('correct'); }
+  }, 110);
+});
+
+// ---------- مؤقت متزامن + أصوات التحذير على موبايل الطالب ----------
+const fmt = s => Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+function tick(){
+  const s = st; if (!s) return;
+  const on = s.endsAt > 0;
+  const rem = on ? Math.max(0, Math.round((s.endsAt - (Date.now()+offset))/1000)) : 0;
+  const label = s.label || '';
+  // في الكارت: الشريط العلوي
+  $('ovt').textContent = on ? fmt(rem) : '';
+  $('ovbar').classList.toggle('warn', on && rem <= 60 && rem > 0);
+  // خارج الكارت: دايرة المؤقت
+  const showT = on && !(s.card && curCard);
+  $('timer').classList.toggle('on', showT && (rem > 0 || Date.now()+offset - s.endsAt < 8000));
+  $('tt').textContent = fmt(rem); $('tlabel').textContent = label; $('tsub').textContent = rem===0 ? 'الوقت خلص' : (rem<=60 ? 'الوقت قرّب يخلص!' : 'الوقت المتبقي');
+  $('timer').classList.toggle('warn', on && rem <= 60 && rem > 0);
+  const circ = 213.6, dur = Math.max(1, (+s.dur || 0) || rem);
+  $('fg').style.strokeDashoffset = circ * (1 - Math.min(1, rem / dur));
+  // الأصوات (مرة لكل جولة)
+  if (!on) return;
+  const id = s.nonce + ':' + s.endsAt;
+  fired[id] = fired[id] || {};
+  const f = fired[id];
+  if (rem <= 60 && rem > 0 && !f.w60 && dur > 90){ f.w60 = 1; Sfx.play('warn'); }
+  if (rem <= 10 && rem > 0 && f.l !== rem){ f.l = rem; Sfx.play('last'); }
+  if (rem === 0 && !f.end){ f.end = 1; Sfx.play('timeup'); try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){} }
+}
+setInterval(tick, 1000);
+
+// لو اتسجل قبل كده على نفس الجهاز، ندخل تلقائي
+if (code && chosen && K){ api({a:'state', k:K, code}).then(s=>{ if (s.registered) enter(s); }).catch(()=>{}); }
+if (!K) $('err').textContent = 'اللينك ناقص. اطلب من الميسّرة لينك جديد.';
+</script>
+</body>
+</html>

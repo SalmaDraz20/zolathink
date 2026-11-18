@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light">
+<title>كارت القرار — Zola Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111535; --ink2:#19203a; --muted:#626782; --purple:#6724cc; --purple2:#6739a6;
+    --lav:#f5efff; --lav2:#ece3fb; --line:#eadff8; --card:#fff; --note:#ece6fb; --ok:#1d7a4d; --err:#b3261e;
+    --shadow:0 9px 27px #493b7312; --shadow2:0 12px 25px #6344830c;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{background:#fff}
+  body{margin:0;min-height:100dvh;color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;line-height:1.6;
+    background:#fff;position:relative;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:linear-gradient(#19203a06 1px,transparent 1px),linear-gradient(90deg,#19203a06 1px,transparent 1px);
+    background-size:64px 64px;mask-image:linear-gradient(#000 55%,transparent)}
+  .shell{max-width:520px;margin:0 auto;padding:16px 16px calc(24px + env(safe-area-inset-bottom));min-height:100dvh;display:flex;flex-direction:column}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px 12px}
+  .top img{height:30px;width:auto}
+  .pill{font-size:13px;font-weight:600;color:var(--purple2);background:var(--lav);border:1px solid var(--line);border-radius:999px;padding:3px 12px}
+  .bar{height:6px;background:var(--lav2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--purple);border-radius:99px;transition:width .35s ease}
+  .count{font-size:12px;color:var(--muted);margin:6px 2px 0}
+  .stage{flex:1;display:flex;align-items:center;padding:18px 0}
+  .card{width:100%;background:var(--card);border:1px solid #f0edf5;border-radius:22px;box-shadow:var(--shadow);padding:26px 20px 22px;position:relative;
+    animation:pop .38s cubic-bezier(.2,.9,.3,1.2) both}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) rotate(-2.2deg) scale(.97)}to{opacity:1;transform:translateY(0) rotate(-.6deg) scale(1)}}
+  .card.back{animation-name:popb}
+  @keyframes popb{from{opacity:0;transform:translateY(14px) rotate(2.2deg) scale(.97)}to{opacity:1;transform:translateY(0) rotate(-.6deg) scale(1)}}
+  .ico{width:64px;height:64px;border-radius:50%;background:var(--lav);display:grid;place-items:center;margin:0 0 14px}
+  .ico svg{width:34px;height:34px;fill:none;stroke:var(--purple2);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  h1{font-size:clamp(24px,6.4vw,30px);line-height:1.45;margin:0 0 10px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+  h1 em{font-style:normal;color:var(--purple)}
+  .note{display:inline-block;background:var(--note);color:var(--purple2);font-size:14px;font-weight:500;padding:8px 14px;border-radius:6px;
+    transform:rotate(1.4deg);box-shadow:var(--shadow2);margin:0 0 18px}
+  .field{width:100%;font:inherit;font-size:19px;color:var(--ink);background:#fcfaff;border:2px solid var(--line);border-radius:16px;padding:15px 16px;min-height:58px;
+    transition:border-color .15s,box-shadow .15s}
+  .field:focus{outline:0;border-color:var(--purple);box-shadow:0 0 0 4px #6724cc1f}
+  .field+.field{margin-top:12px}
+  .lbl{display:block;font-size:14px;color:var(--muted);margin:14px 2px 6px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .chip{font:inherit;font-size:17px;font-weight:500;color:var(--ink2);background:#fff;border:2px solid var(--line);border-radius:16px;min-height:58px;padding:10px 12px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;transition:transform .12s,background .15s,border-color .15s,color .15s}
+  .chip:active{transform:scale(.96)}
+  .chip[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff;transform:rotate(-1deg)}
+  .chip .e{font-size:22px}
+  .yn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+  .yn .chip{min-height:72px;font-size:20px;font-weight:700}
+  .reveal{display:none;margin-top:6px}
+  .reveal.on{display:block;animation:pop .3s both}
+  .emo{display:flex;justify-content:space-between;gap:8px}
+  .emo .chip{flex:1;flex-direction:column;min-height:84px;padding:8px 2px;font-size:12px;color:var(--muted)}
+  .emo .chip .e{font-size:32px}
+  .emo .chip[aria-pressed="true"]{color:#fff}
+  .nav{display:flex;gap:10px;padding-top:6px}
+  .btn{font:inherit;font-size:17px;font-weight:700;border-radius:16px;min-height:56px;padding:0 22px;cursor:pointer;border:2px solid transparent;transition:transform .12s,background .15s,opacity .15s}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{flex:1;background:var(--purple);color:#fff;box-shadow:0 8px 18px #6724cc33}
+  .btn.primary:hover{background:#5a1fb8}
+  .btn.ghost{background:#fff;color:var(--purple2);border-color:var(--line)}
+  .btn:disabled{opacity:.45;cursor:default;box-shadow:none}
+  .btn:focus-visible,.chip:focus-visible{outline:3px solid #6724cc55;outline-offset:2px}
+  .err{color:var(--err);font-size:14px;margin-top:10px;min-height:20px}
+  .done{text-align:center;padding:10px 4px 6px}
+  .done .ico{margin:0 auto 14px;width:84px;height:84px;background:#e6f6ee}
+  .done .ico svg{width:46px;height:46px;stroke:var(--ok);stroke-width:2.2}
+  .done .ico path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .15s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .done p{color:var(--muted);margin:4px 0 0}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <img src="assets/zola-wordmark.png" alt="Zola Think" onerror="this.style.display='none'">
+    <span class="pill" id="pill">قبل</span>
+  </header>
+  <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+  <div class="count" id="count"></div>
+
+  <section class="stage"><div id="stage" style="width:100%" aria-live="polite"></div></section>
+
+  <footer class="nav" id="nav">
+    <button class="btn ghost" id="back" type="button">رجوع</button>
+    <button class="btn primary" id="next" type="button">التالي</button>
+  </footer>
+</main>
+
+<script src="mission2-data.js"></script>
+<script>
+// ===== إعدادات: لينك Google Apps Script (بيتاخد من mission2-data.js) =====
+const ENDPOINT = (window.ZM2 && ZM2.api()) || 'https://script.google.com/macros/s/AKfycbyD6t0HVvI-HtDqpfVjoUQgzNR36pt6EpslUp3LVMvZe5ckI9ukSdAIPwxm_qxfXVgBxw/exec';
+// ============================================
+
+const qs = new URLSearchParams(location.search);
+const mission = (qs.get('mission') || '').replace(/[^\w؀-ۿ -]/g,'').slice(0,20);
+const key = qs.get('k') || '';
+const phase = qs.get('phase') === 'after' ? 'after' : 'before';
+const presetCode = (qs.get('c') || '').replace(/[^\w؀-ۿ-]/g,'').toUpperCase().slice(0,20);
+const M2 = mission === '2' && window.ZM2;
+const $ = id => document.getElementById(id);
+
+$('pill').textContent = (phase === 'after' ? 'بعد' : 'قبل') + (mission ? ' · Mission ' + mission : '');
+
+// ---------- أيقونات (نفس خط الأيقونات في الموقع: خط رفيع بنفسجي) ----------
+const I = {
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  why:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/>',
+  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M9 7h6"/>',
+  scale:'<path d="M12 3v18M6 21h12M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  swap:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
+  smile:'<circle cx="12" cy="12" r="9"/><path d="M8 14a4 4 0 0 0 8 0M9 9.5h.01M15 9.5h.01"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+};
+const svg = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+
+const CONS = [['فلوس','💰'],['وقت','⏱️'],['مكان','📍'],['ناس','👥'],['أدوات','🧰'],['قواعد وشروط','📏']];
+const SUBJ_ALL = [['علوم','🔬'],['رياضيات','➗'],['لغة عربية','📖'],['إنجليزي','🔤'],['دراسات','🌍'],['كمبيوتر','💻'],['من الحياة','🌱'],['مفيش حاجة','🤷']];
+const SUBJ = (mission === '2') ? SUBJ_ALL.filter(x => ['رياضيات','دراسات','لغة عربية','إنجليزي','من الحياة','مفيش حاجة'].includes(x[0])) : SUBJ_ALL;
+const OKS  = [['قياس رقم','📏'],['تجربة صغيرة','🧪'],['رأي الناس','💬'],['مقارنة قبل وبعد','↔️'],['مش عارف','🤔']];
+const EMO  = [['😕','مش واثق'],['🤔','شوية'],['🙂','معقول'],['😀','واثق'],['🤩','واثق جدًا']];
+
+// ---------- الخطوات ----------
+const STEPS = [
+  {id:'code', icon:'user', title:'كودك <em>إيه؟</em>', note:'الكود اللي الميسّر إداهولك. ماتكتبش اسمك.', type:'text', max:20, ph:'مثال: S07', req:true, skip:()=>!!presetCode},
+  {id:'q1', icon:'bulb', title: phase==='after' ? 'حلك <em>النهائي</em> إيه؟' : 'أول <em>حل</em> هتختاره؟', note: M2 ? ZM2.SCENARIO : 'في سطر واحد', type:'text', max:120, ph:'اكتب حلك هنا', req:true},
+  {id:'q2', icon:'why', title:'ليه <em>اخترته؟</em>', note:'قول السبب بكلمتين', type:'text', max:140, ph:'عشان…', req:true},
+  {id:'cons', icon:'flag', title:'إيه <em>القيود</em> اللي واخد بالك منها؟', note:'اختار كل اللي ينطبق', type:'multi', opts:CONS},
+  {id:'top', icon:'star', title:'أنهي قيد هو <em>الأهم؟</em>', type:'single', from:'cons', skip:a=>(a.cons||[]).length<2},
+  {id:'know', icon:'book', title:'استخدمت إيه من اللي <em>اتعلمته؟</em>', note:'اختار المادة، وبعدين سمّي الحاجة', type:'chipsText', opts:SUBJ, none:'مفيش حاجة', ph: M2 ? 'سمّيها (مثال: مقياس الرسم)' : 'سمّيها (مثال: انتقال الحرارة)', max:60},
+  {id:'alt', icon:'scale', title:'فكرت في <em>حل تاني؟</em>', type:'yesno', yes:'آه', no:'لأ',
+     fields:[['alt','الحل التاني إيه؟',100],['gave','اتنازلت عن إيه عشان حلك؟',100]]},
+  {id:'ok', icon:'target', title:'هتعرف إنه <em>نجح</em> إزاي؟', note:'اختار اللي يناسب', type:'multi', opts:OKS},
+  ...(phase==='after' ? [{id:'chg', icon:'swap', title:'<em>غيّرت</em> حلك؟', type:'yesno', yes:'آه غيّرت', no:'لأ، زي ما هو',
+     fields:[['why','غيّرته ليه؟',120]], yesOnly:true}] : []),
+  ...(M2 ? [{id:'quiz', icon:'target', title:'جرّب نفسك <em>بسرعة</em>', note: phase==='before' ? 'لو مش عارف سيبها فاضية. مفيش درجات دلوقتي' : 'ثلاث أسئلة سريعة', type:'quiz'}] : []),
+  {id:'conf', icon:'smile', title:'واثق <em>قد إيه</em> من حلك؟', type:'emoji'}
+];
+
+// ---------- الحالة (بتتحفظ مؤقتًا لو الصفحة اتقفلت) ----------
+const DRAFT = 'zola-card-' + (mission||'x') + '-' + phase;
+let A = {}, idx = 0, dir = 1, sending = false;
+if (presetCode) A.code = presetCode;
+try{ const d = JSON.parse(sessionStorage.getItem(DRAFT)||'null'); if(d){A=d.A||{}; idx=Math.min(d.idx||0, STEPS.length-1);} }catch(e){}
+if (presetCode) A.code = presetCode;
+const save = () => { try{ sessionStorage.setItem(DRAFT, JSON.stringify({A,idx})); }catch(e){} };
+
+const active = () => STEPS.filter(s => !(s.skip && s.skip(A)));
+const cur = () => { const l = active(); if (idx >= l.length) idx = l.length-1; return l[idx]; };
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const buzz = () => { try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} };
+
+function valid(s){
+  if (s.type==='text') return !s.req || !!(A[s.id]||'').trim();
+  return true;
+}
+
+// ---------- الرسم ----------
+function render(){
+  const list = active(), s = cur(), last = idx === list.length-1;
+  $('barfill').style.width = ((idx+1)/list.length*100)+'%';
+  $('count').textContent = (idx+1)+' / '+list.length;
+  $('back').style.visibility = idx===0 ? 'hidden' : 'visible';
+  $('next').textContent = last ? 'إرسال ✨' : 'التالي';
+  $('next').disabled = sending || !valid(s);
+
+  let body = '';
+  if (s.type==='text'){
+    body = `<input class="field" id="in" inputmode="text" autocomplete="off" maxlength="${s.max}" placeholder="${esc(s.ph)}" value="${esc(A[s.id]||'')}">`;
+  } else if (s.type==='multi' || s.type==='single'){
+    const opts = s.from ? (A[s.from]||[]).map(v=>[v, (CONS.find(c=>c[0]===v)||[])[1]||'']) : s.opts;
+    const sel = A[s.id] || (s.type==='multi'?[]:'');
+    body = `<div class="grid" role="group">`+opts.map(([t,e])=>{
+      const on = s.type==='multi' ? sel.includes(t) : sel===t;
+      return `<button type="button" class="chip" data-v="${esc(t)}" aria-pressed="${on}"><span class="e">${e||''}</span>${esc(t)}</button>`;
+    }).join('')+`</div>`;
+  } else if (s.type==='chipsText'){
+    const sel = A[s.id]||'';
+    body = `<div class="grid" role="group">`+s.opts.map(([t,e])=>
+      `<button type="button" class="chip" data-v="${esc(t)}" aria-pressed="${sel===t}"><span class="e">${e}</span>${esc(t)}</button>`).join('')+`</div>
+      <div class="reveal ${sel && sel!==s.none?'on':''}" id="rv"><input class="field" id="in" maxlength="${s.max}" placeholder="${esc(s.ph)}" value="${esc(A[s.id+'_t']||'')}"></div>`;
+  } else if (s.type==='yesno'){
+    const v = A[s.id];
+    body = `<div class="yn" role="group"><button type="button" class="chip" data-v="yes" aria-pressed="${v==='yes'}">${esc(s.yes)}</button>
+      <button type="button" class="chip" data-v="no" aria-pressed="${v==='no'}">${esc(s.no)}</button></div>
+      <div class="reveal ${v==='yes'?'on':''}" id="rv">`+s.fields.map(([k,l,m])=>
+        `<label class="lbl" for="f_${k}">${esc(l)}</label><input class="field" id="f_${k}" data-k="${k}" maxlength="${m}" value="${esc(A[s.id+'_'+k]||'')}">`).join('')+`</div>`;
+  } else if (s.type==='quiz'){
+    const Q = ZM2.QUIZ[phase];
+    body = `<label class="lbl" for="qa">1) ${esc(Q.a)}</label><input class="field" id="qa" data-q="qa" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="الرقم" value="${esc(A.qa||'')}">
+      <label class="lbl" for="qb">2) ${esc(Q.b)}</label><input class="field" id="qb" data-q="qb" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="الرقم" value="${esc(A.qb||'')}">
+      <label class="lbl">3) ${esc(Q.c)}</label><div class="grid" role="group" style="grid-template-columns:1fr">`+ZM2.QUIZ.eras.map(t=>
+      `<button type="button" class="chip" data-v="${esc(t)}" aria-pressed="${A.qc===t}">${esc(t)}</button>`).join('')+`</div>`;
+  } else if (s.type==='emoji'){
+    const v = A.conf;
+    body = `<div class="emo" role="group">`+EMO.map(([e,t],i)=>
+      `<button type="button" class="chip" data-v="${i+1}" aria-pressed="${v===i+1}"><span class="e">${e}</span>${t}</button>`).join('')+`</div>`;
+  }
+
+  $('stage').innerHTML = `<div class="card ${dir<0?'back':''}">
+    <div class="ico">${svg(s.icon)}</div>
+    <h1>${s.title}</h1>
+    ${s.note?`<div class="note">${esc(s.note)}</div>`:''}
+    ${body}
+    <div class="err" id="err" role="alert"></div></div>`;
+  wire(s);
+}
+
+function wire(s){
+  const stage = $('stage');
+  const inp = $('in');
+  if (s.type==='text'){
+    inp.addEventListener('input',()=>{A[s.id]=inp.value; save(); $('next').disabled = !valid(s);});
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault(); if(valid(s)) go(1);} });
+    setTimeout(()=>{ if(document.body.contains(inp)) inp.focus({preventScroll:true}); },120);
+  }
+  stage.querySelectorAll('[data-q]').forEach(f=>f.addEventListener('input',()=>{A[f.dataset.q]=f.value; save();}));
+  stage.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+    buzz();
+    const v = b.dataset.v;
+    if (s.type==='quiz'){
+      A.qc=v; save(); stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
+    } else if (s.type==='multi'){
+      const a = new Set(A[s.id]||[]); a.has(v)?a.delete(v):a.add(v); A[s.id]=[...a];
+      if (s.id==='cons' && !A.cons.includes(A.top)) A.top='';
+      save(); b.setAttribute('aria-pressed', a.has(v));
+    } else if (s.type==='single'){
+      A[s.id]=v; save(); render(); setTimeout(()=>go(1),320);
+    } else if (s.type==='chipsText'){
+      A[s.id]=v; if(v===s.none) A[s.id+'_t']=''; save();
+      stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
+      const rv=$('rv'); rv.classList.toggle('on', v!==s.none); if(v!==s.none) setTimeout(()=>{ const x=$('in'); if(x) x.focus({preventScroll:true}); },80);
+    } else if (s.type==='yesno'){
+      A[s.id]=v; save();
+      stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
+      const rv=$('rv'); rv.classList.toggle('on', v==='yes');
+      if (v==='no') setTimeout(()=>go(1),320);
+    } else if (s.type==='emoji'){
+      A.conf=+v; save(); stage.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.v===v));
+    }
+  }));
+  if (s.type==='chipsText' && inp) inp.addEventListener('input',()=>{A[s.id+'_t']=inp.value; save();});
+  stage.querySelectorAll('[data-k]').forEach(f=>f.addEventListener('input',()=>{A[s.id+'_'+f.dataset.k]=f.value; save();}));
+}
+
+function go(d){
+  if (sending) return;
+  const list = active();
+  if (d>0 && !valid(cur())) { $('err').textContent='اكتب إجابتك الأول'; return; }
+  if (d>0 && idx===list.length-1) return submit();
+  dir = d; idx = Math.max(0, Math.min(list.length-1, idx+d)); save(); render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$('next').addEventListener('click',()=>go(1));
+$('back').addEventListener('click',()=>go(-1));
+
+// ---------- الإرسال (نفس أعمدة الشيت: بنضغط الاختيارات في نص قصير) ----------
+function pack(){
+  const j = a => (a||[]).join('، ');
+  const yn = v => v==='yes' ? 'آه' : v==='no' ? 'لأ' : '';
+  return {
+    q1: (A.q1||'').trim(),
+    q2: (A.q2||'').trim(),
+    q3: [j(A.cons) && 'قيود: '+j(A.cons), A.top && 'الأهم: '+A.top].filter(Boolean).join(' | '),
+    q4: [A.know, (A.know_t||'').trim()].filter(Boolean).join(' — '),
+    q5: [A.alt && 'فكرت في بديل: '+yn(A.alt), (A.alt_alt||'').trim() && 'بديل: '+A.alt_alt.trim(), (A.alt_gave||'').trim() && 'اتنازلت عن: '+A.alt_gave.trim()].filter(Boolean).join(' | '),
+    q6: [j(A.ok), A.conf && 'ثقة: '+A.conf+'/5'].filter(Boolean).join(' | '),
+    qa: M2 ? (A.qa||'').trim() : '', qb: M2 ? (A.qb||'').trim() : '', qc: M2 ? (A.qc||'') : '',
+    q7: phase==='after' ? [A.chg && 'غيّرت: '+yn(A.chg), (A.chg_why||'').trim() && 'ليه: '+A.chg_why.trim()].filter(Boolean).join(' | ') : ''
+  };
+}
+
+async function submit(){
+  if (ENDPOINT.startsWith('PASTE_')) { $('err').textContent='الصفحة لسه مش متوصّلة بالشيت. كلّم الميسّر.'; return; }
+  sending = true; $('next').disabled = true; $('next').textContent = 'جاري الإرسال…';
+  const body = new URLSearchParams({ k:key, mission, phase, code:(A.code||'').trim() });
+  Object.entries(pack()).forEach(([k,v])=>body.set(k,v));
+  let status = 'unknown', text = '';
+  try{
+    // بنقرا رد السيرفر لو المتصفح سمح، عشان ما نقولش "اتسجّلت" وهي مااتسجّلتش
+    const r = await fetch(ENDPOINT,{method:'POST',body});
+    text = (await r.text()).trim();
+    status = text === 'ok' ? 'ok' : 'rejected';
+  }catch(err){
+    status = 'unknown'; // الطلب اتبعت غالبًا لكن المتصفح مانعنا نقرا الرد
+  }
+  if (status === 'rejected'){
+    sending = false; $('next').disabled = false; $('next').textContent='إعادة الإرسال';
+    $('err').textContent = text === 'forbidden' ? 'اللينك ده غلط (الكلمة السرية). اطلب من الميسّر لينك جديد.' : 'الإرسال اترفض (' + text.slice(0,40) + '). كلّم الميسّر.';
+    return;
+  }
+  try{ sessionStorage.removeItem(DRAFT); }catch(e){}
+  $('nav').style.display='none'; $('barfill').style.width='100%'; $('count').textContent='';
+  const msg = status === 'ok'
+    ? (phase==='before' ? 'كمّل مع فريقك. هنرجعلك بعد الشغل.' : 'شكرًا! خلصت.')
+    : 'الإجابة اتبعتت. لو الميسّر قالك إنها مش ظاهرة، ابعتها تاني.';
+  $('stage').innerHTML = `<div class="card"><div class="done"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">${I.check}</svg></div>
+    <h1>${status==='ok' ? 'اتسجّلت <em>إجابتك</em>' : 'اتبعتت <em>إجابتك</em>'}</h1><p>${msg}</p></div></div>`;
+  buzz();
+  try{ if (parent !== window) parent.postMessage({zola:'card-done', phase, status}, location.origin); }catch(e){}
+}
+
+render();
+</script>
+</body>
+</html>

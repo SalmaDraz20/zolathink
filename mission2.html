@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light">
+<title>Mission 2 — Zola Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#151d3b;--mute:#6b7089;--purple:#6724cc;--purple2:#6739a6;--frame:#8346c4;--hl:#e5daf3;--lav:#f5efff;--lav2:#ece3fb;--line:#eeeaf6;--ok:#1d7a4d;--err:#c0392b;--warn:#e8590c}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#24123f;overflow:hidden;font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;color:var(--ink)}
+  #fit{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center}
+  #stage{position:absolute;inset:0;border:22px solid var(--frame);border-radius:42px;overflow:hidden;
+    background:#fcfbff;background-image:repeating-linear-gradient(to bottom,transparent 0 84px,var(--line) 84px 87px);background-position:0 60px}
+  #logo{position:absolute;top:46px;right:76px;height:84px;z-index:6}
+  .demo-badge{position:absolute;top:56px;left:76px;z-index:6;background:#fff1e6;color:var(--warn);font-weight:700;font-size:26px;padding:6px 20px;border-radius:99px;border:2px solid #ffd8bf}
+  .slide{position:absolute;inset:0;padding:150px 110px 110px;display:flex;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transform:translateX(-60px);transition:opacity .4s,transform .45s cubic-bezier(.2,.8,.2,1)}
+  .slide.on{opacity:1;pointer-events:auto;transform:none}
+  .slide.out{transform:translateX(60px)}
+  .title{font-weight:700;font-size:92px;line-height:1.25;margin:0 0 26px;text-align:center}
+  .hl{background:linear-gradient(transparent 58%,var(--hl) 58% 94%,transparent 94%);padding:0 18px;border-radius:12px}
+  .sub{font-size:44px;color:#7b7f92;margin:0}
+  .body{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;min-height:0;padding-bottom:30px}
+  .btn{white-space:nowrap;font:inherit;font-weight:700;font-size:36px;border:0;border-radius:24px;padding:16px 40px;cursor:pointer;background:var(--purple);color:#fff;box-shadow:0 14px 30px #6724cc40;transition:transform .12s,filter .15s}
+  .btn:hover{filter:brightness(1.08)} .btn:active{transform:scale(.96)}
+  .btn.ghost{background:#fff;color:var(--purple2);border:3px solid var(--lav2);box-shadow:none}
+  .btn.sm{font-size:28px;padding:10px 26px;border-radius:18px}
+  .btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .row{display:flex;gap:24px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .card{background:#fff;border:3px solid var(--lav2);border-radius:34px;padding:30px 36px;box-shadow:0 18px 40px #4a3a7a14}
+  .pop{animation:pop .55s cubic-bezier(.2,.9,.3,1.3) both;animation-delay:var(--d,0s)}
+  @keyframes pop{from{opacity:0;transform:translateY(40px) scale(.85) rotate(-3deg)}to{opacity:1;transform:none}}
+  /* غلاف */
+  .cover{justify-content:center;padding-top:60px}
+  .cover-title{font:900 230px/1 "Times New Roman",Tinos,Georgia,serif;margin:0;color:var(--ink);letter-spacing:-.01em;direction:ltr;display:flex;gap:.18em;align-items:flex-end}
+  .cover-title .w{background:linear-gradient(transparent 52%,var(--hl) 52% 98%,transparent 98%);padding:0 .06em;border-radius:18px;display:inline-flex}
+  .cover-title i{font-style:normal;display:inline-block;animation:rise .7s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i)*.06s)}
+  @keyframes rise{from{opacity:0;transform:translateY(90px) rotate(6deg)}to{opacity:1;transform:none}}
+  .cover .sub{font-size:68px;margin-top:20px;color:#8a8d9c;animation:pop .6s .8s both}
+  .cover .btn{margin-top:56px;font-size:44px;animation:pop .6s 1.1s both,pulse 2s 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 14px 30px #6724cc40}50%{box-shadow:0 0 0 22px #6724cc14,0 14px 30px #6724cc40}}
+  /* مؤقت */
+  .tm{display:flex;align-items:center;gap:34px;background:#fff;border:3px solid var(--lav2);border-radius:40px;padding:22px 42px;box-shadow:0 18px 40px #4a3a7a14}
+  .tm .ring{width:190px;height:190px;position:relative;flex:none}
+  .tm svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .tm circle{fill:none;stroke-width:12}
+  .tm .bg{stroke:var(--lav2)} .tm .fg{stroke:var(--purple);stroke-linecap:round;stroke-dasharray:339.3;transition:stroke-dashoffset .3s linear,stroke .3s}
+  .tm b{position:absolute;inset:0;display:grid;place-items:center;font-size:58px;font-variant-numeric:tabular-nums;direction:ltr}
+  .tm.warn{border-color:var(--warn);animation:shake .5s infinite} .tm.warn .fg{stroke:var(--warn)} .tm.warn b{color:var(--warn)}
+  .tm.end{border-color:var(--err)} .tm.end .fg{stroke:var(--err)} .tm.end b{color:var(--err)}
+  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .tm .lab{font-size:38px;font-weight:600;max-width:420px;line-height:1.35}
+  .tm .btns{display:flex;gap:12px;margin-top:14px}
+  /* انضمام */
+  .linkbox{direction:ltr;font:600 38px/1.3 "SFMono-Regular",Consolas,monospace;background:#fff;border:3px dashed #c9b5ee;border-radius:24px;padding:18px 34px;color:var(--purple2);max-width:1500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .count{font-size:120px;font-weight:700;color:var(--purple);line-height:1} .count small{font-size:44px;color:var(--mute);font-weight:500}
+  .bubbles{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;max-width:1500px}
+  .bub{background:var(--lav);border:3px solid var(--lav2);border-radius:999px;padding:8px 26px;font-size:38px;font-weight:600;color:var(--purple2);animation:pop .5s both}
+  .bub em{font-style:normal;background:var(--purple);color:#fff;border-radius:99px;padding:0 14px;margin-inline-start:10px;font-size:32px}
+  /* حقائق */
+  .stat{min-width:480px;text-align:center}
+  .stat .n{font-size:150px;font-weight:700;color:var(--purple);line-height:1;direction:ltr}
+  .stat .l{font-size:40px;font-weight:600;margin-top:6px} .stat .s{font-size:26px;color:var(--mute);margin-top:6px}
+  .q{font-size:56px;font-weight:600;text-align:center;max-width:1500px;line-height:1.4}
+  .src{position:absolute;bottom:50px;right:130px;font-size:24px;color:var(--mute)}
+  .icard{width:390px;text-align:center}
+  .icard .e{font-size:96px;line-height:1.1} .icard p{font-size:40px;font-weight:600;margin:10px 0 0;line-height:1.4}
+  .chip{display:inline-flex;gap:12px;align-items:center;font-size:40px;font-weight:600;background:var(--lav);color:var(--purple2);border-radius:99px;padding:10px 32px}
+  /* تقدم الكارت */
+  .prog{min-width:620px;text-align:center}
+  .prog .big{font-size:130px;font-weight:700;color:var(--purple);line-height:1}
+  .pbar{height:30px;background:var(--lav2);border-radius:99px;overflow:hidden;margin:18px 0 22px} .pbar i{display:block;height:100%;width:0;background:var(--purple);border-radius:99px;transition:width .6s}
+  .done-codes{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:56px} .done-codes span{background:#e6f6ee;color:var(--ok);border-radius:99px;padding:2px 18px;font-size:30px;font-weight:600;animation:pop .4s both}
+  .wall{position:absolute;inset:0;background:#fcfbffee;z-index:4;padding:150px 100px 100px;display:none;flex-direction:column;gap:24px;align-items:center;overflow:auto}
+  .wall.on{display:flex} .wall .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:100%}
+  .idea{background:#fff;border:3px solid var(--lav2);border-radius:26px;padding:20px 26px;font-size:34px;line-height:1.5;cursor:pointer;animation:pop .5s both}
+  .idea small{display:block;color:var(--mute);font-size:24px;margin-bottom:6px} .idea.hid{opacity:.15;filter:blur(6px)}
+  /* خريطة */
+  .mapwrap{display:flex;gap:40px;width:100%;align-items:flex-start;justify-content:center}
+  .map{background:#fff;border:3px solid var(--lav2);border-radius:30px;padding:16px} .map svg{display:block}
+  .side{flex:1;max-width:620px;display:flex;flex-direction:column;gap:18px}
+  .say{font-size:42px;font-weight:600;line-height:1.5;min-height:200px}
+  .say b{color:var(--purple)} .say .ok{color:var(--ok)}
+  table.pat{border-collapse:separate;border-spacing:10px;font-size:40px;direction:rtl} table.pat td{background:var(--lav);border-radius:16px;padding:6px 26px;text-align:center;min-width:130px;font-variant-numeric:tabular-nums}
+  table.pat td.qq{background:#fff;border:3px dashed #c9b5ee;cursor:pointer;color:var(--purple)}
+  /* نسبة */
+  .bar{display:flex;width:1500px;height:150px;border-radius:30px;overflow:hidden;border:3px solid var(--lav2);background:#fff}
+  .seg{display:grid;place-items:center;font-size:46px;font-weight:700;color:#fff;transition:flex .7s cubic-bezier(.2,.8,.2,1);overflow:hidden;white-space:nowrap}
+  .opts{display:flex;gap:14px;align-items:center;font-size:36px} .opt{font:inherit;font-size:36px;font-weight:600;background:#fff;border:3px solid var(--lav2);border-radius:18px;padding:6px 26px;cursor:pointer;color:var(--ink)} .opt.on{background:var(--purple);border-color:var(--purple);color:#fff}
+  .formula{font-size:46px;font-weight:600;background:var(--lav);border-radius:26px;padding:18px 40px;direction:rtl;text-align:center;line-height:1.6;max-width:1560px}
+  /* عصور */
+  .hall{width:430px;text-align:center;cursor:pointer;position:relative;transition:transform .15s,background .2s,border-color .2s}
+  .hall:hover{transform:translateY(-6px)} .hall .e{font-size:84px} .hall h3{margin:6px 0 0;font-size:44px} .hall p{margin:4px 0 0;font-size:32px;color:var(--mute)}
+  .hall .no{position:absolute;top:-22px;left:-22px;width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;font-size:40px;font-weight:700;display:none;place-items:center}
+  .hall.ok{background:#e9f7f0;border-color:#9fd8bb} .hall.ok .no{display:grid;animation:pop .4s both}
+  .hall.bad{animation:shake .4s;border-color:var(--err)}
+  /* فرق */
+  .tcol{min-width:420px;text-align:center;padding:22px 26px} .tcol h3{margin:0;font-size:46px;color:var(--purple)} .tcol .p{background:var(--lav);border-radius:20px;padding:8px 14px;margin:10px 0;font-size:30px;line-height:1.4}
+  .tcodes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:60px} .tcodes span{background:#fff;border:3px solid var(--lav2);border-radius:14px;padding:0 16px;font-size:32px;font-weight:600;animation:pop .5s both}
+  .roomnote{font-size:30px;color:var(--mute);background:#fff;border:3px dashed var(--lav2);border-radius:22px;padding:14px 28px;max-width:1500px;text-align:center;line-height:1.55}
+  /* خطوات */
+  .steps{display:flex;flex-direction:column;gap:14px;min-width:760px}
+  .stp{display:flex;align-items:center;gap:20px;background:#fff;border:3px solid var(--lav2);border-radius:26px;padding:14px 24px;font-size:38px;font-weight:600;transition:all .25s}
+  .stp .m{margin-inline-start:auto;color:var(--mute);font-size:30px} .stp.run{border-color:var(--purple);background:var(--lav);transform:scale(1.03)} .stp.fin{opacity:.55}
+  .picked{font-size:80px;font-weight:700;color:var(--purple);min-height:100px}
+  .siren{width:180px;height:180px;border-radius:50%;background:#ffe3e0;display:grid;place-items:center;font-size:110px;transition:all .3s}
+  .siren.go{animation:flash .35s infinite alternate;background:#ffb3ab}
+  @keyframes flash{from{transform:scale(1)}to{transform:scale(1.14);box-shadow:0 0 0 30px #ff6b5f22}}
+  .twist{font-size:80px;font-weight:700;color:var(--err);text-align:center;min-height:110px}
+  .flash{position:absolute;inset:0;background:#ff3b30;opacity:0;pointer-events:none;z-index:8}.flash.go{animation:fl .9s 2}
+  @keyframes fl{0%,100%{opacity:0}50%{opacity:.28}}
+  /* نتائج */
+  .vs{display:flex;align-items:flex-end;gap:60px;height:330px}
+  .col{width:220px;text-align:center;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+  .col .b{border-radius:26px 26px 8px 8px;transition:height 1.4s cubic-bezier(.2,.8,.2,1);height:0;display:grid;place-items:start center;padding-top:14px;font-size:56px;font-weight:700;color:#fff}
+  .col .l{font-size:36px;font-weight:600;margin-top:10px}
+  .caveat{font-size:32px;color:#8a4a00;background:#fff6e5;border:3px solid #ffe2b0;border-radius:24px;padding:16px 30px;max-width:1500px;text-align:center;line-height:1.55}
+  .conf{position:absolute;inset:0;pointer-events:none;z-index:9}
+  /* شريط التحكم (برا الشريحة) */
+  #ctl{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:#fffffff2;border-radius:99px;padding:6px 14px;box-shadow:0 8px 28px #0003;z-index:30;font:600 14px "IBM Plex Sans Arabic",Tahoma;color:var(--ink)}
+  #ctl button{font:inherit;border:0;background:var(--lav);color:var(--purple2);border-radius:99px;min-width:34px;height:34px;padding:0 12px;cursor:pointer} #ctl button:hover{background:var(--lav2)}
+  #dots{display:flex;gap:5px} #dots i{width:9px;height:9px;border-radius:50%;background:#d9cff0;cursor:pointer} #dots i.on{background:var(--purple);transform:scale(1.4)}
+  .chipc{display:inline-flex;gap:6px;align-items:center;padding:0 10px;height:34px;border-radius:99px;background:#f0f0f4;color:#555}
+  .chipc.ok{background:#e6f6ee;color:var(--ok)} .chipc.bad{background:#fdecea;color:var(--err)}
+  #toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-90px);background:#151d3b;color:#fff;padding:12px 26px;border-radius:99px;font:600 17px "IBM Plex Sans Arabic",Tahoma;z-index:40;transition:transform .35s}
+  #toast.on{transform:translate(-50%,0)} #toast.err{background:var(--err)}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <img id="logo" src="assets/zola-wordmark.png" alt="Zola Think" onerror="this.style.display='none'">
+  <div class="demo-badge" id="demoBadge" style="display:none">DEMO · بيانات تجريبية</div>
+  <div class="flash" id="flash"></div>
+  <canvas class="conf" id="conf" width="1876" height="1036"></canvas>
+</div></div>
+<div id="ctl">
+  <button id="prev" title="السابق (→)">‹</button><div id="dots"></div><button id="next" title="التالي (← أو مسافة)">›</button>
+  <button id="mute" title="الصوت">🔊</button><button id="fs" title="ملء الشاشة">⛶</button>
+  <span class="chipc" id="conn">…</span><span class="chipc" id="joined">0 جوّه</span>
+</div>
+<div id="toast"></div>
+
+<script src="mission2-data.js"></script>
+<script src="zola-sfx.js"></script>
+<script>
+'use strict';
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const qs = new URLSearchParams(location.search);
+const K = qs.get('k') || '';
+const H = ((location.hash.match(/h=([\w]+)/)||[])[1]) || '';
+const LIVE = !!(H && K);
+const API = ZM2.api();
+const D = ZM2;
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const fmt = s => Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+const JOIN_URL = location.origin + location.pathname.replace(/[^/]*$/, '') + 'join.html?k=' + (K || 'المفتاح');
+
+/* ================= scaling ================= */
+function fit(){ const s = Math.min(innerWidth/1920, innerHeight/1080); $('#fit').style.transform = `translate(-50%,-50%) scale(${s})`; }
+addEventListener('resize', fit); fit();
+
+/* ================= toast + confetti ================= */
+let toastT; function toast(m, err){ const t=$('#toast'); t.textContent=m; t.className='on'+(err?' err':''); clearTimeout(toastT); toastT=setTimeout(()=>t.className='',3200); }
+function confetti(){
+  const c = $('#conf'), g = c.getContext('2d'), cols = ['#6724cc','#8346c4','#e5daf3','#ffb703','#2a9d8f','#e76f51'];
+  const P = Array.from({length:170},()=>({x:c.width/2+(Math.random()-.5)*300,y:c.height*0.55,vx:(Math.random()-.5)*26,vy:-Math.random()*30-8,s:8+Math.random()*14,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
+  let f = 0; (function step(){ g.clearRect(0,0,c.width,c.height);
+    P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=1.1;p.vx*=.99;p.r+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.fillStyle=p.c;g.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);g.restore();});
+    if (++f < 130) requestAnimationFrame(step); else g.clearRect(0,0,c.width,c.height); })();
+}
+
+/* ================= الاتصال بالشيت (أو DEMO) ================= */
+function liveBackend(){
+  const post = async o => { const r = await fetch(API, {method:'POST', body:new URLSearchParams(o)}); return (await r.text()).trim(); };
+  return {
+    mode:'live',
+    async set(o){ return (await post({a:'set', h:H, ...o})) === 'ok'; },
+    async teams(n){ return (await post({a:'teams', h:H, n})) === 'ok'; },
+    async reset(){ return (await post({a:'reset', h:H})) === 'ok'; },
+    async roster(){ const r = await fetch(API + '?' + new URLSearchParams({a:'roster', h:H})); return r.json(); }
+  };
+}
+function demoBackend(){
+  const S = {players:[], ready:false, n:0, doneB:[], doneA:[], card:'', ideas:[], t:0};
+  const SAMPLE = ['نبدأ بقاعة الأهرام وبعدين العرض','نختار العرض الأول عشان محدد بوقت','القاعة الأقرب عشان نوفّر مشي','نمشي بالترتيب من الأقدم للأحدث','نروح للأحسن للطفل الأول'];
+  setInterval(()=>{
+    if (curId === 'join' && S.players.length < 10){ const i=S.players.length+1; S.players.push({code:'S'+String(i).padStart(2,'0'), chosen:1+(Math.random()*3|0), team:0, j:i}); }
+    if (S.card){ const L = S.card==='before' ? S.doneB : S.doneA; const next = S.players.find(p=>!L.includes(p.code)); if (next && Math.random()<.55){ L.push(next.code); if(S.card==='before') S.ideas.push({code:next.code, team:next.team, q1:SAMPLE[S.ideas.length%SAMPLE.length]}); } }
+  }, 900);
+  return {
+    mode:'demo',
+    async set(o){ if (o.card !== undefined) S.card = o.card; return true; },
+    async teams(n){
+      const per = Math.ceil(S.players.length/n), cnt = {}; for(let t=1;t<=n;t++) cnt[t]=0;
+      const over=[]; S.players.forEach(p=>{ const t=((p.chosen-1)%n)+1; if(cnt[t]<per){p.team=t;cnt[t]++;} else over.push(p); });
+      over.forEach(p=>{ let b=1; for(let t=2;t<=n;t++) if(cnt[t]<cnt[b]) b=t; p.team=b; cnt[b]++; });
+      S.ready = true; S.n = n; return true;
+    },
+    async reset(){ S.players=[]; S.ready=false; S.doneB=[]; S.doneA=[]; S.ideas=[]; return true; },
+    async roster(){
+      const nb=S.doneB.length, na=S.doneA.length;
+      return {ok:true, players:S.players.map(p=>({code:p.code,chosen:p.chosen,team:p.team})), done:{before:S.doneB, after:S.doneA},
+        agg:{done_before:nb, done_after:na, both:Math.min(nb,na), avg_before:1.1, avg_after:2.2, improved:Math.round(Math.min(nb,na)*.7), same:0, lower:0, changed_yes:Math.round(na*.6), cons_before:{'وقت':8,'ناس':4,'فلوس':3}, cons_after:{'وقت':9,'مكان':6,'ناس':5}}, ideas:S.ideas};
+    }
+  };
+}
+const BE = LIVE ? liveBackend() : demoBackend();
+let R = {players:[], done:{before:[],after:[]}, agg:{}, ideas:[]};
+async function push(o){ try{ const ok = await BE.set(o); if(!ok) toast('الأمر ماوصلش للطلاب. اتأكد من مفتاح الميسّرة والنشر', true); return ok; }catch(e){ toast('مفيش اتصال بالسيرفر', true); return false; } }
+
+/* ================= مؤقت ================= */
+let curTimer = null;
+function timerHTML(label){ return `<div class="tm" data-tm><div class="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54" stroke-dashoffset="0"/></svg><b>0:00</b></div><div><div class="lab">${label||''}</div><div class="btns"><button class="btn sm" data-a="start">▶ ابدأ</button><button class="btn sm ghost" data-a="plus">+1 د</button><button class="btn sm ghost" data-a="reset">↺</button></div></div></div>`; }
+function makeTimer(root, o){
+  const el = $('[data-tm]', root), fg = $('.fg', el), tb = $('b', el), lab = $('.lab', el);
+  const T = { sec:o.sec, left:o.sec, end:0, run:false, iv:null, fired:{} };
+  const draw = () => { tb.textContent = fmt(Math.max(0,T.left)); fg.style.strokeDashoffset = 339.3*(1 - Math.max(0,T.left)/Math.max(1,T.sec));
+    el.classList.toggle('warn', T.run && T.left<=60 && T.left>0 && T.sec>90); el.classList.toggle('end', T.left<=0 && T.fired.end); };
+  T.setSec = (s,l) => { T.stop(true); T.sec=T.left=s; T.fired={}; if(l!==undefined) lab.textContent=l; draw(); };
+  T.stop = (silent) => { T.run=false; clearInterval(T.iv); Sfx.stopWait(); if(!silent){ T.left=T.sec; T.fired={}; draw(); } };
+  T.start = async () => {
+    Sfx.unlock(); if (T.run) return; if (T.left<=0 || T.fired.end){ T.left=T.sec; T.fired={}; }
+    if (o.onStart) await o.onStart(T.left);
+    T.run=true; T.end=Date.now()+T.left*1000; if (o.music) Sfx.startWait();
+    clearInterval(T.iv); T.iv=setInterval(()=>{
+      T.left = Math.max(0, Math.ceil((T.end-Date.now())/1000)); draw();
+      if (T.left<=60 && T.left>0 && !T.fired.w && T.sec>90){ T.fired.w=1; Sfx.play('warn'); }
+      if (T.left<=10 && T.left>0 && T.fired.l!==T.left){ T.fired.l=T.left; Sfx.play('last'); }
+      if (T.left<=0){ T.fired.end=1; T.stop(true); draw(); Sfx.play('timeup'); if(o.onEnd) o.onEnd(); }
+    },250);
+  };
+  $('[data-a=start]',el).onclick = T.start;
+  $('[data-a=reset]',el).onclick = () => { T.stop(); if(o.onReset) o.onReset(); };
+  $('[data-a=plus]',el).onclick = () => { T.left+=60; T.sec+=60; T.end+=60000; draw(); if(T.run && o.onPlus) o.onPlus(T.left); };
+  draw(); curTimer = T; return T;
+}
+
+/* ================= الشرائح ================= */
+const SL = [];
+const slide = (id, build) => SL.push({id, build});
+
+// 0 — الغلاف
+slide('cover', el => { el.classList.add('cover'); el.innerHTML = `
+  <h1 class="cover-title"><span class="w">${[...'MISSION'].map((c,i)=>`<i style="--i:${i}">${c}</i>`).join('')}</span><span>${`<i style="--i:8">2</i>`}</span></h1>
+  <p class="sub">أهلا بيكم !</p><button class="btn" id="go">يلا نبدأ ▶</button>`;
+  $('#go',el).onclick = () => { Sfx.unlock(); Sfx.play('whoosh'); go(1); }; });
+
+// 1 — دخول الطلاب
+slide('join', el => { el.innerHTML = `<h2 class="title">ادخلوا من <span class="hl">اللينك</span></h2>
+  <div class="body"><div class="linkbox" id="lk">${esc(JOIN_URL)}</div>
+  <div class="row" style="align-items:center;gap:40px"><button class="btn sm ghost" id="cp">📋 انسخ اللينك</button><div class="count"><span id="cn">0</span> <small>جوّه</small></div></div>
+  <p class="sub">اكتبوا كودكم واختاروا رقم</p><div class="bubbles" id="bb"></div></div>`;
+  const seen = new Set();
+  $('#cp',el).onclick = async () => { try{ await navigator.clipboard.writeText(JOIN_URL); toast('اتنسخ ✅'); }catch(e){ toast('انسخيه يدويًا', true); } };
+  const upd = () => { $('#cn',el).textContent = R.players.length;
+    R.players.forEach(p => { if (seen.has(p.code)) return; seen.add(p.code); Sfx.play('pop'); const b=document.createElement('span'); b.className='bub'; b.innerHTML = `${esc(p.code)}<em>${p.chosen}</em>`; $('#bb',el).appendChild(b); }); };
+  upd(); return {onRoster:upd}; });
+
+// 2 — الخبر
+slide('hook', el => { el.innerHTML = `<h2 class="title">سنة على المتحف <span class="hl">المصري الكبير</span></h2>
+  <div class="body"><div class="row">
+    <div class="card stat pop" style="--d:.1s"><div class="n"><span data-c="5">0</span>+</div><div class="l">مليون زائر</div><div class="s">من أول فتح</div></div>
+    <div class="card stat pop" style="--d:.25s"><div class="n"><span data-c="35">0</span></div><div class="l">دقيقة: عرض Eternal Sun</div><div class="s">ضوء وصوت في القاعة الكبرى</div></div>
+    <div class="card stat pop" style="--d:.4s"><div class="n" style="font-size:96px;padding-top:36px">30 أبريل</div><div class="l">آخر يوم للعرض (2027)</div><div class="s">بدأ 1 نوفمبر 2026</div></div></div>
+  <div class="q pop" style="--d:.7s">زائر معاه ساعتين ونص… <span class="hl">هتختار يزور إيه؟</span> وبأي ترتيب؟</div>
+  <div id="t"></div></div><div class="src">المصدر: Xinhua، 2 نوفمبر 2026</div>`;
+  $$('[data-c]',el).forEach(n=>{ const to=+n.dataset.c; let v=0; const iv=setInterval(()=>{ v+=Math.max(1,Math.ceil(to/22)); if(v>=to){v=to;clearInterval(iv);} n.textContent=v; },45); });
+  $('#t',el).innerHTML = timerHTML('ناقشوا بصوت عالي: إيه اللي بيخلّي الزيارة تنجح؟'); makeTimer($('#t',el),{sec:300}); });
+
+// 3 — الدور
+slide('role', el => { el.innerHTML = `<h2 class="title">شغلكم <span class="hl">النهارده</span></h2><div class="body">
+  <div class="row">${[['🧑‍💼','إنتوا فريق منتج'],['⏳','وقت قليل وقاعات كتير'],['🧭','المطلوب: خطة زيارة بقرارات مدروسة'],['📱','الأبلكيشن بعدين… النهارده القرار']].map((c,i)=>`<div class="card icard pop" style="--d:${i*.15}s"><div class="e">${c[0]}</div><p>${c[1]}</p></div>`).join('')}</div>
+  <div class="row" style="margin-top:20px">${['📏 مقياس الرسم','➗ التقسيم التناسبي','🏺 العصور المصرية'].map((t,i)=>`<span class="chip pop" style="--d:${.8+i*.12}s">${t}</span>`).join('')}</div></div>`; });
+
+// كارت (قبل/بعد)
+function cardSlide(phase){ return el => {
+  const label = phase==='before' ? 'قبل' : 'بعد', secs = phase==='before' ? 480 : 420;
+  el.innerHTML = `<h2 class="title">كارت <span class="hl">${label}</span> · لوحدك</h2><div class="body"><div class="row" style="align-items:center;gap:60px">
+    <div id="t"></div>
+    <div class="card prog"><div class="big"><span id="dn">0</span><small style="font-size:56px;color:var(--mute)"> / <span id="tt">0</span></small></div><div class="pbar"><i id="pb"></i></div><div class="done-codes" id="dc"></div></div></div>
+    <div class="row"><button class="btn" id="rel">📲 ابعت الكارت</button><button class="btn ghost" id="cls">🔒 اقفل الكارت</button>${phase==='before'?'<button class="btn ghost" id="idea">💡 اعرض الأفكار</button>':''}</div></div>
+    <div class="wall" id="wall"><button class="btn sm ghost" id="wx">✕ اقفل</button><div class="grid" id="wg"></div></div>`;
+  $('#t',el).innerHTML = timerHTML('كل واحد لوحده، بدون كلام');
+  const shown = new Set(); let announced = false;
+  const T = makeTimer($('#t',el), { sec:secs, music:true,
+    onStart: async left => { const ok = await push({card:phase, dur:left, label:'كارت '+label, prompt:''}); if(ok) Sfx.play('card'); },
+    onPlus: left => push({card:phase, dur:left, label:'كارت '+label, prompt:''}),
+    onEnd: () => toast('الوقت خلص. اقفلي الكارت لما الكل يخلص') });
+  $('#rel',el).onclick = () => T.start();
+  $('#cls',el).onclick = async () => { T.stop(); await push({card:'', dur:0, label:'', prompt:''}); toast('الكارت اتقفل عند الطلاب'); };
+  const upd = () => { const L = R.done[phase] || [], tot = R.players.length;
+    $('#dn',el).textContent = L.length; $('#tt',el).textContent = tot; $('#pb',el).style.width = (tot ? L.length/tot*100 : 0) + '%';
+    L.forEach(c=>{ if(shown.has(c)) return; shown.add(c); Sfx.play('pop'); const s=document.createElement('span'); s.textContent=c; $('#dc',el).appendChild(s); });
+    if (!announced && tot && L.length >= tot){ announced = true; T.stop(true); Sfx.play('success'); confetti(); toast('الكل خلّص ✅'); push({card:'', dur:0, label:'', prompt:''}); }
+    if (phase==='before' && $('#wall',el).classList.contains('on')) drawWall(); };
+  const hidden = new Set();
+  function drawWall(){ $('#wg',el).innerHTML = (R.ideas||[]).map((x,i)=>`<div class="idea ${hidden.has(x.code)?'hid':''}" data-c="${esc(x.code)}" style="--d:${i*.05}s"><small>${esc(x.code)}${x.team?' · فريق '+x.team:''}</small>${esc(x.q1)}</div>`).join('') || '<p class="sub">لسه مفيش أفكار</p>';
+    $$('.idea',el).forEach(d=>d.onclick=()=>{ hidden.has(d.dataset.c)?hidden.delete(d.dataset.c):hidden.add(d.dataset.c); d.classList.toggle('hid'); }); }
+  if (phase==='before'){ $('#idea',el).onclick=()=>{ $('#wall',el).classList.add('on'); drawWall(); Sfx.play('whoosh'); toast('اضغطي على أي فكرة لإخفائها'); }; $('#wx',el).onclick=()=>$('#wall',el).classList.remove('on'); }
+  upd(); return {onRoster:upd};
+}; }
+slide('card1', cardSlide('before'));
+
+// 5 — مقياس الرسم
+slide('scale', el => {
+  const M = D.MAP, cell = 62, W = M.cols*cell, Hh = M.rows*cell, N = M.nodes;
+  const sq = (a,b) => Math.abs(N[a].x-N[b].x)+Math.abs(N[a].y-N[b].y);
+  const cells = (a,b) => { const out=[], A=N[a], B=N[b]; let x=A.x,y=A.y; const dx=Math.sign(B.x-A.x), dy=Math.sign(B.y-A.y); while(x!==B.x){x+=dx;out.push([x,y]);} while(y!==B.y){y+=dy;out.push([x,y]);} return out; };
+  const grid = (()=>{ let s=''; for(let i=0;i<=M.cols;i++) s+=`<line x1="${i*cell}" y1="0" x2="${i*cell}" y2="${Hh}" stroke="#e4dcf3"/>`; for(let j=0;j<=M.rows;j++) s+=`<line x1="0" y1="${j*cell}" x2="${W}" y2="${j*cell}" stroke="#e4dcf3"/>`; return s; })();
+  const nodes = Object.entries(N).map(([k,n])=>`<g><rect x="${n.x*cell-34}" y="${n.y*cell-24}" width="68" height="48" rx="14" fill="${k==='S'?'#ffb703':k==='E'?'#2a9d8f':'#6724cc'}"/><text x="${n.x*cell}" y="${n.y*cell+8}" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">${k}</text></g>`).join('');
+  el.innerHTML = `<h2 class="title">مقياس الرسم: <span class="hl">كام متر؟</span></h2><div class="body"><div class="mapwrap">
+    <div class="map"><svg id="svg" width="${W}" height="${Hh}" viewBox="0 0 ${W} ${Hh}">${grid}<g id="cellsG"></g><polyline id="path" fill="none" stroke="#e76f51" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" points=""/>${nodes}</svg>
+      <div style="font-size:30px;margin-top:8px;color:var(--mute)">كل مربع = <b style="color:var(--purple)">${M.metersPerSquare} متر</b> · E مدخل · H1 H2 H3 قاعات · S عرض Eternal Sun · <span style="color:#a05a00">خريطة تمرين، مش المتحف الحقيقي</span></div></div>
+    <div class="side"><div class="say" id="say"></div><div class="row" style="justify-content:flex-start"><button class="btn" id="nx">👆 اللي بعده</button><button class="btn sm ghost" id="rs">↺</button></div><div id="t"></div></div></div></div>`;
+  $('#t',el).innerHTML = timerHTML('اكتشفوا القاعدة'); makeTimer($('#t',el),{sec:300});
+  const say = h => { $('#say',el).innerHTML = h; };
+  const drawPath = (a,b, extra) => new Promise(res => { const cs = cells(a,b); const pts = [[N[a].x*cell,N[a].y*cell]]; let i=0, g=$('#cellsG',el); g.innerHTML = extra||'';
+    const iv = setInterval(()=>{ if(i>=cs.length){clearInterval(iv);res();return;} const [x,y]=cs[i]; pts.push([x*cell,y*cell]); $('#path',el).setAttribute('points',pts.map(p=>p.join(',')).join(' '));
+      g.insertAdjacentHTML('beforeend',`<rect x="${(x-.5)*cell+4}" y="${(y-.5)*cell+4}" width="${cell-8}" height="${cell-8}" rx="10" fill="#6724cc22"/><text x="${x*cell}" y="${y*cell+34}" text-anchor="middle" font-size="26" font-weight="700" fill="#6724cc">${i+1}</text>`); Sfx.play('tick'); i++; },330); });
+  const m1 = sq('E','H1'), m2 = sq('H1','H2'), mps = M.metersPerSquare, spd = M.metersPerMinute;
+  let step = 0, busy = false;
+  const STEPS = [
+    () => { $('#path',el).setAttribute('points',''); $('#cellsG',el).innerHTML=''; say('من <b>المدخل (E)</b> لـ <b>قاعة 1 (H1)</b>…<br>كام <b>مربع</b>؟ كام <b>متر</b>؟ كام <b>دقيقة مشي</b>؟<br><span style="font-size:32px;color:var(--mute)">فكروا قبل ما أرسم</span>'); },
+    async () => { say('نعدّ المربعات…'); await drawPath('E','H1'); say(`عدّينا <b>${m1} مربع</b>`); },
+    () => { say(`${m1} مربع × ${mps} متر = <b>${m1*mps} متر</b> <span class="ok">✔</span>`); Sfx.play('correct'); },
+    () => { say(`${m1*mps} متر ÷ ${spd} متر في الدقيقة = <b>${m1*mps/spd} دقيقة مشي</b> <span class="ok">✔</span><br><span style="font-size:30px;color:var(--mute)">الزائر بيمشي ${spd} م/د لأن فيه زحمة ووقوف</span>`); Sfx.play('correct'); },
+    async () => { say(`جرّبوا لوحدكم: <b>قاعة 1 ← قاعة 2</b>…`); await drawPath('H1','H2'); say(`<b>${m2} مربع</b> = ${m2*mps} متر = <b>${m2*mps/spd} دقيقة</b> <span class="ok">✔</span>`); Sfx.play('correct'); },
+    () => { say(`<div>إيه <b>القاعدة؟</b> اضغطوا على علامة ؟</div><table class="pat" id="pat">${[1,2,3,4,'ن'].map(n=>`<tr><td>${n} مربع</td><td class="qq" data-v="${n==='ن'?'ن × '+mps:n*mps}">؟</td></tr>`).join('')}</table>`);
+      $$('td.qq',el).forEach(td=>td.onclick=()=>{ td.textContent=td.dataset.v+' متر'; td.classList.remove('qq'); td.style.background='#e6f6ee'; Sfx.play('correct'); }); }
+  ];
+  $('#nx',el).onclick = async () => { if(busy) return; if(step>=STEPS.length){ Sfx.play('success'); confetti(); return; } busy=true; await STEPS[step++](); busy=false; };
+  $('#rs',el).onclick = () => { step=0; STEPS[0](); step=1; };
+  STEPS[0](); step=1; });
+
+// 6 — التقسيم التناسبي
+slide('prop', el => {
+  let total = 60, ratio = [2,1];
+  const COLS = ['#6724cc','#8346c4','#b58be8'];
+  el.innerHTML = `<h2 class="title">نقسّم الوقت <span class="hl">بنسبة</span></h2><div class="body">
+    <div class="opts">الإجمالي: ${[60,90,120].map(v=>`<button class="opt" data-t="${v}">${v} د</button>`).join('')}<span style="width:40px"></span>النسبة: ${['2:1','3:2','1:1:1','3:2:1'].map(v=>`<button class="opt" data-r="${v}">${v}</button>`).join('')}</div>
+    <div class="bar" id="bar"></div><div class="formula" id="fm"></div><div id="t"></div></div>`;
+  $('#t',el).innerHTML = timerHTML('جرّبوا أرقام مختلفة'); makeTimer($('#t',el),{sec:300});
+  const num = v => Number.isInteger(v) ? v : (Math.round(v*10)/10);
+  const draw = () => { const sum = ratio.reduce((a,b)=>a+b,0), part = total/sum;
+    $$('.opt[data-t]',el).forEach(b=>b.classList.toggle('on', +b.dataset.t===total)); $$('.opt[data-r]',el).forEach(b=>b.classList.toggle('on', b.dataset.r===ratio.join(':')));
+    $('#bar',el).innerHTML = ratio.map((r,i)=>`<div class="seg" style="flex:${r};background:${COLS[i]}">${num(r*part)} د</div>`).join('');
+    $('#fm',el).innerHTML = `عدد الأجزاء = ${ratio.join(' + ')} = <b>${sum}</b><br>الجزء الواحد = ${total} ÷ ${sum} = <b>${num(part)} دقيقة</b><br>${ratio.map((r,i)=>`قاعة ${i+1} = ${r} × ${num(part)} = <b>${num(r*part)} د</b>`).join(' &nbsp;·&nbsp; ')}`; };
+  $$('.opt[data-t]',el).forEach(b=>b.onclick=()=>{ total=+b.dataset.t; Sfx.play('pop'); draw(); });
+  $$('.opt[data-r]',el).forEach(b=>b.onclick=()=>{ ratio=b.dataset.r.split(':').map(Number); Sfx.play('pop'); draw(); });
+  draw(); });
+
+// 7 — العصور
+slide('eras', el => {
+  const H = ['H1','H2','H3'].map(k=>({k, ...D.MAP.nodes[k]})); const order = ['H1','H2','H3'], shuffled = [H[2],H[0],H[1]];
+  const ICON = {H1:'🔺',H2:'🏺',H3:'🛡️'};
+  el.innerHTML = `<h2 class="title">رتّبوا العصور: <span class="hl">مين الأقدم؟</span></h2><div class="body">
+    <p class="sub">اضغطوا القاعات من الأقدم للأحدث</p>
+    <div class="row">${shuffled.map((h,i)=>`<div class="card hall pop" style="--d:${i*.15}s" data-k="${h.k}"><div class="no"></div><div class="e">${ICON[h.k]}</div><h3>${h.label}</h3><p>${h.title}</p></div>`).join('')}</div>
+    <div class="formula" id="rv" style="visibility:hidden"></div><div id="t"></div></div>`;
+  $('#t',el).innerHTML = timerHTML('رتّبوا وفسّروا ليه'); makeTimer($('#t',el),{sec:240});
+  let n = 0;
+  $$('.hall',el).forEach(c=>c.onclick=()=>{ if(c.classList.contains('ok')) return;
+    if (c.dataset.k === order[n]){ n++; c.classList.add('ok'); $('.no',c).textContent=n; Sfx.play('correct');
+      if (n===3){ const rv=$('#rv',el); rv.style.visibility='visible'; rv.innerHTML = H.map(h=>`<b>${h.label}</b>: ${h.era} (${h.title})`).join('<br>'); Sfx.play('success'); confetti(); } }
+    else { c.classList.remove('bad'); void c.offsetWidth; c.classList.add('bad'); Sfx.play('wrong'); } }); });
+
+// 8 — توزيع الفرق
+let TEAMS_N = 0;
+slide('teams', el => {
+  el.innerHTML = `<h2 class="title">اتفرقوا <span class="hl">على فرق</span></h2><div class="body">
+    <div class="row" style="align-items:center"><span class="chip" id="rec"></span><div class="opts">عدد الفرق: ${[2,3,4].map(v=>`<button class="opt" data-n="${v}">${v}</button>`).join('')}</div><button class="btn" id="mk">🎲 وزّع الفرق</button></div>
+    <div class="row" id="cols" style="align-items:flex-start"></div><div class="roomnote" id="rn"></div></div>`;
+  let n = TEAMS_N || 3, touched = !!TEAMS_N;
+  const pick = () => { $$('.opt',el).forEach(b=>b.classList.toggle('on',+b.dataset.n===n)); };
+  const paint = () => { const P = R.players, assigned = P.some(p=>p.team>0);
+    if (!touched && P.length && !assigned){ n = P.length>=9 ? 3 : 2; pick(); }
+    $('#rec',el).textContent = `الحضور ${P.length} · المقترح ${P.length>=9?3:2} فرق`;
+    const groups = assigned ? [...new Set(P.map(p=>p.team))].sort() : [...new Set(P.map(p=>p.chosen))].sort();
+    $('#cols',el).innerHTML = groups.map(g=>{ const m = P.filter(p=>(assigned?p.team:p.chosen)===g); const per = D.PERSONAS[(g-1)%D.PERSONAS.length];
+      return `<div class="card tcol pop"><h3>${assigned?'فريق '+g:'اختاروا '+g}</h3>${assigned?`<div class="p">${per.emoji} ${per.name}<br>معاه ${per.minutes} دقيقة</div>`:''}<div class="tcodes">${m.map((p,i)=>`<span style="--d:${i*.06}s">${esc(p.code)}</span>`).join('')}</div></div>`; }).join('');
+    $('#rn',el).innerHTML = assigned ? `الغرف: كل فريق في غرفته. في Zoom: <b>Breakout Rooms ← ${groups.length} غرف ← Allow participants to choose room</b>، والطلاب يدخلوا الغرفة اللي رقمها زي فريقهم (الرقم على موبايلاتهم).` : 'اللي اختاروا نفس الرقم هيبقوا في فريق واحد. لو فريق زاد عن حجمه، آخر المسجلين بيتنقلوا لأصغر فريق.'; };
+  $$('.opt',el).forEach(b=>b.onclick=()=>{ n=+b.dataset.n; touched=true; pick(); });
+  $('#mk',el).onclick = async () => { Sfx.unlock(); if(!R.players.length){ toast('لسه محدش دخل', true); return; }
+    Sfx.play('drum'); const ok = await BE.teams(n); if(!ok){ toast('التوزيع ماتمش. اتأكد من مفتاح الميسّرة', true); return; }
+    TEAMS_N = n; await pollRoster(); Sfx.play('success'); confetti(); paint(); };
+  pick(); paint(); return {onRoster:paint}; });
+
+// 9 — شغل الفريق
+slide('work', el => {
+  const ST = D.TEAM_STEPS; let running = -1;
+  el.innerHTML = `<h2 class="title">شغل <span class="hl">الفريق</span></h2><div class="body"><div class="row" style="gap:50px;align-items:flex-start">
+    <div class="steps">${ST.map((s,i)=>`<div class="stp" data-i="${i}"><span>${i+1}</span><span>${s.label}</span><span class="m">${s.min} د</span><button class="btn sm" data-s="${i}">ابدأ</button></div>`).join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:20px;align-items:center"><div id="t"></div><button class="btn ghost" id="who">🎲 مين يتكلم؟</button><div class="picked" id="pk"></div></div></div></div>`;
+  $('#t',el).innerHTML = timerHTML('اختاروا خطوة'); const T = makeTimer($('#t',el),{sec:ST[0].min*60, onEnd:()=>{ if(running>=0) toast('خلصت: '+ST[running].label); }});
+  const start = async i => { running=i; const s=ST[i]; T.setSec(s.min*60, s.label);
+    $$('.stp',el).forEach((d,j)=>{ d.classList.toggle('run',j===i); d.classList.toggle('fin',j<i); });
+    await push({card:'', dur:s.min*60, label:s.label, prompt:s.prompt}); Sfx.play('card'); T.start(); };
+  $$('[data-s]',el).forEach(b=>b.onclick=()=>start(+b.dataset.s));
+  $('#who',el).onclick = () => { const P=R.players; if(!P.length) return; Sfx.unlock(); let i=0; const n=14+(Math.random()*P.length|0); const iv=setInterval(()=>{ $('#pk',el).textContent=P[i%P.length].code; Sfx.play('tick'); i++; if(i>n){clearInterval(iv);Sfx.play('correct');} },100); }; });
+
+// 10 — مفاجأة
+slide('twist', el => { el.innerHTML = `<h2 class="title"><span class="hl">مفاجأة!</span></h2><div class="body"><div class="siren" id="sr">🚨</div><div class="twist" id="tw"></div><button class="btn" id="sd">🚨 ابعت المفاجأة</button><div id="t"></div></div>`;
+  $('#t',el).innerHTML = timerHTML('عدّلوا الخطة'); const T = makeTimer($('#t',el),{sec:D.TWIST.min*60});
+  $('#sd',el).onclick = async () => { Sfx.unlock(); Sfx.play('siren'); $('#sr',el).classList.add('go'); $('#flash').classList.remove('go'); void $('#flash').offsetWidth; $('#flash').classList.add('go');
+    $('#tw',el).textContent = 'قاعة 2 اتقفلت للصيانة!';
+    await push({card:'', dur:D.TWIST.min*60, label:D.TWIST.label, prompt:D.TWIST.prompt}); setTimeout(()=>{ $('#sr',el).classList.remove('go'); T.start(); }, 1800); }; });
+
+// 11 — مناظرة
+slide('debate', el => { const TN = TEAMS_N || Math.max(2, new Set(R.players.map(p=>p.team).filter(Boolean)).size) || 3; const turns = D.DEBATE.turns; let round = 1;
+  const pairs = () => Array.from({length:TN},(_,i)=>[i+1, (i+1)%TN+1]);
+  el.innerHTML = `<h2 class="title">مناظرة <span class="hl">الفرق</span></h2><div class="body"><div class="row" id="pr"></div><div class="steps" id="tn"></div><div id="t"></div></div>`;
+  $('#pr',el).innerHTML = pairs().map(p=>`<div class="card icard pop" style="width:330px"><div class="e">⚔️</div><p>فريق ${p[0]} يدافع قدام فريق ${p[1]}</p></div>`).join('');
+  $('#t',el).innerHTML = timerHTML('اختاروا دور'); const T = makeTimer($('#t',el),{sec:turns[0][1]});
+  $('#tn',el).innerHTML = turns.map((t,i)=>`<div class="stp" data-i="${i}"><span>${i+1}</span><span>${t[0]}</span><span class="m">${fmt(t[1])}</span><button class="btn sm" data-s="${i}">ابدأ</button></div>`).join('');
+  $$('[data-s]',el).forEach(b=>b.onclick=async()=>{ const i=+b.dataset.s, t=turns[i]; T.setSec(t[1], t[0]); $$('.stp',el).forEach((d,j)=>{d.classList.toggle('run',j===i);d.classList.toggle('fin',j<i);});
+    await push({card:'', dur:t[1], label:t[0], prompt: D.SPEAK[i%D.SPEAK.length]}); Sfx.play('card'); T.start(); }); });
+
+slide('card2', cardSlide('after'));
+
+// 13 — النتيجة
+slide('results', el => {
+  const A = () => R.agg || {}; let played = false;
+  el.innerHTML = `<h2 class="title">النتيجة <span class="hl">بالأرقام</span></h2><div class="body">
+    <div class="row" style="align-items:flex-end;gap:80px"><div class="vs"><div class="col"><div class="b" id="bb" style="background:#b58be8"></div><div class="l">قبل</div></div><div class="col"><div class="b" id="ba" style="background:#6724cc"></div><div class="l">بعد</div></div></div>
+    <div class="card" style="min-width:560px;text-align:center"><div style="font-size:34px;color:var(--mute)">متوسط الاختبار السريع من 3</div><div style="font-size:100px;font-weight:700;color:var(--purple)" id="av">–</div><div style="font-size:38px;font-weight:600" id="im"></div><div style="font-size:30px;color:var(--mute);margin-top:6px" id="ch"></div></div></div>
+    <div class="caveat" id="cv"></div>
+    <div class="row"><span class="chip">🎬 الواجب: فيديو 60–90 ثانية خلال 3–5 أيام</span><span class="chip">📱 الأبلكيشن في الميشن الجاية</span></div></div>`;
+  const upd = () => { const a = A(); const ok = a.both > 0;
+    const hb = ok ? a.avg_before/3*300 : 0, ha = ok ? a.avg_after/3*300 : 0;
+    $('#bb',el).style.height = hb+'px'; $('#ba',el).style.height = ha+'px'; $('#bb',el).textContent = ok?a.avg_before:''; $('#ba',el).textContent = ok?a.avg_after:'';
+    $('#av',el).textContent = ok ? a.avg_before+' ← '+a.avg_after : '–';
+    $('#im',el).textContent = ok ? `${a.improved} من ${a.both} زادت درجتهم` : 'لسه مفيش كروت «بعد»';
+    $('#ch',el).textContent = ok ? `غيّروا حلّهم: ${a.changed_yes} من ${a.done_after}` : '';
+    $('#cv',el).innerHTML = (LIVE?'':'<b>DEMO:</b> أرقام تجريبية. ') + `الأرقام دي لـ ${a.both||0} طالب بس، من غير مجموعة ضابطة، وبأسئلة متوازية مش مثبتة التكافؤ. ده تغيّر جوه السيشن (فيه شرح) مش دليل على تعلّم دائم.`;
+    if (ok && !played){ played=true; Sfx.play('success'); confetti(); } };
+  upd(); return {onRoster:upd}; });
+
+/* ================= التنقل ================= */
+const stage = $('#stage'); let cur = -1, curId = '', hooks = null;
+SL.forEach((s,i)=>{ const d=document.createElement('section'); d.className='slide'; d.dataset.i=i; stage.insertBefore(d, $('#flash')); s.el=d; });
+$('#dots').innerHTML = SL.map((s,i)=>`<i data-i="${i}" title="${s.id}"></i>`).join('');
+$$('#dots i').forEach(d=>d.onclick=()=>go(+d.dataset.i,true));
+function show(i){
+  if (i<0||i>=SL.length||i===cur) return;
+  if (curTimer){ curTimer.stop(true); curTimer=null; } Sfx.stopWait();
+  if (cur>=0){ SL[cur].el.classList.remove('on'); SL[cur].el.classList.add('out'); const o=SL[cur].el; setTimeout(()=>{ o.classList.remove('out'); if (SL[cur] && SL[cur].el!==o) o.innerHTML=''; },460); }
+  cur=i; curId=SL[i].id; const s=SL[i]; s.el.innerHTML=''; s.el.className='slide'; hooks = s.build(s.el) || null;
+  requestAnimationFrame(()=>s.el.classList.add('on'));
+  $$('#dots i').forEach((d,j)=>d.classList.toggle('on',j===i));
+  if (i>0) Sfx.play('whoosh');
+}
+function go(d, abs){ show(abs ? d : cur + d); }
+$('#prev').onclick=()=>go(-1); $('#next').onclick=()=>go(1);
+addEventListener('keydown',e=>{ if(/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  if (['ArrowLeft','PageDown',' ','Enter'].includes(e.key) && e.target.tagName!=='BUTTON'){ e.preventDefault(); go(1); }
+  else if (['ArrowRight','PageUp','Backspace'].includes(e.key)){ e.preventDefault(); go(-1); }
+  else if (e.key==='f'){ toggleFS(); } else if (e.key==='m'){ $('#mute').click(); } });
+function toggleFS(){ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.(); }
+$('#fs').onclick = toggleFS;
+const muteUI = () => $('#mute').textContent = Sfx.muted ? '🔇' : '🔊'; muteUI();
+$('#mute').onclick = () => { Sfx.setMuted(!Sfx.muted); muteUI(); if(Sfx.muted) Sfx.stopWait(); };
+
+/* ================= متابعة الشيت ================= */
+async function pollRoster(){
+  try{ const r = await BE.roster(); if(!r || !r.ok) throw new Error(r && r.error || 'x'); R = r; setConn(true);
+    $('#joined').textContent = R.players.length + ' جوّه'; if (hooks && hooks.onRoster) hooks.onRoster(); }
+  catch(e){ setConn(false); }
+}
+function setConn(ok){ const c=$('#conn'); if(BE.mode==='demo'){ c.textContent='DEMO'; c.className='chipc'; return; } c.textContent = ok ? '● الشيت متوصّل' : '● الشيت مش متوصّل'; c.className = 'chipc ' + (ok?'ok':'bad'); }
+if (BE.mode==='demo') $('#demoBadge').style.display='';
+else if (H && !K) toast('ناقص ?k= في اللينك', true);
+pollRoster(); setInterval(pollRoster, BE.mode==='demo' ? 1000 : 3000);
+show(0);
+</script>
+</body>
+</html>
