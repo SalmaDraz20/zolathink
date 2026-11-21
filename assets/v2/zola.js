@@ -255,14 +255,56 @@ if (certForm) {
   }
   // Renders the student's real certificate (first page of the PDF from Notion) in place of the sample design.
   const PDFJS = '/assets/vendor/pdfjs/'; // pdf.js 4.10.38, self-hosted
+  let pdfjs;
+  const pdfLib = async () => { if (!pdfjs) { pdfjs = await import(PDFJS + 'pdf.min.mjs'); pdfjs.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.mjs'; } return pdfjs; };
+  // Draws one PDF page into a canvas sized for `width` CSS pixels.
+  async function pdfPage(doc, n, width) {
+    const page = await doc.getPage(n);
+    const scale = Math.min(3, (width * Math.min(devicePixelRatio || 1, 2)) / page.getViewport({ scale: 1 }).width);
+    const vp = page.getViewport({ scale });
+    const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+    await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+    return cv;
+  }
+
+  /* ---------- project viewer (popup with the project's image or PDF) ---------- */
+  let viewer;
+  function openProject(p) {
+    if (!viewer) {
+      viewer = document.createElement('dialog'); viewer.className = 'viewer'; viewer.setAttribute('aria-labelledby', 'viewer-title');
+      viewer.innerHTML = '<div class="viewer-box"><header><button type="button" class="close" aria-label="اقفل" data-close>✕</button><div><small class="purple" dir="ltr" data-v="mission"></small><h3 id="viewer-title" data-v="title"></h3><p class="en" dir="ltr" data-v="titleEn"></p></div><a class="link" data-v="open" target="_blank" rel="noopener">افتح الملف ↗</a></header><div class="viewer-body"></div></div>';
+      document.body.appendChild(viewer);
+      viewer.addEventListener('click', e => { if (e.target === viewer || e.target.closest('[data-close]')) viewer.close(); });
+      viewer.addEventListener('close', () => { $('.viewer-body', viewer).innerHTML = ''; });
+    }
+    $('[data-v=mission]', viewer).textContent = 'MISSION 0' + p.mission;
+    $('[data-v=title]', viewer).textContent = p.title;
+    $('[data-v=titleEn]', viewer).textContent = p.titleEn || '';
+    const open = $('[data-v=open]', viewer); open.href = p.pdf || p.image;
+    const body = $('.viewer-body', viewer);
+    if (p.pdf) {
+      body.innerHTML = '<div class="cert-loading">بنفتح الملف..</div>';
+      viewer.showModal();
+      (async () => {
+        try {
+          const doc = await (await pdfLib()).getDocument({ url: p.pdf }).promise;
+          const width = body.clientWidth - 2; body.innerHTML = '';
+          for (let n = 1; n <= Math.min(doc.numPages, 30) && viewer.open; n++) body.appendChild(await pdfPage(doc, n, width));
+        } catch (e) { body.innerHTML = '<p class="viewer-err">مقدرناش نعرض الملف هنا.. افتحه من «افتح الملف».</p>'; }
+      })();
+    } else {
+      body.innerHTML = `<img src="${esc(p.image)}" alt="${esc(p.title)}">`;
+      viewer.showModal();
+    }
+  }
+
   async function showPdf(src, code, imgBtn) {
     const sample = $('#cert-card');
     let fig = $('#cert-file');
     if (!fig) { fig = document.createElement('figure'); fig.id = 'cert-file'; fig.className = 'cert-file'; sample.before(fig); }
     fig.innerHTML = '<div class="cert-loading">بنجهّز شهادتك..</div>'; sample.hidden = true; fig.hidden = false;
     try {
-      const lib = await import(PDFJS + 'pdf.min.mjs');
-      lib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.mjs';
+      const lib = await pdfLib();
       const doc = await lib.getDocument({ url: src }).promise;
       const page = await doc.getPage(1);
       const base = page.getViewport({ scale: 1 });
@@ -309,7 +351,20 @@ if (certForm) {
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
     const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<a href="${esc(p.image)}" target="_blank" rel="noopener" aria-label="شوف المشروع كامل"><img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy"></a>` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`).join('');
+    if (projects.length) {
+      const icon = '<svg width="40" height="40" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 6h14l8 8v24H12z" stroke="#834CBF" stroke-width="2" stroke-linejoin="round"/><path d="M26 6v8h8M17 24h12M17 30h9" stroke="#834CBF" stroke-width="2" stroke-linecap="round"/></svg>';
+      gal.innerHTML = projects.map((p, i) => {
+        const has = p.image || p.pdf;
+        const thumb = p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : p.pdf ? `<span class="pdf-thumb" data-pdf="${esc(p.pdf)}">${icon}</span><span class="badge-pdf" dir="ltr">PDF</span>` : '';
+        return `<article class="polaroid${has ? ' open' : ''}" ${has ? `role="button" tabindex="0" aria-label="افتح مشروع ${esc(p.title)}" data-i="${i}"` : ''}><div class="img">${thumb}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`;
+      }).join('');
+      gal.onclick = e => { const a = e.target.closest('.polaroid.open'); if (a) openProject(projects[+a.dataset.i]); };
+      gal.onkeydown = e => { const a = e.target.closest('.polaroid.open'); if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openProject(projects[+a.dataset.i]); } };
+      // PDF cards show their first page as the picture.
+      $$('.pdf-thumb', gal).forEach(async t => {
+        try { const doc = await (await pdfLib()).getDocument({ url: t.dataset.pdf }).promise; t.replaceChildren(await pdfPage(doc, 1, t.clientWidth || 240)); t.classList.add('ready'); } catch (e) {}
+      });
+    }
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
