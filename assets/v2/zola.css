@@ -366,3 +366,14 @@ svg text{font-family:'Readex Pro',sans-serif}
 .cert-file{margin:0;width:100%;transform:rotate(-1.2deg)}
 .cert-file canvas{display:block;width:100%;height:auto;background:#fff;box-shadow:0 24px 60px rgba(51,26,102,.16)}
 .cert-loading{aspect-ratio:1.414;display:grid;place-items:center;background:var(--tint);color:var(--sub);font-family:var(--f-hand);font-size:18px}
+
+/* Arabic + English side by side on the certificate page */
+.en{display:block;direction:ltr;unicode-bidi:isolate;font-family:var(--f-body);font-weight:400;font-size:.78em;color:var(--sub);line-height:1.5;margin-top:2px}
+.en-title{direction:ltr;font-family:var(--f-body);font-size:clamp(16px,1.6vw,20px);color:var(--sub);margin:-6px 0 12px;letter-spacing:.3px}
+.en-title:empty,.en:empty{display:none}
+.bi{display:inline-flex;flex-direction:column;align-items:flex-end;text-align:end}
+.polaroid .en{font-size:12px;margin:2px 0 4px}
+.en-inline{color:var(--sub);font-size:12px}
+.podium b .en{font-size:11px;margin-top:3px}
+.skills-list li .en{font-size:11px;opacity:.85}
+.skills-list li.top .en{color:inherit;opacity:.8}

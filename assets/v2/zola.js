@@ -227,9 +227,9 @@ if (gallery) {
 /* ---------- certificate page ---------- */
 // Sample student (code Z-123) so the result page can be previewed before the Notion table is connected.
 const DEMO_CERT = { code: 'Z-123', certificateId: 'ZT-26-TEST123', name: 'طالب تجريبي', nameEn: 'طالب تجريبي', journey: 'Journey 01', journeyUpper: 'JOURNEY 01',
-  title: 'أفضل صاحب قرار', titleEn: '', titleReason: '', topSkills: ['اتخاذ القرار', 'التفكير النقدي', 'العرض بثقة'],
+  title: 'أفضل صاحب قرار', titleEn: 'The Best Decision Maker', titleEnUpper: 'THE BEST DECISION MAKER', titleReason: '', topSkills: ['اتخاذ القرار', 'التفكير النقدي', 'العرض بثقة'], topSkillsEn: ['Decision making', 'Critical thinking', 'Confident presenting'], skillsEn: ['Problem solving', 'Research', 'Data analysis', 'Understanding AI', 'Teamwork'],
   skills: ['حل المشكلات', 'البحث', 'تحليل البيانات', 'فهم الـ AI', 'العمل الجماعي'], issuedLabel: '', issuedEn: '', pdf: null, image: null,
-  projects: [['خطة رحلة المدرسة', 'مخطّط رحلات'], ['متجر الفصل', 'صاحب مشروع صغير'], ['خطة الاستجابة لزلزال', 'مهندس إنقاذ'], ['سباق زولا', 'مطوّر ألعاب'], ['تطبيق توقّع الطقس', 'محلل بيانات']].map(([title, role], mission) => ({ mission, title, role, image: null })) };
+  projects: [['خطة رحلة المدرسة', 'مخطّط رحلات', 'School Trip Plan', 'Trip Planner'], ['متجر الفصل', 'صاحب مشروع صغير', 'Class Store', 'Small Business Owner'], ['خطة الاستجابة لزلزال', 'مهندس إنقاذ', 'Earthquake Response Plan', 'Rescue Engineer'], ['سباق زولا', 'مطوّر ألعاب', 'Zola Race', 'Game Developer'], ['تطبيق توقّع الطقس', 'محلل بيانات', 'Weather Forecast App', 'Data Analyst']].map(([title, role, titleEn, roleEn], mission) => ({ mission, title, role, titleEn, roleEn, image: null })) };
 const certForm = $('#cert-form');
 if (certForm) {
   const input = $('#cert-code'), box = $('.big-input', certForm), err = $('#cert-error'), btn = $('[type=submit]', certForm);
@@ -289,11 +289,14 @@ if (certForm) {
     const certName = $('#cert-card .name'); certName.classList.toggle('ar', /[\u0600-\u06FF]/.test(certName.textContent));
     const top = c.topSkills || [];
     const pod = $('.podium', v);
-    if (top.length) { [[1, 0], [0, 1], [2, 2]].forEach(([slot, idx]) => { const col = pod.children[slot]; if (top[idx]) $('b', col).textContent = top[idx]; else col.hidden = true; }); }
+    const topEn = c.topSkillsEn || [];
+    if (top.length) { [[1, 0], [0, 1], [2, 2]].forEach(([slot, idx]) => { const col = pod.children[slot]; if (top[idx]) $('b', col).innerHTML = esc(top[idx]) + (topEn[idx] ? `<small class="en" dir="ltr">${esc(topEn[idx])}</small>` : ''); else col.hidden = true; }); }
     else pod.closest('[data-wrap]').hidden = true;
-    const all = [...new Set([...top, ...(c.skills || [])])];
+    const all = [...top, ...(c.skills || [])], allEn = [...topEn, ...(c.skillsEn || [])];
     $('#skills-count').textContent = `(${all.length} مهارة)`;
-    $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}</li>`).join('');
+    // English sits under each Arabic skill when Notion has it in the same order.
+    const enOk = allEn.length === all.length;
+    $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}${enOk ? `<small class="en" dir="ltr">${esc(allEn[i])}</small>` : ''}</li>`).join('');
     if (!c.title) $$('[data-title-only]', v).forEach(n => n.hidden = true);
     if (!c.titleEn) $('[data-award]', v).hidden = true;
     if (!c.titleReason) $$('[data-reason]', v).forEach(n => n.hidden = true);
@@ -306,7 +309,7 @@ if (certForm) {
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
     const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3><small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small></article>`).join('');
+    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`).join('');
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });

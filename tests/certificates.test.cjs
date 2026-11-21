@@ -60,3 +60,19 @@ test('certificate PDF is served through the site with a stable link', async () =
   assert.match(pdf.headers['Content-Disposition'], /^attachment; filename="Zola-Certificate-Z-294.pdf"/);
   assert.ok(pdf.body.equals(pdfBytes));
 });
+
+test('English title, skills and projects come along with the Arabic', () => {
+  const rt = s => [{ plain_text: s }];
+  const c = readCertificate({ properties: {
+    Name: { title: rt('سارة') }, Code: { rich_text: rt('294') },
+    'Title (لقب)': { rich_text: rt('أدق محللة') }, 'Title EN': { rich_text: rt('The Sharpest Analyst') },
+    'Skills acquired': { rich_text: rt('أ، ب، ج، د') }, 'Skills EN': { rich_text: rt('A, B, C, D') },
+    'M1 project': { rich_text: rt('مشروع | دور') }, 'M1 project EN': { rich_text: rt('Project | Role') },
+    'M2 project EN': { rich_text: rt('Only English') },
+  } });
+  assert.equal(c.titleEn, 'The Sharpest Analyst');
+  assert.equal(c.titleEnUpper, 'THE SHARPEST ANALYST');
+  assert.deepEqual([c.topSkillsEn, c.skillsEn], [['A', 'B', 'C'], ['D']]);
+  assert.equal(c.projects.length, 1); // no Arabic project for M2, so it doesn't show
+  assert.deepEqual([c.projects[0].titleEn, c.projects[0].roleEn], ['Project', 'Role']);
+});
