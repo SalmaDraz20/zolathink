@@ -309,7 +309,7 @@ if (certForm) {
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
     const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`).join('');
+    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<a href="${esc(p.image)}" target="_blank" rel="noopener" aria-label="شوف المشروع كامل"><img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy"></a>` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`).join('');
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });

@@ -42,3 +42,10 @@ test('handler reports not_configured without env', async () => {
   await createHandler({})({ method: 'GET', url: '/api/projects' }, res);
   assert.strictEqual(res.statusCode, 503);
 });
+
+test('images can be site paths, but not other schemes or traversal', () => {
+  const page = url => ({ properties: { Project: { title: rt('x') }, 'Image URL': { type: 'url', url } } });
+  assert.strictEqual(readProject(page('/assets/projects/m0-bag.jpg')).image, '/assets/projects/m0-bag.jpg');
+  assert.strictEqual(readProject(page('javascript:alert(1)')).image, null);
+  assert.strictEqual(readProject(page('/assets/../api/x')).image, null);
+});

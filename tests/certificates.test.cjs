@@ -76,3 +76,15 @@ test('English title, skills and projects come along with the Arabic', () => {
   assert.equal(c.projects.length, 1); // no Arabic project for M2, so it doesn't show
   assert.deepEqual([c.projects[0].titleEn, c.projects[0].roleEn], ['Project', 'Role']);
 });
+
+test('an image uploaded to "M0 image" in Notion wins over the link in the text', () => {
+  const rt = s => [{ plain_text: s }];
+  const c = readCertificate({ properties: {
+    Name: { title: rt('سارة') }, Code: { rich_text: rt('294') },
+    'M0 project': { rich_text: rt('مشروع | دور | /assets/projects/m0-bag.jpg') },
+    'M0 image': { files: [{ file: { url: 'https://prod-files-secure.s3.us-west-2.amazonaws.com/x.png' } }] },
+    'M1 project': { rich_text: rt('مشروع ٢ | دور | /assets/projects/m1-school.svg') },
+  } });
+  assert.equal(c.projects[0].image, 'https://prod-files-secure.s3.us-west-2.amazonaws.com/x.png');
+  assert.equal(c.projects[1].image, '/assets/projects/m1-school.svg');
+});
