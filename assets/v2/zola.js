@@ -141,6 +141,11 @@ $$('[data-video]').forEach(b => b.addEventListener('click', e => {
 }));
 
 /* ---------- certificate page ---------- */
+// Sample student (code Z-123) so the result page can be previewed before the Notion table is connected.
+const DEMO_CERT = { code: 'Z-123', certificateId: 'ZT-26-TEST123', name: 'طالب تجريبي', nameEn: 'طالب تجريبي', journey: 'Journey 01', journeyUpper: 'JOURNEY 01',
+  title: 'أفضل صاحب قرار', titleEn: '', titleReason: '', topSkills: ['اتخاذ القرار', 'التفكير النقدي', 'العرض بثقة'],
+  skills: ['حل المشكلات', 'البحث', 'تحليل البيانات', 'فهم الـ AI', 'العمل الجماعي'], issuedLabel: '', issuedEn: '', pdf: null, image: null,
+  projects: [['خطة رحلة المدرسة', 'مخطّط رحلات'], ['متجر الفصل', 'صاحب مشروع صغير'], ['خطة الاستجابة لزلزال', 'مهندس إنقاذ'], ['سباق زولا', 'مطوّر ألعاب'], ['تطبيق توقّع الطقس', 'محلل بيانات']].map(([title, role], mission) => ({ mission, title, role, image: null })) };
 const certForm = $('#cert-form');
 if (certForm) {
   const input = $('#cert-code'), box = $('.big-input', certForm), err = $('#cert-error'), btn = $('[type=submit]', certForm);
@@ -155,6 +160,7 @@ if (certForm) {
     btn.disabled = true; btn.firstChild.textContent = 'بندوّر.. ';
     try {
       const r = await fetch('/api/certificate?code=' + encodeURIComponent(code), { signal: AbortSignal.timeout(15000) });
+      if (r.status === 503 && code === 'Z-123') { render(DEMO_CERT); return; } // preview before Notion is connected
       if (r.status === 404) throw Object.assign(new Error(), { nf: true });
       const j = await r.json(); if (!r.ok || !j.ok) throw new Error();
       render(j.certificate);
@@ -178,6 +184,7 @@ if (certForm) {
     $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}</li>`).join('');
     if (!c.title) $$('[data-title-only]', v).forEach(n => n.hidden = true);
     if (!c.titleEn) $('[data-award]', v).hidden = true;
+    if (!c.titleReason) $$('[data-reason]', v).forEach(n => n.hidden = true);
     if (!c.issuedEn) $('[data-date]', v).hidden = true;
     const pdf = $('#cert-pdf'); if (c.pdf) { pdf.href = c.pdf; pdf.target = '_blank'; } else pdf.addEventListener('click', e => { e.preventDefault(); print(); });
     const img = $('#cert-img'); if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true;
