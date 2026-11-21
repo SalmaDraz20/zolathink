@@ -44,5 +44,12 @@
       "source": "/login",
       "destination": "/login.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/certificate.html",
+      "destination": "/certificate",
+      "permanent": true
+    }
   ]
 }

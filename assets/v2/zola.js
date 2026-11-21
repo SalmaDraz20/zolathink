@@ -248,11 +248,37 @@ if (certForm) {
       if (r.status === 404) throw Object.assign(new Error(), { nf: true });
       const j = await r.json(); if (!r.ok || !j.ok) throw new Error();
       render(j.certificate);
-      history.replaceState(null, '', '?code=' + encodeURIComponent(code));
     } catch (e) {
       box.setAttribute('data-invalid', ''); err.hidden = false;
       err.textContent = e.nf ? 'الكود ده مش موجود عندنا. اتأكد إنه مكتوب صح، أو كلّمنا على واتساب.' : 'حصلت مشكلة في الاتصال. جرّب تاني بعد شوية.';
     } finally { btn.disabled = false; btn.firstChild.textContent = 'استلم شهادتك '; }
+  }
+  // Renders the student's real certificate (first page of the PDF from Notion) in place of the sample design.
+  const PDFJS = '/assets/vendor/pdfjs/'; // pdf.js 4.10.38, self-hosted
+  async function showPdf(src, code, imgBtn) {
+    const sample = $('#cert-card');
+    let fig = $('#cert-file');
+    if (!fig) { fig = document.createElement('figure'); fig.id = 'cert-file'; fig.className = 'cert-file'; sample.before(fig); }
+    fig.innerHTML = '<div class="cert-loading">بنجهّز شهادتك..</div>'; sample.hidden = true; fig.hidden = false;
+    try {
+      const lib = await import(PDFJS + 'pdf.min.mjs');
+      lib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.mjs';
+      const doc = await lib.getDocument({ url: src }).promise;
+      const page = await doc.getPage(1);
+      const base = page.getViewport({ scale: 1 });
+      const scale = Math.min(3, (Math.max(fig.clientWidth, 320) * Math.min(devicePixelRatio || 1, 2)) / base.width);
+      const vp = page.getViewport({ scale });
+      const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'شهادة الطالب');
+      await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+      fig.replaceChildren(cv);
+      // "Download as image" saves exactly what's on screen.
+      imgBtn.hidden = false; imgBtn.removeAttribute('target');
+      imgBtn.onclick = e => { e.preventDefault(); cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `Zola-Certificate-${code}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png'); };
+    } catch (e) {
+      // If the PDF can't be drawn, fall back to the designed certificate; the download button still works.
+      fig.hidden = true; sample.hidden = false; imgBtn.hidden = true;
+    }
   }
   function render(c) {
     $('[data-view=enter]').hidden = true; const v = $('[data-view=result]'); v.hidden = false;
@@ -270,8 +296,9 @@ if (certForm) {
     if (!c.titleEn) $('[data-award]', v).hidden = true;
     if (!c.titleReason) $$('[data-reason]', v).forEach(n => n.hidden = true);
     if (!c.issuedEn) $('[data-date]', v).hidden = true;
-    const pdf = $('#cert-pdf'); if (c.pdf) { pdf.href = c.pdf; pdf.target = '_blank'; } else pdf.addEventListener('click', e => { e.preventDefault(); print(); });
-    const img = $('#cert-img'); if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true;
+    const pdf = $('#cert-pdf'), img = $('#cert-img');
+    if (c.pdf) { pdf.href = c.pdf + '&download=1'; pdf.removeAttribute('target'); showPdf(c.pdf, c.code, img); }
+    else { pdf.onclick = e => { e.preventDefault(); print(); }; if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true; }
     const share = encodeURIComponent(location.href);
     $('#share-wa').href = `https://wa.me/?text=${encodeURIComponent('شهادة ' + c.name + ' من Zola Think 🎓 ')}${share}`;
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
@@ -290,7 +317,7 @@ if (certForm) {
     lookup(code);
   });
   const q = new URLSearchParams(location.search).get('code');
-  if (q) { input.value = q.toUpperCase(); lookup(input.value); }
+  if (q) { history.replaceState(null, '', location.pathname); input.value = q.toUpperCase(); lookup(input.value); }
 }
 
 /* ---------- login page ---------- */
