@@ -38,3 +38,10 @@ test('Supabase transport uses only insert on the target table',async()=>{
  try{const {getSupabase}=require('../lib/server/supabase.cjs');const result=await getSupabase().from('mission_zero_registrations').insert(validate(valid()));assert.equal(result.error,null);assert.ok(actual.url.includes('/rest/v1/mission_zero_registrations'));assert.ok(!actual.url.includes('select='));assert.equal(actual.options.method,'POST');assert.equal(JSON.parse(actual.options.body).status,'new');}
  finally{global.fetch=savedFetch;if(savedUrl===undefined)delete process.env.SUPABASE_URL;else process.env.SUPABASE_URL=savedUrl;if(savedKey===undefined)delete process.env.SUPABASE_SECRET_KEY;else process.env.SUPABASE_SECRET_KEY=savedKey;}
 });
+
+test('optional student whatsapp is normalized and only stored when provided',()=>{
+ assert.equal('student_whatsapp' in validate(valid()),false);
+ assert.equal('student_whatsapp' in validate({...valid(),student_whatsapp:''}),false);
+ assert.equal(validate({...valid(),student_whatsapp:'٠١١٢٣٤٥٦٧٨٩'}).student_whatsapp,'+201123456789');
+ assert.throws(()=>validate({...valid(),student_whatsapp:'123'}));
+});
