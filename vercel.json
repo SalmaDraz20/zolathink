@@ -11,6 +11,9 @@
     },
     "api/card-submit.js": {
       "maxDuration": 15
+    },
+    "api/certificate.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
@@ -21,6 +24,22 @@
     {
       "source": "/card",
       "destination": "/live-card.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/schools",
+      "destination": "/schools.html"
+    },
+    {
+      "source": "/certificate",
+      "destination": "/certificate.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
     }
   ]
 }
