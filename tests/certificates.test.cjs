@@ -40,3 +40,39 @@ test('handler: bad code, not configured, not found, found', async () => {
   assert.equal(sent.filter.or[1].rich_text.equals, 'Z-483');
   assert.equal((await run(h, '/api/certificate?code=Z-999')).statusCode, 404);
 });
+
+test('certificate PDF is served through the site with a stable link', async () => {
+  const { createHandler } = require('../lib/server/certificates.cjs');
+  const row = { properties: { Name: { title: [{ plain_text: 'سارة' }] }, Code: { rich_text: [{ plain_text: '294' }] },
+    'Certificate PDF': { files: [{ file: { url: 'https://files.notion.so/c.pdf' } }] } } };
+  const pdfBytes = Buffer.from('%PDF-1.7 test');
+  const fetchImpl = async url => url.includes('api.notion.com')
+    ? { ok: true, json: async () => ({ results: [row] }) }
+    : { ok: true, headers: new Map([['content-length', String(pdfBytes.length)]]), arrayBuffer: async () => pdfBytes };
+  const h = createHandler({ token: 't', database: 'db', fetchImpl });
+  const mk = () => ({ headers: {}, setHeader(k, v) { this.headers[k] = v; }, end(b) { this.body = b; } });
+  const res = mk();
+  await h({ method: 'GET', url: '/api/certificate?code=Z-294' }, res);
+  assert.strictEqual(JSON.parse(res.body).certificate.pdf, '/api/certificate?code=Z-294&file=pdf');
+  const pdf = mk();
+  await h({ method: 'GET', url: '/api/certificate?code=Z-294&file=pdf&download=1' }, pdf);
+  assert.strictEqual(pdf.headers['Content-Type'], 'application/pdf');
+  assert.match(pdf.headers['Content-Disposition'], /^attachment; filename="Zola-Certificate-Z-294.pdf"/);
+  assert.ok(pdf.body.equals(pdfBytes));
+});
+
+test('English title, skills and projects come along with the Arabic', () => {
+  const rt = s => [{ plain_text: s }];
+  const c = readCertificate({ properties: {
+    Name: { title: rt('سارة') }, Code: { rich_text: rt('294') },
+    'Title (لقب)': { rich_text: rt('أدق محللة') }, 'Title EN': { rich_text: rt('The Sharpest Analyst') },
+    'Skills acquired': { rich_text: rt('أ، ب، ج، د') }, 'Skills EN': { rich_text: rt('A, B, C, D') },
+    'M1 project': { rich_text: rt('مشروع | دور') }, 'M1 project EN': { rich_text: rt('Project | Role') },
+    'M2 project EN': { rich_text: rt('Only English') },
+  } });
+  assert.equal(c.titleEn, 'The Sharpest Analyst');
+  assert.equal(c.titleEnUpper, 'THE SHARPEST ANALYST');
+  assert.deepEqual([c.topSkillsEn, c.skillsEn], [['A', 'B', 'C'], ['D']]);
+  assert.equal(c.projects.length, 1); // no Arabic project for M2, so it doesn't show
+  assert.deepEqual([c.projects[0].titleEn, c.projects[0].roleEn], ['Project', 'Role']);
+});

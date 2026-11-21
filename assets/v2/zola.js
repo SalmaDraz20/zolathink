@@ -227,9 +227,9 @@ if (gallery) {
 /* ---------- certificate page ---------- */
 // Sample student (code Z-123) so the result page can be previewed before the Notion table is connected.
 const DEMO_CERT = { code: 'Z-123', certificateId: 'ZT-26-TEST123', name: 'طالب تجريبي', nameEn: 'طالب تجريبي', journey: 'Journey 01', journeyUpper: 'JOURNEY 01',
-  title: 'أفضل صاحب قرار', titleEn: '', titleReason: '', topSkills: ['اتخاذ القرار', 'التفكير النقدي', 'العرض بثقة'],
+  title: 'أفضل صاحب قرار', titleEn: 'The Best Decision Maker', titleEnUpper: 'THE BEST DECISION MAKER', titleReason: '', topSkills: ['اتخاذ القرار', 'التفكير النقدي', 'العرض بثقة'], topSkillsEn: ['Decision making', 'Critical thinking', 'Confident presenting'], skillsEn: ['Problem solving', 'Research', 'Data analysis', 'Understanding AI', 'Teamwork'],
   skills: ['حل المشكلات', 'البحث', 'تحليل البيانات', 'فهم الـ AI', 'العمل الجماعي'], issuedLabel: '', issuedEn: '', pdf: null, image: null,
-  projects: [['خطة رحلة المدرسة', 'مخطّط رحلات'], ['متجر الفصل', 'صاحب مشروع صغير'], ['خطة الاستجابة لزلزال', 'مهندس إنقاذ'], ['سباق زولا', 'مطوّر ألعاب'], ['تطبيق توقّع الطقس', 'محلل بيانات']].map(([title, role], mission) => ({ mission, title, role, image: null })) };
+  projects: [['خطة رحلة المدرسة', 'مخطّط رحلات', 'School Trip Plan', 'Trip Planner'], ['متجر الفصل', 'صاحب مشروع صغير', 'Class Store', 'Small Business Owner'], ['خطة الاستجابة لزلزال', 'مهندس إنقاذ', 'Earthquake Response Plan', 'Rescue Engineer'], ['سباق زولا', 'مطوّر ألعاب', 'Zola Race', 'Game Developer'], ['تطبيق توقّع الطقس', 'محلل بيانات', 'Weather Forecast App', 'Data Analyst']].map(([title, role, titleEn, roleEn], mission) => ({ mission, title, role, titleEn, roleEn, image: null })) };
 const certForm = $('#cert-form');
 if (certForm) {
   const input = $('#cert-code'), box = $('.big-input', certForm), err = $('#cert-error'), btn = $('[type=submit]', certForm);
@@ -248,36 +248,68 @@ if (certForm) {
       if (r.status === 404) throw Object.assign(new Error(), { nf: true });
       const j = await r.json(); if (!r.ok || !j.ok) throw new Error();
       render(j.certificate);
-      history.replaceState(null, '', '?code=' + encodeURIComponent(code));
     } catch (e) {
       box.setAttribute('data-invalid', ''); err.hidden = false;
       err.textContent = e.nf ? 'الكود ده مش موجود عندنا. اتأكد إنه مكتوب صح، أو كلّمنا على واتساب.' : 'حصلت مشكلة في الاتصال. جرّب تاني بعد شوية.';
     } finally { btn.disabled = false; btn.firstChild.textContent = 'استلم شهادتك '; }
   }
+  // Renders the student's real certificate (first page of the PDF from Notion) in place of the sample design.
+  const PDFJS = '/assets/vendor/pdfjs/'; // pdf.js 4.10.38, self-hosted
+  async function showPdf(src, code, imgBtn) {
+    const sample = $('#cert-card');
+    let fig = $('#cert-file');
+    if (!fig) { fig = document.createElement('figure'); fig.id = 'cert-file'; fig.className = 'cert-file'; sample.before(fig); }
+    fig.innerHTML = '<div class="cert-loading">بنجهّز شهادتك..</div>'; sample.hidden = true; fig.hidden = false;
+    try {
+      const lib = await import(PDFJS + 'pdf.min.mjs');
+      lib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.mjs';
+      const doc = await lib.getDocument({ url: src }).promise;
+      const page = await doc.getPage(1);
+      const base = page.getViewport({ scale: 1 });
+      const scale = Math.min(3, (Math.max(fig.clientWidth, 320) * Math.min(devicePixelRatio || 1, 2)) / base.width);
+      const vp = page.getViewport({ scale });
+      const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'شهادة الطالب');
+      await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+      fig.replaceChildren(cv);
+      // "Download as image" saves exactly what's on screen.
+      imgBtn.hidden = false; imgBtn.removeAttribute('target');
+      imgBtn.onclick = e => { e.preventDefault(); cv.toBlob(b => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `Zola-Certificate-${code}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png'); };
+    } catch (e) {
+      // If the PDF can't be drawn, fall back to the designed certificate; the download button still works.
+      fig.hidden = true; sample.hidden = false; imgBtn.hidden = true;
+    }
+  }
   function render(c) {
     $('[data-view=enter]').hidden = true; const v = $('[data-view=result]'); v.hidden = false;
     $$('[data-f]', v).forEach(el => { const k = el.dataset.f; if (c[k] != null && c[k] !== '') el.textContent = c[k]; else if (el.dataset.optional !== undefined) el.closest('[data-wrap]')?.setAttribute('hidden', ''); });
     $('#first-name').textContent = (c.name || '').split(' ')[0];
+    // Count only the Missions this student actually has a project for.
+    const done = (c.projects || []).length; if (done) $('#mission-count').textContent = done;
     const certName = $('#cert-card .name'); certName.classList.toggle('ar', /[\u0600-\u06FF]/.test(certName.textContent));
     const top = c.topSkills || [];
     const pod = $('.podium', v);
-    if (top.length) { [[1, 0], [0, 1], [2, 2]].forEach(([slot, idx]) => { const col = pod.children[slot]; if (top[idx]) $('b', col).textContent = top[idx]; else col.hidden = true; }); }
+    const topEn = c.topSkillsEn || [];
+    if (top.length) { [[1, 0], [0, 1], [2, 2]].forEach(([slot, idx]) => { const col = pod.children[slot]; if (top[idx]) $('b', col).innerHTML = esc(top[idx]) + (topEn[idx] ? `<small class="en" dir="ltr">${esc(topEn[idx])}</small>` : ''); else col.hidden = true; }); }
     else pod.closest('[data-wrap]').hidden = true;
-    const all = [...new Set([...top, ...(c.skills || [])])];
+    const all = [...top, ...(c.skills || [])], allEn = [...topEn, ...(c.skillsEn || [])];
     $('#skills-count').textContent = `(${all.length} مهارة)`;
-    $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}</li>`).join('');
+    // English sits under each Arabic skill when Notion has it in the same order.
+    const enOk = allEn.length === all.length;
+    $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}${enOk ? `<small class="en" dir="ltr">${esc(allEn[i])}</small>` : ''}</li>`).join('');
     if (!c.title) $$('[data-title-only]', v).forEach(n => n.hidden = true);
     if (!c.titleEn) $('[data-award]', v).hidden = true;
     if (!c.titleReason) $$('[data-reason]', v).forEach(n => n.hidden = true);
     if (!c.issuedEn) $('[data-date]', v).hidden = true;
-    const pdf = $('#cert-pdf'); if (c.pdf) { pdf.href = c.pdf; pdf.target = '_blank'; } else pdf.addEventListener('click', e => { e.preventDefault(); print(); });
-    const img = $('#cert-img'); if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true;
+    const pdf = $('#cert-pdf'), img = $('#cert-img');
+    if (c.pdf) { pdf.href = c.pdf + '&download=1'; pdf.removeAttribute('target'); showPdf(c.pdf, c.code, img); }
+    else { pdf.onclick = e => { e.preventDefault(); print(); }; if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true; }
     const share = encodeURIComponent(location.href);
     $('#share-wa').href = `https://wa.me/?text=${encodeURIComponent('شهادة ' + c.name + ' من Zola Think 🎓 ')}${share}`;
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
     const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3><small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small></article>`).join('');
+    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`).join('');
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
@@ -290,7 +322,7 @@ if (certForm) {
     lookup(code);
   });
   const q = new URLSearchParams(location.search).get('code');
-  if (q) { input.value = q.toUpperCase(); lookup(input.value); }
+  if (q) { history.replaceState(null, '', location.pathname); input.value = q.toUpperCase(); lookup(input.value); }
 }
 
 /* ---------- login page ---------- */
