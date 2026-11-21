@@ -284,6 +284,8 @@ if (certForm) {
     $('[data-view=enter]').hidden = true; const v = $('[data-view=result]'); v.hidden = false;
     $$('[data-f]', v).forEach(el => { const k = el.dataset.f; if (c[k] != null && c[k] !== '') el.textContent = c[k]; else if (el.dataset.optional !== undefined) el.closest('[data-wrap]')?.setAttribute('hidden', ''); });
     $('#first-name').textContent = (c.name || '').split(' ')[0];
+    // Count only the Missions this student actually has a project for.
+    const done = (c.projects || []).length; if (done) $('#mission-count').textContent = done;
     const certName = $('#cert-card .name'); certName.classList.toggle('ar', /[\u0600-\u06FF]/.test(certName.textContent));
     const top = c.topSkills || [];
     const pod = $('.podium', v);
