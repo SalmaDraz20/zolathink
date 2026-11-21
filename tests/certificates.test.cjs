@@ -88,3 +88,25 @@ test('an image uploaded to "M0 image" in Notion wins over the link in the text',
   assert.equal(c.projects[0].image, 'https://prod-files-secure.s3.us-west-2.amazonaws.com/x.png');
   assert.equal(c.projects[1].image, '/assets/projects/m1-school.svg');
 });
+
+test('a PDF uploaded as a project file gets a same-site link and streams through the API', async () => {
+  const { createHandler } = require('../lib/server/certificates.cjs');
+  const rt = s => [{ plain_text: s }];
+  const row = { properties: { Name: { title: rt('سارة') }, Code: { rich_text: rt('294') },
+    'M1 project': { rich_text: rt('مشروع | دور') },
+    'M1 image': { files: [{ name: 'deck.pdf', file: { url: 'https://files.notion.so/deck?sig=1' } }] },
+    'M2 project': { rich_text: rt('صورة | دور') },
+    'M2 image': { files: [{ name: 'p.png', file: { url: 'https://files.notion.so/p.png' } }] } } };
+  const pdfBytes = Buffer.from('%PDF-1.7 deck');
+  let fetched;
+  const fetchImpl = async u => { if (u.includes('api.notion.com')) return { ok: true, json: async () => ({ results: [row] }) }; fetched = u; return { ok: true, headers: new Map(), arrayBuffer: async () => pdfBytes }; };
+  const h = createHandler({ token: 't', database: 'db', fetchImpl });
+  const mk = () => ({ headers: {}, setHeader(k, v) { this.headers[k] = v; }, end(b) { this.body = b; } });
+  const res = mk(); await h({ method: 'GET', url: '/api/certificate?code=Z-294' }, res);
+  const [m1, m2] = JSON.parse(res.body).certificate.projects;
+  assert.deepEqual([m1.image, m1.pdf, m1.pdfSrc], [null, '/api/certificate?code=Z-294&file=m1', undefined]);
+  assert.deepEqual([m2.image, m2.pdf], ['https://files.notion.so/p.png', undefined]);
+  const f = mk(); await h({ method: 'GET', url: '/api/certificate?code=Z-294&file=m1' }, f);
+  assert.equal(fetched, 'https://files.notion.so/deck?sig=1');
+  assert.equal(f.headers['Content-Type'], 'application/pdf');
+});
