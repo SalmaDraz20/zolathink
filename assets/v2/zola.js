@@ -168,6 +168,7 @@ if (certForm) {
     $('[data-view=enter]').hidden = true; const v = $('[data-view=result]'); v.hidden = false;
     $$('[data-f]', v).forEach(el => { const k = el.dataset.f; if (c[k] != null && c[k] !== '') el.textContent = c[k]; else if (el.dataset.optional !== undefined) el.closest('[data-wrap]')?.setAttribute('hidden', ''); });
     $('#first-name').textContent = (c.name || '').split(' ')[0];
+    const certName = $('#cert-card .name'); certName.classList.toggle('ar', /[\u0600-\u06FF]/.test(certName.textContent));
     const top = c.topSkills || [];
     const pod = $('.podium', v);
     if (top.length) { [[1, 0], [0, 1], [2, 2]].forEach(([slot, idx]) => { const col = pod.children[slot]; if (top[idx]) $('b', col).textContent = top[idx]; else col.hidden = true; }); }
@@ -176,6 +177,8 @@ if (certForm) {
     $('#skills-count').textContent = `(${all.length} مهارة)`;
     $('.skills-list', v).innerHTML = all.map((s, i) => `<li class="${i < top.length ? 'top' : ''}">${esc(s)}</li>`).join('');
     if (!c.title) $$('[data-title-only]', v).forEach(n => n.hidden = true);
+    if (!c.titleEn) $('[data-award]', v).hidden = true;
+    if (!c.issuedEn) $('[data-date]', v).hidden = true;
     const pdf = $('#cert-pdf'); if (c.pdf) { pdf.href = c.pdf; pdf.target = '_blank'; } else pdf.addEventListener('click', e => { e.preventDefault(); print(); });
     const img = $('#cert-img'); if (c.image) { img.href = c.image; img.target = '_blank'; } else img.hidden = true;
     const share = encodeURIComponent(location.href);
@@ -183,7 +186,7 @@ if (certForm) {
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
     const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${i + 1}</small><h3>${esc(p.title)}</h3><small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small></article>`).join('');
+    if (projects.length) gal.innerHTML = projects.map((p, i) => `<article class="polaroid"><div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : ''}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3><small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small></article>`).join('');
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
