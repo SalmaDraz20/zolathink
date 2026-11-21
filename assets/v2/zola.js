@@ -140,6 +140,90 @@ $$('[data-video]').forEach(b => b.addEventListener('click', e => {
   video.showModal(); $('video', video).play().catch(() => {});
 }));
 
+/* ---------- celebration (certificate page) ---------- */
+// Confetti in the logo colours + a short synthesized applause (no audio file to download).
+// Sound only plays after the student's own click (browsers block autoplay otherwise) and can be muted.
+const SOUND_KEY = 'zola-sound';
+let soundOn = true; try { soundOn = localStorage.getItem(SOUND_KEY) !== 'off'; } catch (e) {}
+function applause(seconds = 2.6) {
+  if (!soundOn) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    const ctx = applause.ctx || (applause.ctx = new AC()); ctx.resume?.();
+    const sr = ctx.sampleRate, buf = ctx.createBuffer(1, Math.floor(sr * seconds), sr), d = buf.getChannelData(0);
+    // Many short noise "claps" with random timing, louder in the middle, fading out at the end.
+    const claps = Math.floor(seconds * 38);
+    for (let k = 0; k < claps; k++) {
+      const t0 = Math.random() * (seconds - 0.08), start = Math.floor(t0 * sr), len = Math.floor(sr * (0.012 + Math.random() * 0.02));
+      const env = Math.min(1, t0 / 0.25) * Math.min(1, (seconds - t0) / 0.9) * (0.35 + Math.random() * 0.65);
+      for (let i = 0; i < len && start + i < d.length; i++) d[start + i] += (Math.random() * 2 - 1) * env * Math.exp(-i / (len / 4));
+    }
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.7;
+    const g = ctx.createGain(); g.gain.value = 0.32;
+    src.connect(bp).connect(g).connect(ctx.destination); src.start();
+  } catch (e) {}
+}
+function confetti() {
+  if (reduced) return;
+  const cv = document.createElement('canvas'); cv.className = 'confetti'; cv.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(cv);
+  const c = cv.getContext('2d'), dpr = Math.min(devicePixelRatio || 1, 2);
+  const size = () => { cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; }; size(); addEventListener('resize', size);
+  const colors = ['#834CBF', '#372D75', '#B394DE', '#FFBF33', '#19203A'], shapes = ['rect', 'circle', 'star', 'squiggle'];
+  const W = () => cv.width, H = () => cv.height;
+  // Two bursts from the bottom corners, then a gentle rain from the top.
+  const parts = [];
+  const add = (x, y, vx, vy) => parts.push({ x, y, vx, vy, r: (5 + Math.random() * 7) * dpr, a: Math.random() * 6.28, va: (Math.random() - .5) * .3,
+    col: colors[Math.random() * colors.length | 0], sh: shapes[Math.random() * shapes.length | 0], life: 0 });
+  for (let i = 0; i < 90; i++) { add(0, H(), (6 + Math.random() * 9) * dpr, -(14 + Math.random() * 12) * dpr); add(W(), H(), -(6 + Math.random() * 9) * dpr, -(14 + Math.random() * 12) * dpr); }
+  setTimeout(() => { for (let i = 0; i < 70; i++) add(Math.random() * W(), -20 * dpr, (Math.random() - .5) * 2 * dpr, (2 + Math.random() * 3) * dpr); }, 700);
+  const star = (r) => { c.beginPath(); for (let i = 0; i < 5; i++) { c.lineTo(Math.cos(i * 1.2566 - 1.57) * r, Math.sin(i * 1.2566 - 1.57) * r); c.lineTo(Math.cos(i * 1.2566 - .94) * r * .45, Math.sin(i * 1.2566 - .94) * r * .45); } c.closePath(); c.fill(); };
+  let last = performance.now(), end = last + 5200;
+  (function frame(now) {
+    const dt = Math.min(2, (now - last) / 16.7); last = now;
+    c.clearRect(0, 0, W(), H());
+    for (const p of parts) {
+      p.vy += .32 * dpr * dt; p.vx *= .985; p.vy = Math.min(p.vy, 5 * dpr); p.x += p.vx * dt; p.y += p.vy * dt; p.a += p.va * dt; p.life += dt;
+      c.save(); c.translate(p.x, p.y); c.rotate(p.a); c.fillStyle = c.strokeStyle = p.col;
+      c.globalAlpha = Math.max(0, Math.min(1, (end - now) / 900));
+      if (p.sh === 'rect') { c.scale(1, Math.abs(Math.cos(p.life * .15)) + .2); c.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); }
+      else if (p.sh === 'circle') { c.beginPath(); c.arc(0, 0, p.r / 3, 0, 6.28); c.fill(); }
+      else if (p.sh === 'star') star(p.r / 1.6);
+      else { c.lineWidth = 2 * dpr; c.lineCap = 'round'; c.beginPath(); c.moveTo(-p.r, 0); c.quadraticCurveTo(-p.r / 2, -p.r / 2, 0, 0); c.quadraticCurveTo(p.r / 2, p.r / 2, p.r, 0); c.stroke(); }
+      c.restore();
+    }
+    if (now < end) requestAnimationFrame(frame); else { removeEventListener('resize', size); cv.remove(); }
+  })(last);
+}
+function celebrate() {
+  confetti(); applause();
+  const h = $('.cheer'); if (h && !reduced) { h.classList.remove('pop'); void h.offsetWidth; h.classList.add('pop'); }
+}
+$('#celebrate-again')?.addEventListener('click', celebrate);
+const soundBtn = $('#sound-toggle');
+if (soundBtn) {
+  const paint = () => { soundBtn.textContent = soundOn ? '🔊' : '🔇'; soundBtn.setAttribute('aria-pressed', String(soundOn)); soundBtn.setAttribute('aria-label', soundOn ? 'الصوت شغّال — دوس عشان تقفله' : 'الصوت مقفول — دوس عشان تشغّله'); };
+  paint();
+  soundBtn.addEventListener('click', () => { soundOn = !soundOn; try { localStorage.setItem(SOUND_KEY, soundOn ? 'on' : 'off'); } catch (e) {} paint(); });
+}
+
+/* ---------- projects gallery (landing) ---------- */
+// Shows the projects ticked "Show on site" in Notion; keeps the placeholder cards if nothing is there yet.
+const gallery = $('[data-projects]');
+if (gallery) {
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const ph = $('.polaroid .img', gallery)?.innerHTML || '';
+  fetch('/api/projects', { signal: AbortSignal.timeout(12000) }).then(r => r.ok ? r.json() : null).then(j => {
+    const list = j && j.ok && j.projects; if (!list || !list.length) return;
+    gallery.innerHTML = list.map(p => {
+      const meta = [p.mission && `<bdi>${esc(p.mission)}</bdi>`, esc(p.by)].filter(Boolean).join(' · ');
+      const inner = `<div class="img">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : ph}</div><h3>${esc(p.title)}</h3><small>${meta}</small>${p.math ? `<span class="math">الماث: ${esc(p.math)}</span>` : ''}${p.description ? `<p>${esc(p.description)}</p>` : ''}`;
+      return p.link ? `<a class="polaroid" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>` : `<article class="polaroid">${inner}</article>`;
+    }).join('');
+  }).catch(() => {});
+}
+
 /* ---------- certificate page ---------- */
 // Sample student (code Z-123) so the result page can be previewed before the Notion table is connected.
 const DEMO_CERT = { code: 'Z-123', certificateId: 'ZT-26-TEST123', name: 'طالب تجريبي', nameEn: 'طالب تجريبي', journey: 'Journey 01', journeyUpper: 'JOURNEY 01',
@@ -197,6 +281,7 @@ if (certForm) {
     else gal.closest('[data-wrap]').hidden = true;
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    setTimeout(celebrate, reduced ? 0 : 350);
   }
   certForm.addEventListener('submit', e => {
     e.preventDefault();

@@ -14,6 +14,9 @@
     },
     "api/certificate.js": {
       "maxDuration": 15
+    },
+    "api/projects.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
