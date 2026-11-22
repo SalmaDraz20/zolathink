@@ -2,7 +2,7 @@
 const test = require('node:test'); const assert = require('node:assert/strict');
 const { validate } = require('../lib/server/mission-zero.cjs');
 const { toNotionProperties, createNotionInsert, combineInserts } = require('../lib/server/mission-zero-notion.cjs');
-const row = () => validate({ student_name: 'يوسف أحمد', parent_name: 'أحمد علي', grade: 'grade_2_prep', parent_whatsapp: '01012345678', student_whatsapp: '01123456789', preferred_slot: 'saturday_7pm', interests: [], dream_profession: '' });
+const row = () => validate({ student_name: 'يوسف أحمد', parent_name: 'أحمد علي', grade: 'grade_2_prep', parent_whatsapp: '01012345678', student_whatsapp: '01123456789', preferred_slot: 'saturday_5pm', interests: [], dream_profession: '' });
 test('maps a booking to the Notion Mission 0 columns', () => {
   const p = toNotionProperties(row());
   assert.equal(p.Student.title[0].text.content, 'يوسف أحمد');
@@ -10,7 +10,7 @@ test('maps a booking to the Notion Mission 0 columns', () => {
   assert.equal(p['Parent WhatsApp'].phone_number, '+201012345678');
   assert.equal(p['Student WhatsApp'].phone_number, '+201123456789');
   assert.equal(p.Grade.select.name, 'الصف الثاني الإعدادي');
-  assert.equal(p['Preferred slot'].select.name, 'السبت — 7 مساءً');
+  assert.equal(p['Preferred slot'].select.name, 'السبت — 5 مساءً');
   assert.equal(p.Status.select.name, 'جديد');
   assert.deepEqual(p['Dream career'].rich_text, []);
   const { student_whatsapp, ...without } = row();
