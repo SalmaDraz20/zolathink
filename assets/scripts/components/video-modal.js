@@ -27,7 +27,7 @@ export function initVideoModal() {
     if (modal.open) return;
     opener = trigger;
     closing = false;
-    video.src ||= 'assets/videos/full-mission.mp4';
+    video.src ||= 'assets/videos/how-missions-work.mp4';
     video.muted = false;
     modal.showModal();
     document.documentElement.classList.add('zola-video-open');

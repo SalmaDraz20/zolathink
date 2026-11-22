@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="color-scheme" content="light">
-<title>Mission 2 — Zola Think</title>
+<title>Zola Think - Mission 2</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -171,7 +172,7 @@ async function doJoin(){
   }catch(e){
     // لو الرد مااتقراش (CORS) نتأكد بطلب GET
     try{ const s = await api({a:'state', k:K, code}); if (s.registered){ LS.set('zm2-code',code); LS.set('zm2-chosen',chosen); enter(s); return; } }catch(_){}
-    $('err').textContent = 'مقدرناش نوصل للسيرفر. اتأكد من النت واللينك وجرّب تاني.';
+    $('err').textContent = 'مقدرناش نوصل للسيرفر. اتأكد من النت واللينك وجرّب تاني';
     $('go').disabled = false; $('go').textContent = 'ادخل';
   }
 }
@@ -270,7 +271,7 @@ setInterval(tick, 1000);
 
 // لو اتسجل قبل كده على نفس الجهاز، ندخل تلقائي
 if (code && chosen && K){ api({a:'state', k:K, code}).then(s=>{ if (s.registered) enter(s); }).catch(()=>{}); }
-if (!K) $('err').textContent = 'اللينك ناقص. اطلب من الميسّرة لينك جديد.';
+if (!K) $('err').textContent = 'اللينك ناقص. اطلب من الميسّرة لينك جديد';
 </script>
 </body>
 </html>

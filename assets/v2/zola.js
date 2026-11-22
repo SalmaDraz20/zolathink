@@ -39,7 +39,7 @@ function buildBooking() {
     <div class="state" data-state="form">
       <span class="eyebrow"><bdi>Mission 0</bdi></span>
       <h2 id="booking-title" tabindex="-1">احجز مكانك مجاناً</h2>
-      <p class="lead">90 دقيقة أونلاين مع فريق صغير.<br>هنكلّمك على واتساب نأكّد الميعاد.</p>
+      <p class="lead">90 دقيقة أونلاين مع فريق صغير.<br>هنكلّمك على واتساب نأكّد الميعاد</p>
       <form class="form" novalidate>
         <div class="row2">
           <label class="field">اسم ولي الأمر<input name="parent_name" autocomplete="name" maxlength="80" placeholder="الاسم بالكامل" required><span class="err"></span></label>
@@ -89,12 +89,12 @@ function buildBooking() {
       interests: [], dream_profession: '',
     };
     const errs = {};
-    if (data.parent_name.length < 2) errs.parent_name = 'اكتب اسم ولي الأمر.';
-    if (data.student_name.length < 2) errs.student_name = 'اكتب اسم الطالب.';
-    if (!data.grade) errs.grade = 'اختار الصف.';
-    if (!phoneOk(data.parent_whatsapp)) errs.parent_whatsapp = 'اكتب رقم صحيح، زي 01012345678.';
-    if (data.student_whatsapp && !phoneOk(data.student_whatsapp)) errs.student_whatsapp = 'الرقم ده مش صحيح.';
-    if (!data.preferred_slot) errs.preferred_slot = 'اختار ميعاد.';
+    if (data.parent_name.length < 2) errs.parent_name = 'اكتب اسم ولي الأمر';
+    if (data.student_name.length < 2) errs.student_name = 'اكتب اسم الطالب';
+    if (!data.grade) errs.grade = 'اختار الصف';
+    if (!phoneOk(data.parent_whatsapp)) errs.parent_whatsapp = 'اكتب رقم صحيح، زي 01012345678';
+    if (data.student_whatsapp && !phoneOk(data.student_whatsapp)) errs.student_whatsapp = 'الرقم ده مش صحيح';
+    if (!data.preferred_slot) errs.preferred_slot = 'اختار ميعاد';
     ['parent_name', 'student_name', 'grade', 'parent_whatsapp', 'student_whatsapp', 'preferred_slot'].forEach(n => setErr(n, errs[n]));
     if (Object.keys(errs).length) return;
     if (!data.student_whatsapp) delete data.student_whatsapp;
@@ -106,7 +106,7 @@ function buildBooking() {
       $('[data-state=form]', d).hidden = true; $('[data-state=done]', d).hidden = false;
       $('[data-state=done] h2', d).focus();
     } catch {
-      alert.textContent = 'مقدرناش نحفظ الحجز دلوقتي. جرّب تاني، أو احجز على واتساب.'; alert.hidden = false;
+      alert.textContent = 'مقدرناش نحفظ الحجز دلوقتي. جرّب تاني، أو احجز على واتساب'; alert.hidden = false;
     } finally { submit.disabled = false; submit.innerHTML = 'احجز <bdi>Mission 0</bdi> مجاناً <span class="arrow">←</span>'; }
   });
   d.addEventListener('close', () => {
@@ -126,10 +126,10 @@ $$('[data-video]').forEach(b => b.addEventListener('click', e => {
   if (!video) {
     video = document.createElement('dialog'); video.className = 'video-modal'; video.setAttribute('aria-labelledby', 'video-title');
     video.innerHTML = `
-      <div class="vhead"><div><h2 id="video-title">إزاي Zola بتشتغل.. في دقيقتين</h2><p>من أول المشكلة، للمفهوم، للـ AI، لحد الحل اللي بيبنوه.</p></div>
+      <div class="vhead"><div><h2 id="video-title">إزاي Zola بتشتغل.. في دقيقة</h2><p>من أول المشكلة، للمفهوم، للـ AI، لحد الحل اللي بيبنوه</p></div>
       <button class="vclose" type="button" aria-label="إغلاق الفيديو">${closeSvg.replace('currentColor', '#fff')}</button></div>
-      <video controls playsinline preload="none" src="assets/videos/full-mission.mp4"></video>
-      <div class="vfoot"><span class="hand">عجبتك الفكرة؟ جرّبها مع ابنك.</span><button class="btn btn-light" type="button" data-book-from-video>احجز <bdi>Mission 0</bdi> مجاناً <span class="arrow purple">←</span></button></div>`;
+      <video controls playsinline preload="none" poster="assets/videos/how-missions-work.jpg" src="assets/videos/how-missions-work.mp4"></video>
+      <div class="vfoot"><span class="hand">عجبتك الفكرة؟ جرّبها مع ابنك</span><button class="btn btn-light" type="button" data-book-from-video>احجز <bdi>Mission 0</bdi> مجاناً <span class="arrow purple">←</span></button></div>`;
     document.body.append(video);
     const v = $('video', video), shut = () => video.close();
     $('.vclose', video).addEventListener('click', shut);
@@ -221,7 +221,34 @@ if (gallery) {
       const inner = `<div class="img">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : ph}</div><h3>${esc(p.title)}</h3><small>${meta}</small>${p.math ? `<span class="math">الماث: ${esc(p.math)}</span>` : ''}${p.description ? `<p>${esc(p.description)}</p>` : ''}`;
       return p.link ? `<a class="polaroid" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>` : `<article class="polaroid">${inner}</article>`;
     }).join('');
+    pageGallery();
   }).catch(() => {});
+  pageGallery();
+}
+
+/* Show the gallery a page at a time (4 cards), with arrows and dots underneath. */
+function pageGallery() {
+  const size = +gallery.dataset.pageSize || 0; if (!size) return;
+  const cards = [...gallery.children], pages = Math.ceil(cards.length / size);
+  let nav = gallery.nextElementSibling?.classList.contains('gallery-nav') ? gallery.nextElementSibling : null;
+  if (!nav) {
+    nav = document.createElement('div'); nav.className = 'gallery-nav';
+    const arrow = d => `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    nav.innerHTML = `<button type="button" data-dir="-1" aria-label="المشاريع السابقة">${arrow('M7 4l5 5-5 5')}</button><span class="dots"></span><button type="button" data-dir="1" aria-label="مشاريع تانية">${arrow('M11 4L6 9l5 5')}</button>`;
+    gallery.after(nav);
+  }
+  let page = 0;
+  const show = (p, animate) => {
+    page = Math.max(0, Math.min(pages - 1, p));
+    cards.forEach((c, i) => { c.hidden = Math.floor(i / size) !== page; });
+    $$('button', nav).forEach(b => { b.disabled = b.dataset.dir < 0 ? page === 0 : page === pages - 1; });
+    $$('.dots i', nav).forEach((d, i) => d.classList.toggle('on', i === page));
+    if (animate) { gallery.classList.remove('turn'); void gallery.offsetWidth; gallery.classList.add('turn'); }
+  };
+  $('.dots', nav).innerHTML = Array.from({ length: pages }, () => '<i></i>').join('');
+  nav.hidden = pages < 2;
+  $$('button', nav).forEach(b => { b.onclick = () => show(page + +b.dataset.dir, true); });
+  show(0, false);
 }
 
 /* ---------- certificate page ---------- */
@@ -250,7 +277,7 @@ if (certForm) {
       render(j.certificate);
     } catch (e) {
       box.setAttribute('data-invalid', ''); err.hidden = false;
-      err.textContent = e.nf ? 'الكود ده مش موجود عندنا. اتأكد إنه مكتوب صح، أو كلّمنا على واتساب.' : 'حصلت مشكلة في الاتصال. جرّب تاني بعد شوية.';
+      err.textContent = e.nf ? 'الكود ده مش موجود عندنا. اتأكد إنه مكتوب صح، أو كلّمنا على واتساب' : 'حصلت مشكلة في الاتصال. جرّب تاني بعد شوية';
     } finally { btn.disabled = false; btn.firstChild.textContent = 'استلم شهادتك '; }
   }
   // Renders the student's real certificate (first page of the PDF from Notion) in place of the sample design.
@@ -290,7 +317,7 @@ if (certForm) {
           const doc = await (await pdfLib()).getDocument({ url: p.pdf }).promise;
           const width = body.clientWidth - 2; body.innerHTML = '';
           for (let n = 1; n <= Math.min(doc.numPages, 30) && viewer.open; n++) body.appendChild(await pdfPage(doc, n, width));
-        } catch (e) { body.innerHTML = '<p class="viewer-err">مقدرناش نعرض الملف هنا.. افتحه من «افتح الملف».</p>'; }
+        } catch (e) { body.innerHTML = '<p class="viewer-err">مقدرناش نعرض الملف هنا.. افتحه من «افتح الملف»</p>'; }
       })();
     } else {
       body.innerHTML = `<img src="${esc(p.image)}" alt="${esc(p.title)}">`;
@@ -373,7 +400,7 @@ if (certForm) {
   certForm.addEventListener('submit', e => {
     e.preventDefault();
     const code = input.value.trim();
-    if (!/^Z-[A-Z0-9]{2,12}$/.test(code)) { box.setAttribute('data-invalid', ''); err.hidden = false; err.textContent = 'اكتب الكود كامل بعد Z- (زي Z-1234).'; return; }
+    if (!/^Z-[A-Z0-9]{2,12}$/.test(code)) { box.setAttribute('data-invalid', ''); err.hidden = false; err.textContent = 'اكتب الكود كامل بعد Z- (زي Z-1234)'; return; }
     lookup(code);
   });
   const q = new URLSearchParams(location.search).get('code');

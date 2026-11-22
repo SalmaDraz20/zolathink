@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FAF9FE">
-<title>Zola Think — Mission 1 · Earthquake Early Warning</title>
+<title>Zola Think - Mission 1</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -201,45 +202,45 @@ body.flash{animation:flash .5s infinite}
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const T={
-en:{kick:"ZOLA THINK · MISSION 1",introH:"You're an earthquake engineer. You have seconds to save lives.",introP:"Try the exact mission our students (12–14) solved live — on your phone.",m1:"⏱ 2 min",m2:"📱 No sign-up",m3:"🧮 Real physics",start:"Start the mission",
+en:{kick:"ZOLA THINK · MISSION 1",introH:"You're an earthquake engineer. You have seconds to save lives",introP:"Try the exact mission our students (12–14) solved live — on your phone",m1:"⏱ 2 min",m2:"📱 No sign-up",m3:"🧮 Real physics",start:"Start the mission",
 s1k:"STEP 1 · OBSERVE",s1h:"What does this device do?",next:"Next",
 o1:["Measures a heartbeat","Records ground motion during an earthquake","Records sound like a radio"],
-r1ok:"Exactly — it's a seismograph.",r1no:"Good guess! Students said that too — it's a seismograph.",r1d:"It records ground motion. The calm wave (P) arrives first; the violent one (S) arrives later. The gap between them is your warning time.",
+r1ok:"Exactly — it's a seismograph",r1no:"Good guess! Students said that too — it's a seismograph",r1d:"It records ground motion. The calm wave (P) arrives first; the violent one (S) arrives later. The gap between them is your warning time",
 pw:"P-wave",pwd:"Fast, light — arrives first",sw:"S-wave",swd:"Slower, destructive",gap:"Time gap",gapd:"Your precious seconds",
-s2k:"STEP 2 · YOUR SCENARIO",s2h:"Pick a card",s2p:"Same earthquake, different place. Each team gets a different one.",
-s3k:"STEP 3 · CALCULATE",s3h:"How many seconds of warning before strong shaking?",dist:"Distance",vp:"P speed",vs:"S speed",hint:"Need a hint?",hintT:"Time = distance ÷ speed. Find P's arrival, then S's, and subtract.",check:"Check my answer",
-c_ok:"Correct!",c_no:"Not quite — try again.",c_hi:"Too high.",c_lo:"Too low.",show:"Show me",
+s2k:"STEP 2 · YOUR SCENARIO",s2h:"Pick a card",s2p:"Same earthquake, different place. Each team gets a different one",
+s3k:"STEP 3 · CALCULATE",s3h:"How many seconds of warning before strong shaking?",dist:"Distance",vp:"P speed",vs:"S speed",hint:"Need a hint?",hintT:"Time = distance ÷ speed. Find P's arrival, then S's, and subtract",check:"Check my answer",
+c_ok:"Correct!",c_no:"Not quite — try again",c_hi:"Too high",c_lo:"Too low",show:"Show me",
 s4k:"STEP 4 · DECIDE",s4h:"How should the alert reach people?",decide:"Lock my decision",
 a:{sound:["🔊","Loud siren"],light:["💡","Flashing light"],vib:["📳","Vibration"],voice:["🗣","Voice instruction (what to do)"]},
-f_good:"Strong decision.",f_mid:"Close — something's missing.",f_bad:"Risky choice.",
-s5k:"STEP 5 · TEST IT",s5h:"Earthquake! Watch your alert work.",epi:"Epicenter",simGo:"Trigger the earthquake",simNext:"See my result",
-st0:"Waiting…",st1:"P-wave detected — alert sent!",st2:"Strong shaking arrived.",cntU:"s left",
-endH:"Mission complete.",endP:"In the live session, teams then defend their decision and build a working tool with AI in 15 minutes.",again:"Play again",foot:"Zola Think — not a course, not a contest: an experience in deciding, teaming and defending ideas.",
+f_good:"Strong decision",f_mid:"Close — something's missing",f_bad:"Risky choice",
+s5k:"STEP 5 · TEST IT",s5h:"Earthquake! Watch your alert work",epi:"Epicenter",simGo:"Trigger the earthquake",simNext:"See my result",
+st0:"Waiting…",st1:"P-wave detected — alert sent!",st2:"Strong shaking arrived",cntU:"s left",
+endH:"Mission complete",endP:"In the live session, teams then defend their decision and build a working tool with AI in 15 minutes",again:"Play again",foot:"Zola Think — not a course, not a contest: an experience in deciding, teaming and defending ideas",
 rc1:"Observed & guessed",rc2:"Calculated: {g} s of warning",rc3:"Decided: {a}",rc4:"Tested under pressure",
-s4p_school:"Many classrooms — every child must hear it at once.",s4p_elder:"He lives alone and may be hard of hearing.",s4p_market:"A crowd from everywhere — people follow others, not signs.",
+s4p_school:"Many classrooms — every child must hear it at once",s4p_elder:"He lives alone and may be hard of hearing",s4p_market:"A crowd from everywhere — people follow others, not signs",
 alerts:{DROP:"DROP · COVER · HOLD ON"}},
-ar:{kick:"ZOLA THINK · MISSION 1",introH:"إنت مهندس مقاومة زلازل، ومعاك ثواني تنقذ بيها أرواح.",introP:"جرّب نفس المهمة اللي طلابنا (١٢–١٤ سنة) حلّوها لايف — من موبايلك.",m1:"⏱ دقيقتين",m2:"📱 من غير تسجيل",m3:"🧮 فيزياء حقيقية",start:"ابدأ المهمة",
+ar:{kick:"ZOLA THINK · MISSION 1",introH:"إنت مهندس مقاومة زلازل، ومعاك ثواني تنقذ بيها أرواح",introP:"جرّب نفس المهمة اللي طلابنا (١٢–١٤ سنة) حلّوها لايف — من موبايلك",m1:"⏱ دقيقتين",m2:"📱 من غير تسجيل",m3:"🧮 فيزياء حقيقية",start:"ابدأ المهمة",
 s1k:"الخطوة ١ · لاحظ",s1h:"الجهاز ده بيعمل إيه؟",next:"التالي",
 o1:["بيقيس نبض القلب","بيسجّل حركة الأرض وقت الزلزال","بيسجّل الصوت زي الراديو"],
-r1ok:"بالظبط — ده Seismograph.",r1no:"تخمين حلو! الطلاب قالوه برضه — ده Seismograph.",r1d:"بيسجّل حركة الأرض. الموجة الهادية (P) بتوصل الأول، والعنيفة (S) بعدها. الفرق بينهم هو وقت التحذير بتاعك.",
+r1ok:"بالظبط — ده Seismograph",r1no:"تخمين حلو! الطلاب قالوه برضه — ده Seismograph",r1d:"بيسجّل حركة الأرض. الموجة الهادية (P) بتوصل الأول، والعنيفة (S) بعدها. الفرق بينهم هو وقت التحذير بتاعك",
 pw:"موجة P",pwd:"سريعة وخفيفة — بتوصل الأول",sw:"موجة S",swd:"أبطأ ومدمّرة",gap:"الفرق الزمني",gapd:"ثوانيك الثمينة",
-s2k:"الخطوة ٢ · السيناريو",s2h:"اختار كارت",s2p:"نفس الزلزال، بس مكان مختلف. كل فريق بياخد سيناريو.",
-s3k:"الخطوة ٣ · احسب",s3h:"قد إيه ثانية تحذير قبل الاهتزاز القوي؟",dist:"المسافة",vp:"سرعة P",vs:"سرعة S",hint:"محتاج تلميح؟",hintT:"الزمن = المسافة ÷ السرعة. احسب وصول P، وبعدين S، واطرحهم.",check:"اتأكد من إجابتي",
-c_ok:"صح!",c_no:"لسه — جرّب تاني.",c_hi:"أكبر من اللازم.",c_lo:"أقل من اللازم.",show:"ورّيني الحل",
+s2k:"الخطوة ٢ · السيناريو",s2h:"اختار كارت",s2p:"نفس الزلزال، بس مكان مختلف. كل فريق بياخد سيناريو",
+s3k:"الخطوة ٣ · احسب",s3h:"قد إيه ثانية تحذير قبل الاهتزاز القوي؟",dist:"المسافة",vp:"سرعة P",vs:"سرعة S",hint:"محتاج تلميح؟",hintT:"الزمن = المسافة ÷ السرعة. احسب وصول P، وبعدين S، واطرحهم",check:"اتأكد من إجابتي",
+c_ok:"صح!",c_no:"لسه — جرّب تاني",c_hi:"أكبر من اللازم",c_lo:"أقل من اللازم",show:"ورّيني الحل",
 s4k:"الخطوة ٤ · قرّر",s4h:"التنبيه يوصل للناس إزاي؟",decide:"ثبّت قراري",
 a:{sound:["🔊","صفارة عالية"],light:["💡","ضوء بيلمع"],vib:["📳","اهتزاز"],voice:["🗣","تعليمات صوتية (يعملوا إيه)"]},
-f_good:"قرار قوي.",f_mid:"قربت — في حاجة ناقصة.",f_bad:"اختيار فيه خطورة.",
-s5k:"الخطوة ٥ · جرّبه",s5h:"زلزال! شوف التنبيه بتاعك شغال.",epi:"مركز الزلزال",simGo:"شغّل الزلزال",simNext:"شوف النتيجة",
-st0:"مستنيين…",st1:"اتلقطت موجة P — التنبيه اتبعت!",st2:"الاهتزاز القوي وصل.",cntU:"ثانية فاضلة",
-endH:"المهمة خلصت.",endP:"في السيشن اللايف، الفرق بعدها بتدافع عن قرارها وتبني أداة شغالة بالـAI في ١٥ دقيقة.",again:"العب تاني",foot:"Zola Think — مش كورس ومش مسابقة: تجربة في القرار والتفكير كفريق والدفاع عن الفكرة.",
+f_good:"قرار قوي",f_mid:"قربت — في حاجة ناقصة",f_bad:"اختيار فيه خطورة",
+s5k:"الخطوة ٥ · جرّبه",s5h:"زلزال! شوف التنبيه بتاعك شغال",epi:"مركز الزلزال",simGo:"شغّل الزلزال",simNext:"شوف النتيجة",
+st0:"مستنيين…",st1:"اتلقطت موجة P — التنبيه اتبعت!",st2:"الاهتزاز القوي وصل",cntU:"ثانية فاضلة",
+endH:"المهمة خلصت",endP:"في السيشن اللايف، الفرق بعدها بتدافع عن قرارها وتبني أداة شغالة بالـAI في ١٥ دقيقة",again:"العب تاني",foot:"Zola Think — مش كورس ومش مسابقة: تجربة في القرار والتفكير كفريق والدفاع عن الفكرة",
 rc1:"لاحظت وخمّنت",rc2:"حسبت: {g} ثانية تحذير",rc3:"قررت: {a}",rc4:"جرّبت تحت ضغط الوقت",
-s4p_school:"فصول كتير — كل الأطفال لازم يسمعوا مرة واحدة.",s4p_elder:"ساكن لوحده، وممكن يكون تقيل السمع.",s4p_market:"زحمة من كل حتة — الناس بتتبع اللي حواليها مش اللافتات.",
+s4p_school:"فصول كتير — كل الأطفال لازم يسمعوا مرة واحدة",s4p_elder:"ساكن لوحده، وممكن يكون تقيل السمع",s4p_market:"زحمة من كل حتة — الناس بتتبع اللي حواليها مش اللافتات",
 alerts:{DROP:"انزل · اتغطى · استنى"}}
 };
 const SC={
- school:{e:"🏫",d:60,n:{en:"School",ar:"مدرسة"},p:{en:"Many classrooms. The alert must reach every child at once, not just one class.",ar:"فيها فصول كتير، والأطفال محتاجين التنبيه يوصلهم كلهم مرة واحدة، مش فصل بس."},i:{en:"💡 Schools in quake zones teach “Drop, Cover, Hold On”.",ar:"💡 في مدارس مناطق الزلازل بيتعلم الأطفال «انزل، اتغطى، استنى»."}},
- elder:{e:"🏠",d:36,n:{en:"Elderly man living alone",ar:"مُسِن يسكن بمفرده"},p:{en:"Nobody around to hear him, and he may be hard of hearing.",ar:"مفيش حد حواليه يسمعه، وممكن يكون تقيل السمع."},i:{en:"💡 Vibration alerts exist for people who are hard of hearing.",ar:"💡 فيه أنظمة تنبيه بالاهتزاز مخصصة لضعاف السمع."}},
- market:{e:"🛒",d:72,n:{en:"Crowded market",ar:"سوق مزدحم"},p:{en:"Lots of people from everywhere who need one clear direction out.",ar:"ناس كتير من أماكن مختلفة، محتاجين اتجاه واضح للخروج."},i:{en:"💡 In crowds, people follow others, not signs — the alert must guide behavior.",ar:"💡 في الزحمة الناس بتتبع اللي حواليها مش اللافتات — التنبيه لازم يوجّه سلوك."}}
+ school:{e:"🏫",d:60,n:{en:"School",ar:"مدرسة"},p:{en:"Many classrooms. The alert must reach every child at once, not just one class",ar:"فيها فصول كتير، والأطفال محتاجين التنبيه يوصلهم كلهم مرة واحدة، مش فصل بس"},i:{en:"💡 Schools in quake zones teach “Drop, Cover, Hold On”.",ar:"💡 في مدارس مناطق الزلازل بيتعلم الأطفال «انزل، اتغطى، استنى»."}},
+ elder:{e:"🏠",d:36,n:{en:"Elderly man living alone",ar:"مُسِن يسكن بمفرده"},p:{en:"Nobody around to hear him, and he may be hard of hearing",ar:"مفيش حد حواليه يسمعه، وممكن يكون تقيل السمع"},i:{en:"💡 Vibration alerts exist for people who are hard of hearing",ar:"💡 فيه أنظمة تنبيه بالاهتزاز مخصصة لضعاف السمع"}},
+ market:{e:"🛒",d:72,n:{en:"Crowded market",ar:"سوق مزدحم"},p:{en:"Lots of people from everywhere who need one clear direction out",ar:"ناس كتير من أماكن مختلفة، محتاجين اتجاه واضح للخروج"},i:{en:"💡 In crowds, people follow others, not signs — the alert must guide behavior",ar:"💡 في الزحمة الناس بتتبع اللي حواليها مش اللافتات — التنبيه لازم يوجّه سلوك"}}
 };
 const VP=6,VS=3;
 let L='en',S={scr:0,q1:null,key:null,val:0,calcOk:false,alerts:new Set(),fb4:null};
@@ -281,9 +282,9 @@ const RULE={
  elder:a=>a.has('vib')?'good':a.has('light')?'mid':'bad',
  market:a=>a.has('voice')?'good':a.has('light')||a.has('sound')?'mid':'bad'};
 const WHY={
- school:{good:{en:"Every class hears it at once, and a voice tells kids exactly what to do: Drop, Cover, Hold On. In 10 s, staying under the desk beats running to the stairs.",ar:"كل الفصول بتسمعه مرة واحدة، والصوت بيقول للأطفال يعملوا إيه بالظبط: انزل، اتغطى، استنى. في ١٠ ثواني، الاستخبّي تحت الديسك أأمن من الجري على السلالم."},mid:{en:"A siren reaches everyone — but frightened kids need to be told what to do, not just warned.",ar:"الصفارة بتوصل للكل — بس الأطفال المفزوعين محتاجين حد يقولهم يعملوا إيه، مش تحذير وبس."},bad:{en:"In a school, the alert must reach every class at once. Light or vibration alone won't.",ar:"في المدرسة لازم التنبيه يوصل لكل الفصول مرة واحدة. الضوء أو الاهتزاز لوحدهم مش هيعملوا كده."}},
- elder:{good:{en:"Vibration reaches someone who can't hear — and he only has 6 seconds, the shortest warning of all.",ar:"الاهتزاز بيوصل لحد مش سامع — ومعاه ٦ ثواني بس، أقصر وقت تحذير."},mid:{en:"Light helps, but he might not be looking. Add something he feels.",ar:"الضوء بيساعد، بس ممكن ما يكونش باصص. ضيف حاجة يحسّ بيها."},bad:{en:"He may be hard of hearing — a sound-only alert might never reach him.",ar:"ممكن يكون تقيل السمع — تنبيه بالصوت بس ممكن ما يوصلوش خالص."}},
- market:{good:{en:"In a crowd people copy each other — a clear voice instruction steers the whole crowd in 12 s.",ar:"في الزحمة الناس بتقلّد بعض — تعليمات صوتية واضحة بتوجّه الزحمة كلها في ١٢ ثانية."},mid:{en:"It gets attention, but a crowd needs to be told where to go — otherwise it panics.",ar:"بيلفت الانتباه، بس الزحمة محتاجة حد يقولها تروح فين — غير كده هيحصل تدافع."},bad:{en:"A crowd doesn't read or feel individual alerts — it needs guidance.",ar:"الزحمة مش هتحسّ بتنبيه فردي — محتاجة توجيه."}}};
+ school:{good:{en:"Every class hears it at once, and a voice tells kids exactly what to do: Drop, Cover, Hold On. In 10 s, staying under the desk beats running to the stairs",ar:"كل الفصول بتسمعه مرة واحدة، والصوت بيقول للأطفال يعملوا إيه بالظبط: انزل، اتغطى، استنى. في ١٠ ثواني، الاستخبّي تحت الديسك أأمن من الجري على السلالم"},mid:{en:"A siren reaches everyone — but frightened kids need to be told what to do, not just warned",ar:"الصفارة بتوصل للكل — بس الأطفال المفزوعين محتاجين حد يقولهم يعملوا إيه، مش تحذير وبس"},bad:{en:"In a school, the alert must reach every class at once. Light or vibration alone won't",ar:"في المدرسة لازم التنبيه يوصل لكل الفصول مرة واحدة. الضوء أو الاهتزاز لوحدهم مش هيعملوا كده"}},
+ elder:{good:{en:"Vibration reaches someone who can't hear — and he only has 6 seconds, the shortest warning of all",ar:"الاهتزاز بيوصل لحد مش سامع — ومعاه ٦ ثواني بس، أقصر وقت تحذير"},mid:{en:"Light helps, but he might not be looking. Add something he feels",ar:"الضوء بيساعد، بس ممكن ما يكونش باصص. ضيف حاجة يحسّ بيها"},bad:{en:"He may be hard of hearing — a sound-only alert might never reach him",ar:"ممكن يكون تقيل السمع — تنبيه بالصوت بس ممكن ما يوصلوش خالص"}},
+ market:{good:{en:"In a crowd people copy each other — a clear voice instruction steers the whole crowd in 12 s",ar:"في الزحمة الناس بتقلّد بعض — تعليمات صوتية واضحة بتوجّه الزحمة كلها في ١٢ ثانية"},mid:{en:"It gets attention, but a crowd needs to be told where to go — otherwise it panics",ar:"بيلفت الانتباه، بس الزحمة محتاجة حد يقولها تروح فين — غير كده هيحصل تدافع"},bad:{en:"A crowd doesn't read or feel individual alerts — it needs guidance",ar:"الزحمة مش هتحسّ بتنبيه فردي — محتاجة توجيه"}}};
 function renderQ4(){if(!S.key)return;$('#s4p').textContent=t('s4p_'+S.key);const A=t('a');$('#q4').innerHTML=Object.keys(A).map(k=>`<button class="opt ${S.alerts.has(k)?'sel':''}" data-k="${k}"><span class="e">${A[k][0]}</span>${A[k][1]}<span class="ck">✓</span></button>`).join('');
  $$('#q4 .opt').forEach(b=>b.onclick=()=>{if(S.fb4)return;const k=b.dataset.k;S.alerts.has(k)?S.alerts.delete(k):S.alerts.add(k);b.classList.toggle('sel');$('#decide').disabled=!S.alerts.size;beep(760,.05,.08)});
  if(S.fb4)showFb4()}
