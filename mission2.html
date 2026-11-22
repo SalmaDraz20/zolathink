@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="color-scheme" content="light">
-<title>Mission 2 — Zola Think</title>
+<title>Zola Think - Mission 2</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -384,7 +385,7 @@ slide('teams', el => {
     const groups = assigned ? [...new Set(P.map(p=>p.team))].sort() : [...new Set(P.map(p=>p.chosen))].sort();
     $('#cols',el).innerHTML = groups.map(g=>{ const m = P.filter(p=>(assigned?p.team:p.chosen)===g); const per = D.PERSONAS[(g-1)%D.PERSONAS.length];
       return `<div class="card tcol pop"><h3>${assigned?'فريق '+g:'اختاروا '+g}</h3>${assigned?`<div class="p">${per.emoji} ${per.name}<br>معاه ${per.minutes} دقيقة</div>`:''}<div class="tcodes">${m.map((p,i)=>`<span style="--d:${i*.06}s">${esc(p.code)}</span>`).join('')}</div></div>`; }).join('');
-    $('#rn',el).innerHTML = assigned ? `الغرف: كل فريق في غرفته. في Zoom: <b>Breakout Rooms ← ${groups.length} غرف ← Allow participants to choose room</b>، والطلاب يدخلوا الغرفة اللي رقمها زي فريقهم (الرقم على موبايلاتهم).` : 'اللي اختاروا نفس الرقم هيبقوا في فريق واحد. لو فريق زاد عن حجمه، آخر المسجلين بيتنقلوا لأصغر فريق.'; };
+    $('#rn',el).innerHTML = assigned ? `الغرف: كل فريق في غرفته. في Zoom: <b>Breakout Rooms ← ${groups.length} غرف ← Allow participants to choose room</b>، والطلاب يدخلوا الغرفة اللي رقمها زي فريقهم (الرقم على موبايلاتهم)` : 'اللي اختاروا نفس الرقم هيبقوا في فريق واحد. لو فريق زاد عن حجمه، آخر المسجلين بيتنقلوا لأصغر فريق'; };
   $$('.opt',el).forEach(b=>b.onclick=()=>{ n=+b.dataset.n; touched=true; pick(); });
   $('#mk',el).onclick = async () => { Sfx.unlock(); if(!R.players.length){ toast('لسه محدش دخل', true); return; }
     Sfx.play('drum'); const ok = await BE.teams(n); if(!ok){ toast('التوزيع ماتمش. اتأكد من مفتاح الميسّرة', true); return; }
@@ -437,7 +438,7 @@ slide('results', el => {
     $('#av',el).textContent = ok ? a.avg_before+' ← '+a.avg_after : '–';
     $('#im',el).textContent = ok ? `${a.improved} من ${a.both} زادت درجتهم` : 'لسه مفيش كروت «بعد»';
     $('#ch',el).textContent = ok ? `غيّروا حلّهم: ${a.changed_yes} من ${a.done_after}` : '';
-    $('#cv',el).innerHTML = (LIVE?'':'<b>DEMO:</b> أرقام تجريبية. ') + `الأرقام دي لـ ${a.both||0} طالب بس، من غير مجموعة ضابطة، وبأسئلة متوازية مش مثبتة التكافؤ. ده تغيّر جوه السيشن (فيه شرح) مش دليل على تعلّم دائم.`;
+    $('#cv',el).innerHTML = (LIVE?'':'<b>DEMO:</b> أرقام تجريبية. ') + `الأرقام دي لـ ${a.both||0} طالب بس، من غير مجموعة ضابطة، وبأسئلة متوازية مش مثبتة التكافؤ. ده تغيّر جوه السيشن (فيه شرح) مش دليل على تعلّم دائم`;
     if (ok && !played){ played=true; Sfx.play('success'); confetti(); } };
   upd(); return {onRoster:upd}; });
 

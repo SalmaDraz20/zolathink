@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#ffffff">
-<title>كارت الـ Mission — Zola Think</title>
+<title>Zola Think - Decision Card</title>
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;600;700&family=Readex+Pro:wght@400;500&family=Marhey:wght@500;600&display=swap" rel="stylesheet">
@@ -213,9 +213,9 @@ async function load() {
   try {
     const r = await fetch('/api/card', { cache: 'no-store' });
     const d = await r.json();
-    if (!d.ok) return state('oops', 'مش قادرين نفتح الكارت', d.message || 'جرّب تاني بعد لحظة.', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>');
+    if (!d.ok) return state('oops', 'مش قادرين نفتح الكارت', d.message || 'جرّب تاني بعد لحظة', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>');
     if (!d.card) {
-      state('lock', 'الكارت لسه مقفول', 'المدرّبة هتفتحه في الوقت المناسب.. استنّى إشارتها، الصفحة هتفتح لوحدها.', '<div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>');
+      state('lock', 'الكارت لسه مقفول', 'المدرّبة هتفتحه في الوقت المناسب.. استنّى إشارتها، الصفحة هتفتح لوحدها', '<div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>');
       waitTimer = setTimeout(load, 8000); return;
     }
     card = d.card; DRAFT = 'zola-card-' + card.id; setPhase(card);
@@ -227,7 +227,7 @@ async function load() {
     $('nav').hidden = false; $('progress').hidden = false; $('steps').hidden = false;
     $('steplist').innerHTML = steps.map((s, i) => `<li>${i === 0 ? 'الكود' : 'سؤال ' + i}</li>`).join('');
     render();
-  } catch (e) { state('oops', 'مفيش اتصال', 'اتأكد من النت وجرّب تاني.', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>'); }
+  } catch (e) { state('oops', 'مفيش اتصال', 'اتأكد من النت وجرّب تاني', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>'); }
 }
 const save = () => { try { sessionStorage.setItem(DRAFT, JSON.stringify({ A, idx, t: started })); } catch (e) {} };
 
@@ -337,13 +337,13 @@ async function submit() {
     if (r.ok && d.ok) {
       done();
       return card.phase === 'after'
-        ? state('done', 'كارتك اتسجّل!', 'برافو عليك.. خلّصت الـ Mission.', '<p class="hand">اقفل الصفحة وارجع للمدرّبة</p>')
-        : state('done', 'كارتك اتسجّل!', 'ده أول حل عندك.. شيله في دماغك، وبعد الـ Mission هنشوف اتغيّر ولا لأ.', '<p class="hand">اقفل الصفحة وارجع للمدرّبة</p>');
+        ? state('done', 'كارتك اتسجّل!', 'برافو عليك.. خلّصت الـ Mission', '<p class="hand">اقفل الصفحة وارجع للمدرّبة</p>')
+        : state('done', 'كارتك اتسجّل!', 'ده أول حل عندك.. شيله في دماغك، وبعد الـ Mission هنشوف اتغيّر ولا لأ', '<p class="hand">اقفل الصفحة وارجع للمدرّبة</p>');
     }
-    if (d.code === 'duplicate') { done(); return state('done', 'إجابتك متسجّلة', 'إنت بعتّ الكارت ده قبل كده.. مش محتاج تبعته تاني.'); }
-    if (d.code === 'closed') return state('lock', 'الكارت اتقفل', 'المدرّبة قفلت الكارت. كلّمها لو لسه مابعتّش.');
-    sending = false; render(); $('err').textContent = d.message || 'مقدرناش نبعت. جرّب تاني.';
-  } catch (e) { sending = false; render(); $('err').textContent = 'مفيش اتصال. جرّب تاني.'; }
+    if (d.code === 'duplicate') { done(); return state('done', 'إجابتك متسجّلة', 'إنت بعتّ الكارت ده قبل كده.. مش محتاج تبعته تاني'); }
+    if (d.code === 'closed') return state('lock', 'الكارت اتقفل', 'المدرّبة قفلت الكارت. كلّمها لو لسه مابعتّش');
+    sending = false; render(); $('err').textContent = d.message || 'مقدرناش نبعت. جرّب تاني';
+  } catch (e) { sending = false; render(); $('err').textContent = 'مفيش اتصال. جرّب تاني'; }
 }
 load();
 </script>

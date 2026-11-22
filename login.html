@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تسجيل الدخول — Zola Think</title>
-<meta name="description" content="ادخل حساب الطالب أو ولي الأمر في Zola Think.">
-<meta property="og:title" content="تسجيل الدخول — Zola Think"><meta property="og:description" content="ادخل حساب الطالب أو ولي الأمر في Zola Think."><meta name="theme-color" content="#19203A">
+<title>Zola Think - Login</title>
+<meta name="description" content="ادخل حساب الطالب أو ولي الأمر في Zola Think">
+<meta property="og:title" content="تسجيل الدخول — Zola Think"><meta property="og:description" content="ادخل حساب الطالب أو ولي الأمر في Zola Think"><meta name="theme-color" content="#19203A">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;600;700&family=Readex+Pro:wght@400;500&family=Marhey:wght@500;600&display=swap" rel="stylesheet">
@@ -13,33 +13,33 @@
 </head>
 <body>
 <main class="auth">
-  <div class="panel" aria-hidden="true"><p class="hand">كل <bdi>Mission</bdi><br>بتقرّبك خطوة.</p><svg viewBox="0 0 620 420" style="width:100%;max-width:520px"><g><rect x="110" y="220" width="40" height="110" rx="12" fill="#E7DFF6"/><rect x="164" y="170" width="40" height="160" rx="12" fill="#E7DFF6"/><rect x="218" y="200" width="40" height="130" rx="12" fill="#E7DFF6"/><rect x="272" y="90" width="40" height="240" rx="12" fill="#834CBF"/><rect x="326" y="150" width="40" height="180" rx="12" fill="#E7DFF6"/><rect x="380" y="210" width="40" height="120" rx="12" fill="#E7DFF6"/><rect x="434" y="130" width="40" height="200" rx="12" fill="#E7DFF6"/></g><path d="M90 330h420" stroke="#D8CDEF" stroke-width="2"/><path d="M180 150c30-70 70-90 106-74M300 80c30-50 80-50 120-70" fill="none" stroke="#834CBF" stroke-width="2.2" stroke-dasharray="6 7" stroke-linecap="round"/><g class="" transform="translate(440 -10) scale(1)"><path d="M10 40 72 16 42 70Z" fill="#B394DE"/><path d="M42 70 48 50 72 16 32 50Z" fill="#372D75"/></g></svg></div>
+  <div class="panel" aria-hidden="true"><p class="hand">كل <bdi>Mission</bdi><br>بتقرّبك خطوة</p><svg viewBox="0 0 620 420" style="width:100%;max-width:520px"><g><rect x="110" y="220" width="40" height="110" rx="12" fill="#E7DFF6"/><rect x="164" y="170" width="40" height="160" rx="12" fill="#E7DFF6"/><rect x="218" y="200" width="40" height="130" rx="12" fill="#E7DFF6"/><rect x="272" y="90" width="40" height="240" rx="12" fill="#834CBF"/><rect x="326" y="150" width="40" height="180" rx="12" fill="#E7DFF6"/><rect x="380" y="210" width="40" height="120" rx="12" fill="#E7DFF6"/><rect x="434" y="130" width="40" height="200" rx="12" fill="#E7DFF6"/></g><path d="M90 330h420" stroke="#D8CDEF" stroke-width="2"/><path d="M180 150c30-70 70-90 106-74M300 80c30-50 80-50 120-70" fill="none" stroke="#834CBF" stroke-width="2.2" stroke-dasharray="6 7" stroke-linecap="round"/><g class="" transform="translate(440 -10) scale(1)"><path d="M10 40 72 16 42 70Z" fill="#B394DE"/><path d="M42 70 48 50 72 16 32 50Z" fill="#372D75"/></g></svg></div>
   <div class="side">
     <header><a href="index.html"><img src="assets/zola-logo.svg" alt="Zola Think" width="98" height="40"></a><a href="index.html" class="hint">رجوع للرئيسية →</a></header>
     <form id="f-student" novalidate>
       <div class="tabs" role="tablist"><button type="button" role="tab" data-form="f-student" aria-selected="true">طالب</button><button type="button" role="tab" data-form="f-parent" aria-selected="false">ولي أمر</button></div>
       <h1 style="font-size:38px">أهلاً بيك تاني!</h1>
-      <p class="lead">ادخل بكود الطالب وكلمة السر عشان تكمّل الـ <bdi>Journey</bdi>.</p>
+      <p class="lead">ادخل بكود الطالب وكلمة السر عشان تكمّل الـ <bdi>Journey</bdi></p>
       <label class="field">كود الطالب<input id="student-code" dir="ltr" value="Z-" autocomplete="username" maxlength="15"></label>
       <label class="field"><span style="display:flex;justify-content:space-between">كلمة السر <a class="link" style="font-size:13px" data-wa="نسيت كلمة السر بتاعة Zola">نسيت كلمة السر؟</a></span><input type="password" dir="ltr" autocomplete="current-password"></label>
       <button class="btn btn-dark" type="submit">دخول <span class="arrow">←</span></button>
-      <p class="toast" hidden>حسابات الطلاب هتتفعّل قريب. لحد ده، كل حاجة بتوصلك على واتساب.</p>
+      <p class="toast" hidden>حسابات الطلاب هتتفعّل قريب. لحد ده، كل حاجة بتوصلك على واتساب</p>
       <p class="hint" style="text-align:center">لسه مش معانا؟ <a class="link" href="index.html#book">جرّب <bdi>Mission 0</bdi> مجاناً</a></p>
     </form>
     <form id="f-parent" novalidate hidden>
       <div class="tabs" role="tablist"><button type="button" role="tab" data-form="f-student" aria-selected="false">طالب</button><button type="button" role="tab" data-form="f-parent" aria-selected="true">ولي أمر</button></div>
       <h1 style="font-size:38px">أهلاً يا ولي الأمر</h1>
-      <p class="lead">اكتب رقمك وهنبعتلك كود دخول على واتساب.<br>من هنا تتابع حضور ابنك، مشاريعه، وشهادته.</p>
+      <p class="lead">اكتب رقمك وهنبعتلك كود دخول على واتساب.<br>من هنا تتابع حضور ابنك، مشاريعه، وشهادته</p>
       <label class="field">رقم الموبايل (واتساب)<input type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" autocomplete="tel"></label>
       <button class="btn btn-dark" type="submit"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5C6.8 2.5 2.6 6.6 2.6 11.8c0 1.8.5 3.5 1.4 4.9L3 21l4.4-1.1c1.4.8 3 1.2 4.6 1.2 5.2 0 9.4-4.1 9.4-9.3S17.2 2.5 12 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 7.6c.3-.3.8-.3 1 .1l.8 1.7c.1.3 0 .6-.2.8l-.5.5c.6 1.3 1.8 2.5 3.2 3.1l.5-.5c.2-.2.5-.3.8-.2l1.7.8c.4.2.4.7.1 1-.6.8-1.5 1.1-2.4.9-2.5-.6-5-3.1-5.6-5.6-.2-1 0-1.9.6-2.6Z" fill="currentColor"/></svg> ابعتلي كود على واتساب</button>
       <p class="hint" style="text-align:center">الرقم اللي حجزت بيه <bdi>Mission 0</bdi></p>
     </form>
     <form id="f-otp" novalidate hidden>
       <h1 style="font-size:38px">اكتب الكود</h1>
-      <p class="lead">بعتنالك كود من 4 أرقام على واتساب.</p>
+      <p class="lead">بعتنالك كود من 4 أرقام على واتساب</p>
       <div class="otp"><input inputmode="numeric" maxlength="1" aria-label="رقم"><input inputmode="numeric" maxlength="1" aria-label="رقم"><input inputmode="numeric" maxlength="1" aria-label="رقم"><input inputmode="numeric" maxlength="1" aria-label="رقم"></div>
       <button class="btn btn-dark" type="submit">تأكيد ودخول <span class="arrow">←</span></button>
-      <p class="toast" hidden>حسابات أولياء الأمور هتتفعّل قريب. لحد ده، كل حاجة بتوصلك على واتساب.</p>
+      <p class="toast" hidden>حسابات أولياء الأمور هتتفعّل قريب. لحد ده، كل حاجة بتوصلك على واتساب</p>
       <p class="hint" style="text-align:center">مجالكش الكود؟ ابعت تاني بعد <b class="purple">0:45</b> · <button type="button" class="link" data-back style="font-size:14px">غيّر الرقم</button></p>
     </form>
   </div>
