@@ -48,10 +48,11 @@ function buildBooking() {
         <label class="field">الصف الدراسي<select name="grade" required><option value="">اختار الصف</option>${GRADES.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="err"></span></label>
         <label class="field">رقم ولي الأمر (واتساب)<input name="parent_whatsapp" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="01X XXXX XXXX" maxlength="24" required><span class="err"></span></label>
         <label class="field">رقم الطالب للجروب <span class="opt">(اختياري)</span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
-        <fieldset class="field"><legend>اختار ميعاد يناسبك</legend>
+        <fieldset class="field slot-field"><legend>اختار ميعاد يناسبك</legend>
           <div class="slots" role="radiogroup">
-            <label><input type="radio" name="preferred_slot" value="friday_7pm"><span>الجمعة · 7 م</span></label>
-            <label><input type="radio" name="preferred_slot" value="saturday_7pm"><span>السبت · 7 م</span></label>
+            <label><input type="radio" name="preferred_slot" value="thursday_5pm"><span>الخميس · 5 م</span></label>
+            <label><input type="radio" name="preferred_slot" value="friday_5pm"><span>الجمعة · 5 م</span></label>
+            <label><input type="radio" name="preferred_slot" value="saturday_5pm"><span>السبت · 5 م</span></label>
           </div><span class="err"></span>
         </fieldset>
         <p class="alert" role="alert" hidden></p>

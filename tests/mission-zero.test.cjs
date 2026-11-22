@@ -2,7 +2,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {Readable}=require('node:stream');
 const {validate,createHandler}=require('../lib/server/mission-zero.cjs');
-const valid=()=>({student_name:'طالب اختبار',grade:'grade_5_primary',parent_name:'ولي اختبار',parent_whatsapp:'٠١٠١٢٣٤٥٦٧٨',preferred_slot:'friday_7pm',interests:['التكنولوجيا والبرمجة'],dream_profession:''});
+const valid=()=>({student_name:'طالب اختبار',grade:'grade_5_primary',parent_name:'ولي اختبار',parent_whatsapp:'٠١٠١٢٣٤٥٦٧٨',preferred_slot:'friday_5pm',interests:['التكنولوجيا والبرمجة'],dream_profession:''});
 const req=(body=valid(),headers={},method='POST')=>({body,method,headers:{'content-type':'application/json',host:'zola.test',origin:'https://zola.test',...headers},socket:{remoteAddress:'test'}});
 const res=()=>({headers:{},setHeader(k,v){this.headers[k]=v},end(body){this.body=JSON.parse(body)}});
 test('maps allowed columns, sanitizes, normalizes and ignores injected status/id/timestamp',()=>{
@@ -10,7 +10,7 @@ test('maps allowed columns, sanitizes, normalizes and ignores injected status/id
  assert.equal(row.student_name,'طالب اختبار');assert.equal(row.parent_whatsapp,'+201012345678');assert.equal(row.status,'new');assert.equal(row.dream_profession,null);assert.equal(row.interests.length,1);assert.ok(!('id'in row));assert.ok(!('created_at'in row));
 });
 test('accepts exactly five grade codes and two slot codes',()=>{
- for(const grade of ['grade_5_primary','grade_6_primary','grade_1_prep','grade_2_prep','grade_3_prep'])for(const preferred_slot of ['friday_7pm','saturday_7pm'])assert.equal(validate({...valid(),grade,preferred_slot}).grade,grade);
+ for(const grade of ['grade_5_primary','grade_6_primary','grade_1_prep','grade_2_prep','grade_3_prep'])for(const preferred_slot of ['thursday_5pm','friday_5pm','saturday_5pm'])assert.equal(validate({...valid(),grade,preferred_slot}).grade,grade);
 });
 test('rejects missing required fields, invalid choices, unsafe/long input and interests',()=>{
  for(const field of ['student_name','parent_name','parent_whatsapp','grade','preferred_slot','interests']){const body=valid();delete body[field];assert.throws(()=>validate(body));}

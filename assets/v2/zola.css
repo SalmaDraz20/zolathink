@@ -273,6 +273,10 @@ dialog::backdrop{background:rgba(25,32,58,.55);backdrop-filter:blur(5px)}
 .form .alert{color:var(--red);font-size:14px;text-align:center}
 .success{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
 .success .btn{width:100%}
+fieldset.slot-field{border:0;padding:0;margin:0;min-width:0}
+fieldset.slot-field legend{padding:0;margin-bottom:8px}
+.modal .state{max-height:calc(100dvh - 32px - 88px);overflow-y:auto;overscroll-behavior:contain;margin-inline:-8px;padding-inline:8px;scrollbar-width:thin;scrollbar-color:#D9CCEF transparent}
+@media (max-width:560px){.modal .state{max-height:calc(100dvh - 24px - 62px)}.modal{width:calc(100vw - 24px)}}
 @media (max-width:560px){.modal{padding:36px 22px 26px}.row2{grid-template-columns:1fr}.modal .plane-deco{display:none}}
 
 .video-modal{width:min(960px,100vw - 32px);margin:auto}
