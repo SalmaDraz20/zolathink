@@ -126,9 +126,9 @@ $$('[data-video]').forEach(b => b.addEventListener('click', e => {
   if (!video) {
     video = document.createElement('dialog'); video.className = 'video-modal'; video.setAttribute('aria-labelledby', 'video-title');
     video.innerHTML = `
-      <div class="vhead"><div><h2 id="video-title">إزاي Zola بتشتغل.. في دقيقتين</h2><p>من أول المشكلة، للمفهوم، للـ AI، لحد الحل اللي بيبنوه.</p></div>
+      <div class="vhead"><div><h2 id="video-title">إزاي Zola بتشتغل.. في دقيقة</h2><p>من أول المشكلة، للمفهوم، للـ AI، لحد الحل اللي بيبنوه.</p></div>
       <button class="vclose" type="button" aria-label="إغلاق الفيديو">${closeSvg.replace('currentColor', '#fff')}</button></div>
-      <video controls playsinline preload="none" src="assets/videos/full-mission.mp4"></video>
+      <video controls playsinline preload="none" poster="assets/videos/how-missions-work.jpg" src="assets/videos/how-missions-work.mp4"></video>
       <div class="vfoot"><span class="hand">عجبتك الفكرة؟ جرّبها مع ابنك.</span><button class="btn btn-light" type="button" data-book-from-video>احجز <bdi>Mission 0</bdi> مجاناً <span class="arrow purple">←</span></button></div>`;
     document.body.append(video);
     const v = $('video', video), shut = () => video.close();
