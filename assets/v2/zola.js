@@ -226,29 +226,40 @@ if (gallery) {
   pageGallery();
 }
 
-/* Show the gallery a page at a time (4 cards), with arrows and dots underneath. */
+/* Show the gallery a page at a time (4 cards on desktop, 2 on phones), small arrows on the sides, dots underneath. */
 function pageGallery() {
-  const size = +gallery.dataset.pageSize || 0; if (!size) return;
-  const cards = [...gallery.children], pages = Math.ceil(cards.length / size);
-  let nav = gallery.nextElementSibling?.classList.contains('gallery-nav') ? gallery.nextElementSibling : null;
-  if (!nav) {
-    nav = document.createElement('div'); nav.className = 'gallery-nav';
-    const arrow = d => `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    nav.innerHTML = `<button type="button" data-dir="-1" aria-label="المشاريع السابقة">${arrow('M7 4l5 5-5 5')}</button><span class="dots"></span><button type="button" data-dir="1" aria-label="مشاريع تانية">${arrow('M11 4L6 9l5 5')}</button>`;
-    gallery.after(nav);
+  if (!gallery.dataset.pageSize) return;
+  const cards = [...gallery.children];
+  let stage = gallery.closest('.gallery-stage'), dots;
+  if (!stage) {
+    const arrow = d => `<svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    stage = document.createElement('div'); stage.className = 'gallery-stage';
+    gallery.before(stage);
+    stage.innerHTML = `<button type="button" class="g-arrow g-prev" data-dir="-1" aria-label="المشاريع السابقة">${arrow('M7 4l5 5-5 5')}</button><button type="button" class="g-arrow g-next" data-dir="1" aria-label="مشاريع تانية">${arrow('M11 4L6 9l5 5')}</button>`;
+    stage.insertBefore(gallery, stage.lastElementChild);
+    dots = document.createElement('div'); dots.className = 'gallery-dots'; stage.after(dots);
   }
-  let page = 0;
+  dots = stage.nextElementSibling;
+  const mq = matchMedia('(max-width:900px)');
+  let page = 0, size, pages;
   const show = (p, animate) => {
     page = Math.max(0, Math.min(pages - 1, p));
     cards.forEach((c, i) => { c.hidden = Math.floor(i / size) !== page; });
-    $$('button', nav).forEach(b => { b.disabled = b.dataset.dir < 0 ? page === 0 : page === pages - 1; });
-    $$('.dots i', nav).forEach((d, i) => d.classList.toggle('on', i === page));
+    $$('.g-arrow', stage).forEach(b => { b.disabled = b.dataset.dir < 0 ? page === 0 : page === pages - 1; });
+    $$('i', dots).forEach((d, i) => d.classList.toggle('on', i === page));
     if (animate) { gallery.classList.remove('turn'); void gallery.offsetWidth; gallery.classList.add('turn'); }
   };
-  $('.dots', nav).innerHTML = Array.from({ length: pages }, () => '<i></i>').join('');
-  nav.hidden = pages < 2;
-  $$('button', nav).forEach(b => { b.onclick = () => show(page + +b.dataset.dir, true); });
-  show(0, false);
+  const setup = () => {
+    const first = page * (size || 1);
+    size = mq.matches ? 2 : (+gallery.dataset.pageSize || 4);
+    pages = Math.max(1, Math.ceil(cards.length / size));
+    dots.innerHTML = Array.from({ length: pages }, () => '<i></i>').join('');
+    stage.classList.toggle('single', pages < 2); dots.hidden = pages < 2;
+    show(Math.floor(first / size), false);
+  };
+  $$('.g-arrow', stage).forEach(b => { b.onclick = () => show(page + +b.dataset.dir, true); });
+  mq.onchange = setup;
+  setup();
 }
 
 /* ---------- certificate page ---------- */
