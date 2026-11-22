@@ -221,7 +221,34 @@ if (gallery) {
       const inner = `<div class="img">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : ph}</div><h3>${esc(p.title)}</h3><small>${meta}</small>${p.math ? `<span class="math">الماث: ${esc(p.math)}</span>` : ''}${p.description ? `<p>${esc(p.description)}</p>` : ''}`;
       return p.link ? `<a class="polaroid" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>` : `<article class="polaroid">${inner}</article>`;
     }).join('');
+    pageGallery();
   }).catch(() => {});
+  pageGallery();
+}
+
+/* Show the gallery a page at a time (4 cards), with arrows and dots underneath. */
+function pageGallery() {
+  const size = +gallery.dataset.pageSize || 0; if (!size) return;
+  const cards = [...gallery.children], pages = Math.ceil(cards.length / size);
+  let nav = gallery.nextElementSibling?.classList.contains('gallery-nav') ? gallery.nextElementSibling : null;
+  if (!nav) {
+    nav = document.createElement('div'); nav.className = 'gallery-nav';
+    const arrow = d => `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    nav.innerHTML = `<button type="button" data-dir="-1" aria-label="المشاريع السابقة">${arrow('M7 4l5 5-5 5')}</button><span class="dots"></span><button type="button" data-dir="1" aria-label="مشاريع تانية">${arrow('M11 4L6 9l5 5')}</button>`;
+    gallery.after(nav);
+  }
+  let page = 0;
+  const show = (p, animate) => {
+    page = Math.max(0, Math.min(pages - 1, p));
+    cards.forEach((c, i) => { c.hidden = Math.floor(i / size) !== page; });
+    $$('button', nav).forEach(b => { b.disabled = b.dataset.dir < 0 ? page === 0 : page === pages - 1; });
+    $$('.dots i', nav).forEach((d, i) => d.classList.toggle('on', i === page));
+    if (animate) { gallery.classList.remove('turn'); void gallery.offsetWidth; gallery.classList.add('turn'); }
+  };
+  $('.dots', nav).innerHTML = Array.from({ length: pages }, () => '<i></i>').join('');
+  nav.hidden = pages < 2;
+  $$('button', nav).forEach(b => { b.onclick = () => show(page + +b.dataset.dir, true); });
+  show(0, false);
 }
 
 /* ---------- certificate page ---------- */
