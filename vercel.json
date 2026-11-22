@@ -17,6 +17,12 @@
     },
     "api/projects.js": {
       "maxDuration": 15
+    },
+    "api/admin.js": {
+      "maxDuration": 30
+    },
+    "api/slots.js": {
+      "maxDuration": 15
     }
   },
   "rewrites": [
@@ -43,6 +49,10 @@
     {
       "source": "/login",
       "destination": "/login.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
     }
   ],
   "redirects": [
@@ -50,6 +60,26 @@
       "source": "/certificate.html",
       "destination": "/certificate",
       "permanent": true
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/admin",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }

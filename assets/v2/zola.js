@@ -73,6 +73,12 @@ function buildBooking() {
   $('.close', d).addEventListener('click', close);
   $('[data-close]', d).addEventListener('click', close);
   d.addEventListener('click', e => { if (e.target === d) close(); });
+  // The slots come from /admin (Notion). The three default buttons stay if that can't load.
+  fetch('/api/slots').then(r => r.json()).then(res => {
+    if (!res.ok || !Array.isArray(res.slots) || !res.slots.length) return;
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    $('.slots', d).innerHTML = res.slots.map(s => `<label><input type="radio" name="preferred_slot" value="${esc(s.key)}"${s.full ? ' disabled' : ''}><span>${esc(s.short)}${s.full ? ' · كامل' : ''}</span></label>`).join('');
+  }).catch(() => {});
   const norm = v => v.replace(/[٠-٩]/g, x => '٠١٢٣٤٥٦٧٨٩'.indexOf(x)).replace(/[۰-۹]/g, x => '۰۱۲۳۴۵۶۷۸۹'.indexOf(x)).replace(/[\s()-]/g, '');
   const phoneOk = v => /^(01[0125]\d{8}|(?:\+|00)[1-9]\d{7,14})$/.test(v);
   const setErr = (name, msg) => {

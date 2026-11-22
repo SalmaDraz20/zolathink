@@ -195,6 +195,9 @@ const ART = {
 };
 
 const qs = new URLSearchParams(location.search);
+// /card?preview=<card id>&q=<step> — admin preview (needs the admin login). Nothing is saved.
+const PREVIEW = /^[0-9a-f-]{32,36}$/i.test(qs.get('preview') || '') ? qs.get('preview') : '';
+const PREVIEW_STEP = Math.max(0, parseInt(qs.get('q') || '0', 10) || 0);
 const preset = toLatin(qs.get('c') || '').toUpperCase().replace(/^Z-?/, '').replace(/[^A-Z0-9]/g, '').slice(0, 12);
 let card = null, steps = [], A = {}, idx = 0, dir = 1, sending = false, started = Date.now(), DRAFT = '', waitTimer = 0;
 
@@ -211,8 +214,9 @@ const setPhase = c => {
 async function load() {
   clearTimeout(waitTimer);
   try {
-    const r = await fetch('/api/card', { cache: 'no-store' });
+    const r = await fetch(PREVIEW ? '/api/admin?action=preview&card=' + encodeURIComponent(PREVIEW) : '/api/card', { cache: 'no-store' });
     const d = await r.json();
+    if (PREVIEW && !d.ok) return state('lock', 'معاينة', d.message || 'ادخلي لوحة التحكم الأول');
     if (!d.ok) return state('oops', 'مش قادرين نفتح الكارت', d.message || 'جرّب تاني بعد لحظة', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>');
     if (!d.card) {
       state('lock', 'الكارت لسه مقفول', 'المدرّبة هتفتحه في الوقت المناسب.. استنّى إشارتها، الصفحة هتفتح لوحدها', '<div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>');
@@ -221,7 +225,8 @@ async function load() {
     card = d.card; DRAFT = 'zola-card-' + card.id; setPhase(card);
     steps = [{ id: 'code', type: 'code', text: 'كودك <em>إيه؟</em>', html: true, hint: 'الكود اللي المدرّبة إدّتهولك' },
       ...card.questions.map((q, i) => ({ ...q, intro: i === 0 ? card.intro : '' }))];
-    try { const s = JSON.parse(sessionStorage.getItem(DRAFT) || 'null'); if (s) { A = s.A || {}; idx = Math.min(s.idx || 0, steps.length - 1); started = s.t || started; } } catch (e) {}
+    if (PREVIEW) { A = { code: '123' }; idx = Math.min(PREVIEW_STEP, steps.length - 1); }
+    else try { const s = JSON.parse(sessionStorage.getItem(DRAFT) || 'null'); if (s) { A = s.A || {}; idx = Math.min(s.idx || 0, steps.length - 1); started = s.t || started; } } catch (e) {}
     if (preset && !A.code) A.code = preset;
     if (preset && idx === 0) idx = 1;
     $('nav').hidden = false; $('progress').hidden = false; $('steps').hidden = false;
@@ -229,7 +234,7 @@ async function load() {
     render();
   } catch (e) { state('oops', 'مفيش اتصال', 'اتأكد من النت وجرّب تاني', '<p class="hand"><button class="btn ghost" onclick="load()">جرّب تاني</button></p>'); }
 }
-const save = () => { try { sessionStorage.setItem(DRAFT, JSON.stringify({ A, idx, t: started })); } catch (e) {} };
+const save = () => { if (PREVIEW) return; try { sessionStorage.setItem(DRAFT, JSON.stringify({ A, idx, t: started })); } catch (e) {} };
 
 function valid(s) {
   const v = A[s.id];
@@ -328,6 +333,7 @@ function answerFor(s) {
   return v == null ? '' : v;
 }
 async function submit() {
+  if (PREVIEW) return state('done', 'دي معاينة بس', 'في الكارت الحقيقي، الإجابات بتتسجّل في Notion لما الطالب يدوس إرسال');
   sending = true; $('next').disabled = true; $('nextlabel').textContent = 'بنبعت..';
   try {
     const r = await fetch('/api/card-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' },

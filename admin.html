@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Zola Think - Admin</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;600;700&family=Readex+Pro:wght@400;500&family=Marhey:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/admin/admin.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/" aria-label="Zola Think"><img src="/assets/zola-logo.svg" alt="Zola Think" width="98" height="40"></a>
+  <span class="pill">لوحة التحكم</span>
+</header>
+
+<!-- Login -->
+<main id="login" class="login" hidden>
+  <form class="card taped login-card" id="login-form" novalidate>
+    <h1>ادخلي <em>اللوحة</em></h1>
+    <p class="sub">اكتبي الباسوورد عشان تفتحي لوحة التحكم</p>
+    <label class="sr" for="pw">الباسوورد</label>
+    <div class="underline"><input id="pw" type="password" autocomplete="current-password" placeholder="••••••" required><button type="button" class="eye" id="eye" aria-label="إظهار الباسوورد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button></div>
+    <p class="err" id="login-err" role="alert"></p>
+    <div class="row-end"><span class="muted">أو دوس Enter</span><button class="btn" type="submit"><span>←</span> ادخلي</button></div>
+  </form>
+</main>
+
+<!-- App -->
+<div id="app" class="app" hidden>
+  <nav class="rail" aria-label="أقسام اللوحة">
+    <p class="hand">لوحة التحكم</p>
+    <a href="#cards" data-nav="cards"><span>الكروت</span><i></i></a>
+    <a href="#slots" data-nav="slots"><span>المواعيد</span><i></i></a>
+    <a href="#bookings" data-nav="bookings"><span>الحجوزات</span><i></i></a>
+    <button type="button" class="out" id="logout"><span>خروج</span><i></i></button>
+  </nav>
+  <main class="main" id="view" aria-live="polite"></main>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="/assets/admin/admin.js" defer></script>
+</body>
+</html>
