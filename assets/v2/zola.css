@@ -247,6 +247,9 @@ dialog{border:0;padding:0;background:none;max-width:none;max-height:none;color:i
 dialog::backdrop{background:rgba(25,32,58,.55);backdrop-filter:blur(5px)}
 .modal{width:min(560px,100vw - 32px);background:#fff;border-radius:28px;padding:44px;position:relative;box-shadow:0 30px 60px rgba(15,10,51,.25);overflow:visible;margin:auto}
 .modal[open]{animation:pop .35s var(--ease)}
+/* keep popups on screen even when the page is scrolled (e.g. opened from /#book) */
+dialog.modal{position:fixed;inset:0}
+#booking-title:focus{outline:none}
 @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}}
 .modal .close{position:absolute;top:20px;left:20px;width:36px;height:36px;border-radius:50%;background:var(--lav);display:grid;place-items:center}
 .modal .plane-deco{position:absolute;top:-58px;left:-88px;width:150px;pointer-events:none}
