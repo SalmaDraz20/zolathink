@@ -65,6 +65,11 @@
       "source": "/admin.html",
       "destination": "/admin",
       "permanent": true
+    },
+    {
+      "source": "/book",
+      "destination": "/#book",
+      "permanent": false
     }
   ],
   "headers": [

@@ -125,6 +125,11 @@ let booking;
 $$('[data-book]').forEach(b => b.addEventListener('click', e => {
   e.preventDefault(); booking ||= buildBooking(); booking.showModal(); $('#booking-title').focus();
 }));
+// Direct link to the form: zolathink.vercel.app/book (→ /#book) opens it right away.
+if (location.hash === '#book' && document.querySelector('[data-book]')) {
+  booking ||= buildBooking(); booking.showModal(); $('#booking-title').focus();
+  booking.addEventListener('close', () => history.replaceState(null, '', location.pathname + location.search), { once: true });
+}
 
 /* ---------- video modal ---------- */
 let video;
