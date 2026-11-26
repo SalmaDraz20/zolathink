@@ -233,14 +233,14 @@ if (gallery) {
       const inner = `<div class="img">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : ph}</div><h3>${esc(p.title)}</h3><small>${meta}</small>${p.math ? `<span class="math">الماث: ${esc(p.math)}</span>` : ''}${p.description ? `<p>${esc(p.description)}</p>` : ''}`;
       return p.link ? `<a class="polaroid" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>` : `<article class="polaroid">${inner}</article>`;
     }).join('');
-    pageGallery();
+    pageGallery(gallery);
   }).catch(() => {});
-  pageGallery();
+  pageGallery(gallery);
 }
 
 /* Show the gallery a page at a time (4 cards on desktop, 2 on phones), small arrows on the sides, dots underneath. */
-function pageGallery() {
-  if (!gallery.dataset.pageSize) return;
+function pageGallery(gallery) {
+  if (!gallery || !gallery.dataset.pageSize) return;
   const cards = [...gallery.children];
   let stage = gallery.closest('.gallery-stage'), dots;
   if (!stage) {
@@ -400,22 +400,35 @@ if (certForm) {
     $('#share-wa').href = `https://wa.me/?text=${encodeURIComponent('شهادة ' + c.name + ' من Zola Think 🎓 ')}${share}`;
     $('#share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${share}`;
     $('#share-li').href = `https://www.linkedin.com/sharing/share-offsite/?url=${share}`;
-    const projects = c.projects || [], gal = $('.polaroids', v);
-    if (projects.length) {
-      const icon = '<svg width="40" height="40" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 6h14l8 8v24H12z" stroke="#834CBF" stroke-width="2" stroke-linejoin="round"/><path d="M26 6v8h8M17 24h12M17 30h9" stroke="#834CBF" stroke-width="2" stroke-linecap="round"/></svg>';
-      gal.innerHTML = projects.map((p, i) => {
-        const has = p.image || p.pdf;
-        const thumb = p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : p.pdf ? `<span class="pdf-thumb" data-pdf="${esc(p.pdf)}">${icon}</span><span class="badge-pdf" dir="ltr">PDF</span>` : '';
-        return `<article class="polaroid${has ? ' open' : ''}" ${has ? `role="button" tabindex="0" aria-label="افتح مشروع ${esc(p.title)}" data-i="${i}"` : ''}><div class="img">${thumb}</div><small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${p.mission ?? i}</small><h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`;
-      }).join('');
-      gal.onclick = e => { const a = e.target.closest('.polaroid.open'); if (a) openProject(projects[+a.dataset.i]); };
-      gal.onkeydown = e => { const a = e.target.closest('.polaroid.open'); if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openProject(projects[+a.dataset.i]); } };
-      // PDF cards show their first page as the picture.
-      $$('.pdf-thumb', gal).forEach(async t => {
-        try { const doc = await (await pdfLib()).getDocument({ url: t.dataset.pdf }).promise; t.replaceChildren(await pdfPage(doc, 1, t.clientWidth || 240)); t.classList.add('ready'); } catch (e) {}
-      });
-    }
-    else gal.closest('[data-wrap]').hidden = true;
+    // My Zola Mission Portfolio: all five Missions, in order. A Mission without a project shows a locked card:
+    // "waiting for you" if the batch already ran it, "coming soon" if it hasn't happened yet.
+    const projects = c.projects || [], gal = $('.polaroids', v), held = c.held || null;
+    const icon = '<svg width="40" height="40" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 6h14l8 8v24H12z" stroke="#834CBF" stroke-width="2" stroke-linejoin="round"/><path d="M26 6v8h8M17 24h12M17 30h9" stroke="#834CBF" stroke-width="2" stroke-linecap="round"/></svg>';
+    const lock = '<svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="16" width="20" height="14" rx="3" stroke="#834CBF" stroke-width="2"/><path d="M12.5 16v-4a5.5 5.5 0 0 1 11 0v4" stroke="#834CBF" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="23" r="1.8" fill="#834CBF"/></svg>';
+    const star = '<svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 5q0 13 13 13q-13 0-13 13q0-13-13-13q13 0 13-13Z" stroke="#834CBF" stroke-width="2" stroke-linejoin="round"/></svg>';
+    const tag = i => `<small dir="ltr" class="purple" style="font-weight:600;letter-spacing:2px;font-size:11px">MISSION 0${i}</small>`;
+    gal.innerHTML = [0, 1, 2, 3, 4].map(m => {
+      const i = projects.findIndex(p => p.mission === m), p = projects[i];
+      if (!p) {
+        const soon = held && !held.includes(m);
+        return soon
+          ? `<article class="polaroid locked soon"><div class="img">${star}</div>${tag(m)}<h3>قريباً</h3><small>مشروعك الجاي هيتضاف هنا</small></article>`
+          : `<article class="polaroid locked"><div class="img">${lock}</div>${tag(m)}<h3>لسه مستنياك</h3><small>كمّل الرحلة وافتح المشروع ده</small><a class="lock-cta" data-wa="عايز أكمّل الـ Journey وأحضر Mission 0${m}">كمّل الرحلة</a></article>`;
+      }
+      const has = p.image || p.pdf;
+      const thumb = p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : p.pdf ? `<span class="pdf-thumb" data-pdf="${esc(p.pdf)}">${icon}</span><span class="badge-pdf" dir="ltr">PDF</span>` : '';
+      return `<article class="polaroid${has ? ' open' : ''}" ${has ? `role="button" tabindex="0" aria-label="افتح مشروع ${esc(p.title)}" data-i="${i}"` : ''}><div class="img">${thumb}</div>${tag(m)}<h3>${esc(p.title)}</h3>${p.titleEn ? `<p class="en" dir="ltr">${esc(p.titleEn)}</p>` : ''}<small>${p.role ? 'الدور: ' + esc(p.role) : ''}</small>${p.roleEn ? `<small class="en" dir="ltr">Role: ${esc(p.roleEn)}</small>` : ''}</article>`;
+    }).join('');
+    $$('.lock-cta', gal).forEach(a => { a.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(a.dataset.wa)}`; a.target = '_blank'; a.rel = 'noopener'; });
+    const prog = $('.journey-progress', v);
+    if (prog) { $('b', prog).textContent = projects.length; $('.bar i', prog).style.width = (projects.length / 5 * 100) + '%'; }
+    gal.onclick = e => { const a = e.target.closest('.polaroid.open'); if (a) openProject(projects[+a.dataset.i]); };
+    gal.onkeydown = e => { const a = e.target.closest('.polaroid.open'); if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openProject(projects[+a.dataset.i]); } };
+    // PDF cards show their first page as the picture.
+    $$('.pdf-thumb', gal).forEach(async t => {
+      try { const doc = await (await pdfLib()).getDocument({ url: t.dataset.pdf }).promise; t.replaceChildren(await pdfPage(doc, 1, t.clientWidth || 240)); t.classList.add('ready'); } catch (e) {}
+    });
+    pageGallery(gal);
     $$('.podium,[data-reveal]', v).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
     setTimeout(celebrate, reduced ? 0 : 350);

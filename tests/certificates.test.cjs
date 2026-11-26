@@ -110,3 +110,17 @@ test('a PDF uploaded as a project file gets a same-site link and streams through
   assert.equal(fetched, 'https://files.notion.so/deck?sig=1');
   assert.equal(f.headers['Content-Type'], 'application/pdf');
 });
+
+test('the lookup says which Missions the batch has already run', async () => {
+  const { createHandler } = require('../lib/server/certificates.cjs');
+  const rt = s => [{ plain_text: s }];
+  const me = { properties: { Name: { title: rt('سارة') }, Code: { rich_text: rt('294') }, 'M0 project': { rich_text: rt('أ | ب') } } };
+  const other = { properties: { Name: { title: rt('علي') }, Code: { rich_text: rt('295') }, 'M0 project': { rich_text: rt('أ | ب') }, 'M2 project': { rich_text: rt('ج | د') } } };
+  const fetchImpl = async (u, o) => ({ ok: true, json: async () => ({ results: JSON.parse(o.body).filter ? [me] : [me, other] }) });
+  const h = createHandler({ token: 't', database: 'db', fetchImpl });
+  const res = { headers: {}, setHeader(k, v) { this.headers[k] = v; }, end(b) { this.body = b; } };
+  await h({ method: 'GET', url: '/api/certificate?code=Z-294' }, res);
+  const c = JSON.parse(res.body).certificate;
+  assert.deepEqual(c.held, [0, 2]);
+  assert.deepEqual(c.projects.map(p => p.mission), [0]);
+});
