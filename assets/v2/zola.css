@@ -462,3 +462,6 @@ svg text{font-family:'Readex Pro',sans-serif}
 .modal .state::-webkit-scrollbar-thumb{background:#ECE8F3;border-radius:4px}
 .modal .state::-webkit-scrollbar-button{display:none;height:0}
 @media (max-width:560px){.modal{padding:30px 20px 22px}.modal .row2{grid-template-columns:1fr 1fr;gap:14px}.modal h2{font-size:23px}.modal .lead{font-size:14px}.modal .field{font-size:12.5px}}
+.modal .row2>*{min-width:0}
+.modal .state{overflow-x:hidden}
+@media (max-width:560px){.modal .field .wide{display:none}}

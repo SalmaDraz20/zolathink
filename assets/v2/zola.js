@@ -48,7 +48,7 @@ function buildBooking() {
         <label class="field">الصف الدراسي<select name="grade" required><option value="">اختار الصف</option>${GRADES.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="err"></span></label>
         <div class="row2">
         <label class="field">رقم ولي الأمر (واتساب)<input name="parent_whatsapp" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="01X XXXX XXXX" maxlength="24" required><span class="err"></span></label>
-        <label class="field"><span>رقم الطالب للجروب <span class="opt">(اختياري)</span></span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
+        <label class="field"><span>رقم الطالب<span class="wide"> للجروب</span> <span class="opt">(اختياري)</span></span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
         </div>
         <fieldset class="field slot-field"><legend>اختار ميعاد يناسبك</legend>
           <div class="slots" role="radiogroup">
