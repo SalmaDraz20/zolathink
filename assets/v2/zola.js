@@ -39,15 +39,17 @@ function buildBooking() {
     <div class="state" data-state="form">
       <span class="eyebrow"><bdi>Mission 0</bdi></span>
       <h2 id="booking-title" tabindex="-1">احجز مكانك مجاناً</h2>
-      <p class="lead">90 دقيقة أونلاين مع فريق صغير.<br>هنكلّمك على واتساب نأكّد الميعاد</p>
+      <p class="lead">90 دقيقة أونلاين مع فريق صغير، ونأكّد معاك الميعاد على واتساب</p>
       <form class="form" novalidate>
         <div class="row2">
           <label class="field">اسم ولي الأمر<input name="parent_name" autocomplete="name" maxlength="80" placeholder="الاسم بالكامل" required><span class="err"></span></label>
-          <label class="field">اسم الطالب<input name="student_name" autocomplete="off" maxlength="80" placeholder="اسم الطالب بالكامل" required><span class="err"></span></label>
+          <label class="field">اسم الطالب<input name="student_name" autocomplete="off" maxlength="80" placeholder="الاسم بالكامل" required><span class="err"></span></label>
         </div>
         <label class="field">الصف الدراسي<select name="grade" required><option value="">اختار الصف</option>${GRADES.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="err"></span></label>
+        <div class="row2">
         <label class="field">رقم ولي الأمر (واتساب)<input name="parent_whatsapp" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="01X XXXX XXXX" maxlength="24" required><span class="err"></span></label>
-        <label class="field">رقم الطالب للجروب <span class="opt">(اختياري)</span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
+        <label class="field"><span>رقم الطالب<span class="wide"> للجروب</span> <span class="opt">(اختياري)</span></span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
+        </div>
         <fieldset class="field slot-field"><legend>اختار ميعاد يناسبك</legend>
           <div class="slots" role="radiogroup">
             <label><input type="radio" name="preferred_slot" value="thursday_5pm"><span>الخميس · 5 م</span></label>
