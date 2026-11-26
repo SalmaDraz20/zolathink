@@ -413,7 +413,7 @@ if (certForm) {
         const soon = held && !held.includes(m);
         return soon
           ? `<article class="polaroid locked soon"><div class="img">${star}</div>${tag(m)}<h3>قريباً</h3><small>مشروعك الجاي هيتضاف هنا</small></article>`
-          : `<article class="polaroid locked"><div class="img">${lock}</div>${tag(m)}<h3>لسه مستنياك</h3><small>كمّل الرحلة وافتح المشروع ده</small><a class="lock-cta" data-wa="عايز أكمّل الـ Journey وأحضر Mission 0${m}">كمّل الرحلة <span class="arrow">←</span></a></article>`;
+          : `<article class="polaroid locked"><div class="img">${lock}</div>${tag(m)}<h3>لسه مستنياك</h3><small>كمّل الرحلة وافتح المشروع ده</small><a class="lock-cta" data-wa="عايز أكمّل الـ Journey وأحضر Mission 0${m}">كمّل الرحلة</a></article>`;
       }
       const has = p.image || p.pdf;
       const thumb = p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : p.pdf ? `<span class="pdf-thumb" data-pdf="${esc(p.pdf)}">${icon}</span><span class="badge-pdf" dir="ltr">PDF</span>` : '';
