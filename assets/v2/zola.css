@@ -429,3 +429,16 @@ svg text{font-family:'Readex Pro',sans-serif}
 .viewer-err{color:var(--sub);padding:30px 10px;text-align:center}
 @media (max-width:560px){.viewer header{padding:14px 16px}.viewer-body{padding:10px}}
 #skills-count{white-space:nowrap;display:inline-block}
+
+/* ---------- portfolio: locked Missions + progress ---------- */
+.journey-progress{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px;font-size:15px;color:var(--sub)}
+.journey-progress b{color:var(--purple);font-size:18px}
+.journey-progress .bar{width:140px;height:8px;border-radius:99px;background:#E7DEF6;overflow:hidden}
+.journey-progress .bar i{display:block;height:100%;width:0;background:var(--purple);border-radius:99px;transition:width .8s var(--ease)}
+.polaroid.locked{background:#FBF9FE;box-shadow:none;outline:1.5px dashed #CDBDEB;outline-offset:-1.5px}
+.polaroid.locked .img{background:#F3EEFB}
+.polaroid.locked .img svg{opacity:.75}
+.polaroid.locked h3{color:var(--purple)}
+.polaroid.locked.soon{opacity:.7}
+.polaroid .lock-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:600;color:var(--purple);text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:1px}
+.polaroid .lock-cta:hover{opacity:.8}
