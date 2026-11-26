@@ -442,3 +442,23 @@ svg text{font-family:'Readex Pro',sans-serif}
 .polaroid.locked.soon{opacity:.7}
 .polaroid .lock-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:600;color:var(--purple);text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:1px}
 .polaroid .lock-cta:hover{opacity:.8}
+
+/* ---------- booking form: fits on one screen ---------- */
+.modal{padding:36px 40px 30px}
+.modal h2{font-size:26px}
+.modal .lead{font-size:15px}
+.modal .form{gap:12px;margin-top:18px}
+.modal .row2{gap:18px}
+.modal .field{font-size:13.5px;gap:2px}
+.modal .field input,.modal .field select{padding:7px 0;font-size:15px}
+.modal .field input[type=tel]{text-align:right}
+.modal .field select:invalid{color:var(--muted)}
+.modal .field select option{color:var(--navy)}
+.modal .slot-field{margin-top:4px}
+.modal .slot-field legend{margin-bottom:8px}
+.modal .form .btn{margin-top:4px}
+.modal .state{scrollbar-width:thin;scrollbar-color:#ECE8F3 transparent}
+.modal .state::-webkit-scrollbar{width:4px}
+.modal .state::-webkit-scrollbar-thumb{background:#ECE8F3;border-radius:4px}
+.modal .state::-webkit-scrollbar-button{display:none;height:0}
+@media (max-width:560px){.modal{padding:30px 20px 22px}.modal .row2{grid-template-columns:1fr 1fr;gap:14px}.modal h2{font-size:23px}.modal .lead{font-size:14px}.modal .field{font-size:12.5px}}
