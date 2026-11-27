@@ -53,7 +53,7 @@ function buildBooking() {
         <label class="field"><span>رقم الطالب<span class="wide"> للجروب</span> <span class="opt">(اختياري)</span></span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
         </div>
         <fieldset class="field slot-field"><legend>اختار ميعاد يناسبك</legend>
-          <div class="slots" role="radiogroup">
+          <div class="slots times" role="radiogroup">
             <label><input type="radio" name="preferred_slot" value="thursday_5pm"><span>الخميس · 5 م</span></label>
             <label><input type="radio" name="preferred_slot" value="friday_5pm"><span>الجمعة · 5 م</span></label>
             <label><input type="radio" name="preferred_slot" value="saturday_5pm"><span>السبت · 5 م</span></label>
@@ -81,7 +81,7 @@ function buildBooking() {
   fetch('/api/slots').then(r => r.json()).then(res => {
     if (!res.ok || !Array.isArray(res.slots) || !res.slots.length) return;
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    $('.slots', d).innerHTML = res.slots.map(s => `<label><input type="radio" name="preferred_slot" value="${esc(s.key)}"${s.full ? ' disabled' : ''}><span>${esc(s.short)}${s.full ? ' · كامل' : ''}</span></label>`).join('');
+    $('.slots.times', d).innerHTML = res.slots.map(s => `<label><input type="radio" name="preferred_slot" value="${esc(s.key)}"${s.full ? ' disabled' : ''}><span>${esc(s.short)}${s.full ? ' · كامل' : ''}</span></label>`).join('');
   }).catch(() => {});
   const norm = v => v.replace(/[٠-٩]/g, x => '٠١٢٣٤٥٦٧٨٩'.indexOf(x)).replace(/[۰-۹]/g, x => '۰۱۲۳۴۵۶۷۸۹'.indexOf(x)).replace(/[\s()-]/g, '');
   const phoneOk = v => /^(01[0125]\d{8}|(?:\+|00)[1-9]\d{7,14})$/.test(v);
