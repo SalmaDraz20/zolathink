@@ -465,3 +465,26 @@ svg text{font-family:'Readex Pro',sans-serif}
 .modal .row2>*{min-width:0}
 .modal .state{overflow-x:hidden}
 @media (max-width:560px){.modal .field .wide{display:none}}
+.modal .slots.times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.modal .slots.times span{display:block;text-align:center;padding:9px 6px}
+.modal .slots span{border:1.5px solid transparent}
+.modal .slots label:hover input:not(:checked):not(:disabled)+span{border-color:#CDBDEB}
+.modal .field[data-invalid] .slots span{border-color:#F3C4C4}
+
+/* ---------- booking form: grade dropdown ---------- */
+.modal .dd{position:relative}
+.modal .dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;font:inherit;font-size:15px;color:var(--navy);background:transparent;border:0;border-bottom:2px solid var(--line);padding:7px 0;cursor:pointer;text-align:start;transition:border-color .2s}
+.modal .dd-btn svg{flex:none;color:var(--navy);transition:transform .25s var(--ease)}
+.modal .dd.open .dd-btn,.modal .dd-btn:focus-visible{border-color:var(--purple);outline:none}
+.modal .dd.open .dd-btn svg{transform:rotate(180deg)}
+.modal .dd-value.is-empty{color:var(--muted)}
+.modal .dd-list{position:absolute;inset-inline:0;top:calc(100% + 8px);z-index:5;margin:0;padding:6px;list-style:none;background:#fff;border:1px solid #ECE6F7;border-radius:16px;box-shadow:0 18px 40px rgba(51,26,102,.16);outline:none;animation:dd-in .18s var(--ease)}
+.modal .dd-list[hidden]{display:none}
+.modal .dd-list li{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:10px;font-size:15px;font-weight:500;color:var(--navy);cursor:pointer}
+.modal .dd-list li svg{opacity:0;color:var(--purple)}
+.modal .dd-list li.active{background:var(--lav)}
+.modal .dd-list li[aria-selected=true]{color:var(--purple)}
+.modal .dd-list li[aria-selected=true] svg{opacity:1}
+.modal .field[data-invalid] .dd-btn{border-color:var(--red)}
+.modal .dd-field>span:first-child{display:block}
+@keyframes dd-in{from{opacity:0;translate:0 -6px}to{opacity:1;translate:0 0}}

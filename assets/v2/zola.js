@@ -45,13 +45,19 @@ function buildBooking() {
           <label class="field">اسم ولي الأمر<input name="parent_name" autocomplete="name" maxlength="80" placeholder="الاسم بالكامل" required><span class="err"></span></label>
           <label class="field">اسم الطالب<input name="student_name" autocomplete="off" maxlength="80" placeholder="الاسم بالكامل" required><span class="err"></span></label>
         </div>
-        <label class="field">الصف الدراسي<select name="grade" required><option value="">اختار الصف</option>${GRADES.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="err"></span></label>
+        <div class="field dd-field"><span id="grade-label">الصف الدراسي</span>
+          <div class="dd">
+            <button type="button" class="dd-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="grade-label grade-value"><span id="grade-value" class="dd-value is-empty">اختار الصف</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <ul class="dd-list" role="listbox" aria-labelledby="grade-label" tabindex="-1" hidden>${GRADES.map(([v, t]) => `<li role="option" data-value="${v}" aria-selected="false">${t}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li>`).join('')}</ul>
+            <input type="hidden" name="grade" value="">
+          </div><span class="err"></span>
+        </div>
         <div class="row2">
         <label class="field">رقم ولي الأمر (واتساب)<input name="parent_whatsapp" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="01X XXXX XXXX" maxlength="24" required><span class="err"></span></label>
         <label class="field"><span>رقم الطالب<span class="wide"> للجروب</span> <span class="opt">(اختياري)</span></span><input name="student_whatsapp" type="tel" dir="ltr" inputmode="tel" placeholder="01X XXXX XXXX" maxlength="24"><span class="err"></span></label>
         </div>
         <fieldset class="field slot-field"><legend>اختار ميعاد يناسبك</legend>
-          <div class="slots" role="radiogroup">
+          <div class="slots times" role="radiogroup">
             <label><input type="radio" name="preferred_slot" value="thursday_5pm"><span>الخميس · 5 م</span></label>
             <label><input type="radio" name="preferred_slot" value="friday_5pm"><span>الجمعة · 5 م</span></label>
             <label><input type="radio" name="preferred_slot" value="saturday_5pm"><span>السبت · 5 م</span></label>
@@ -71,6 +77,35 @@ function buildBooking() {
     </div>`;
   document.body.append(d);
   const form = $('form', d), alert = $('.alert', d), submit = $('[type=submit]', d);
+  // Custom dropdown for the grade: a button that opens a styled list; the value lives in a hidden input.
+  {
+    const dd = $('.dd', d), btn = $('.dd-btn', dd), list = $('.dd-list', dd), hidden = $('input', dd), label = $('.dd-value', dd);
+    const opts = $$('[role=option]', list);
+    let active = -1;
+    const mark = i => { active = i; opts.forEach((o, j) => o.classList.toggle('active', j === i)); if (opts[i]) list.setAttribute('aria-activedescendant', opts[i].id); };
+    opts.forEach((o, i) => { o.id = 'grade-opt-' + i; });
+    const open = () => { list.hidden = false; btn.setAttribute('aria-expanded', 'true'); dd.classList.add('open'); mark(Math.max(0, opts.findIndex(o => o.dataset.value === hidden.value))); list.focus(); };
+    const shut = (focus = true) => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); dd.classList.remove('open'); if (focus) btn.focus(); };
+    const pick = i => {
+      const o = opts[i]; if (!o) return;
+      hidden.value = o.dataset.value; label.textContent = o.textContent; label.classList.remove('is-empty');
+      opts.forEach(x => x.setAttribute('aria-selected', String(x === o)));
+      hidden.dispatchEvent(new Event('input', { bubbles: true })); shut();
+    };
+    btn.addEventListener('click', () => list.hidden ? open() : shut());
+    btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); } });
+    list.addEventListener('click', e => { const o = e.target.closest('[role=option]'); if (o) pick(opts.indexOf(o)); });
+    list.addEventListener('mousemove', e => { const o = e.target.closest('[role=option]'); if (o) mark(opts.indexOf(o)); });
+    list.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); mark(Math.min(opts.length - 1, active + 1)); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); mark(Math.max(0, active - 1)); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(active); }
+      else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); shut(); }
+      else if (e.key === 'Tab') shut(false);
+    });
+    d.addEventListener('click', e => { if (!list.hidden && !dd.contains(e.target)) shut(false); });
+    form.addEventListener('reset', () => { hidden.value = ''; label.textContent = 'اختار الصف'; label.classList.add('is-empty'); opts.forEach(x => x.setAttribute('aria-selected', 'false')); });
+  }
   const close = () => d.close();
   $('.close', d).addEventListener('click', close);
   $('[data-close]', d).addEventListener('click', close);
@@ -79,7 +114,7 @@ function buildBooking() {
   fetch('/api/slots').then(r => r.json()).then(res => {
     if (!res.ok || !Array.isArray(res.slots) || !res.slots.length) return;
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    $('.slots', d).innerHTML = res.slots.map(s => `<label><input type="radio" name="preferred_slot" value="${esc(s.key)}"${s.full ? ' disabled' : ''}><span>${esc(s.short)}${s.full ? ' · كامل' : ''}</span></label>`).join('');
+    $('.slots.times', d).innerHTML = res.slots.map(s => `<label><input type="radio" name="preferred_slot" value="${esc(s.key)}"${s.full ? ' disabled' : ''}><span>${esc(s.short)}${s.full ? ' · كامل' : ''}</span></label>`).join('');
   }).catch(() => {});
   const norm = v => v.replace(/[٠-٩]/g, x => '٠١٢٣٤٥٦٧٨٩'.indexOf(x)).replace(/[۰-۹]/g, x => '۰۱۲۳۴۵۶۷۸۹'.indexOf(x)).replace(/[\s()-]/g, '');
   const phoneOk = v => /^(01[0125]\d{8}|(?:\+|00)[1-9]\d{7,14})$/.test(v);
