@@ -465,3 +465,8 @@ svg text{font-family:'Readex Pro',sans-serif}
 .modal .row2>*{min-width:0}
 .modal .state{overflow-x:hidden}
 @media (max-width:560px){.modal .field .wide{display:none}}
+.modal .slots.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.modal .slots.grades span{display:block;text-align:center;padding:9px 6px}
+.modal .slots span{border:1.5px solid transparent}
+.modal .slots label:hover input:not(:checked):not(:disabled)+span{border-color:#CDBDEB}
+.modal .field[data-invalid] .slots span{border-color:#F3C4C4}
